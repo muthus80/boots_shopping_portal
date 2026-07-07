@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import enum
 import uuid
-from datetime import datetime
-from typing import List, Optional
+from typing import List
 
 from sqlalchemy import (
     Column,

@@ -11,7 +11,6 @@ from sqlalchemy.future import select
 
 from app.core.config import settings
 from app.core.database import get_db
-from app.core.exceptions import ForbiddenError, UnauthorizedError
 from app.core.security import decode_token
 from app.domains.account.models import User
 

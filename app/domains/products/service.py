@@ -7,7 +7,7 @@ from sqlalchemy import select, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.domains.products.models import Product, ProductVariant, Review
+from app.domains.products.models import Product, Review
 from app.domains.products.schemas import ProductList, ProductRead, ReviewCreate, ReviewRead
 from app.core.exceptions import NotFoundError, ConflictError
 

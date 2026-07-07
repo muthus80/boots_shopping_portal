@@ -12,11 +12,10 @@ from sqlalchemy.orm import selectinload
 from app.core.config import settings
 from app.core.exceptions import (
     BadRequestError,
-    NotFoundError,
     PaymentError,
     ValidationError,
 )
-from app.domains.cart.models import Cart, CartItem
+from app.domains.cart.models import Cart
 from app.domains.checkout.models import Order, OrderItem
 from app.domains.checkout.schemas import (
     ConfirmOrderRequest,

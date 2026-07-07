@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import uuid as _uuid
-from datetime import datetime
-from typing import List, Optional
+from typing import List
 
 from sqlalchemy import (
     Boolean,

@@ -4,7 +4,6 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.core.config import settings
 from app.core.logging import configure_logging, get_logger
 from app.core.middleware import RequestIDMiddleware
 from app.core.exceptions import (

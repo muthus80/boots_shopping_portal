@@ -16,6 +16,12 @@ class Base(DeclarativeBase):
 def _build_engine():
     url = settings.DATABASE_URL or os.environ.get("DATABASE_URL", "")
 
+    # Fall back to SQLite for local smoke-test / CI environments where no
+    # DATABASE_URL is configured.  A real Postgres URL must be supplied in
+    # production via the environment.
+    if not url:
+        url = "sqlite+aiosqlite:///./boots_shopping_local.db"
+
     if url.startswith("postgresql://"):
         url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
     elif url.startswith("postgres://"):

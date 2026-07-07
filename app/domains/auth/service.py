@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
@@ -12,7 +11,6 @@ from app.domains.account.models import User, RefreshToken
 from app.domains.auth.schemas import (
     LoginRequest,
     TokenResponse,
-    RefreshRequest,
     RegisterRequest,
     RegisterResponse,
 )
@@ -26,10 +24,8 @@ from app.core.security import (
 from app.core.exceptions import (
     UnauthorizedError,
     ConflictError,
-    NotFoundError,
     ValidationError,
 )
-from app.core.config import settings
 
 
 class AuthService:
