@@ -3,9 +3,14 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProduct } from '../api/products';
 import { addCartItem } from '../api/cart';
-import { apiClient } from '../api/client';
+import {
+  getProductReviews,
+  createProductReview,
+  REVIEWS_PER_PAGE,
+} from '../api/reviews';
+import type { ReviewApiItem, ReviewsResponse } from '../api/reviews';
 import { useAuth } from '../stores/authStore';
-import type { Product, ProductVariant, Review } from '../types/index';
+import type { Product, ProductVariant } from '../types/index';
 
 // ── Extended types for extra fields returned by detail endpoint ───────────────
 
@@ -14,30 +19,11 @@ interface ProductVariantFull extends ProductVariant {
   price?: number;
 }
 
-interface ProductDetail extends Omit<Product, 'variants' | 'reviews'> {
+interface ProductDetail extends Omit<Product, 'variants'> {
   variants?: ProductVariantFull[];
-  reviews?: Review[];
   category?: { id: string; name: string };
   materials?: string | null;
   features?: string[] | null;
-}
-
-// ── API helper for reviews (uses product-scoped route) ────────────────────────
-
-interface CreateReviewPayload {
-  rating: number;
-  comment?: string;
-}
-
-async function createProductReview(
-  productId: string,
-  payload: CreateReviewPayload
-): Promise<Review> {
-  const response = await apiClient.post<Review>(
-    `/api/v1/products/${productId}/reviews`,
-    payload
-  );
-  return response.data;
 }
 
 // ── ImageGallery ──────────────────────────────────────────────────────────────
@@ -332,7 +318,7 @@ const ProductDetailSkeleton: React.FC = () => (
 // ── ReviewCard ────────────────────────────────────────────────────────────────
 
 interface ReviewCardProps {
-  review: Review;
+  review: ReviewApiItem;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => (
@@ -340,9 +326,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => (
     <div className="mb-2 flex items-center justify-between gap-4">
       <div className="flex items-center gap-2">
         <StarRating rating={review.rating} />
-        {review.user?.full_name && (
-          <span className="text-sm font-medium text-gray-700">{review.user.full_name}</span>
-        )}
       </div>
       <time
         className="shrink-0 text-xs text-gray-400"
@@ -355,11 +338,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => (
         })}
       </time>
     </div>
-    {review.title && (
-      <p className="mb-1 text-sm font-semibold text-gray-900">{review.title}</p>
-    )}
-    {review.body && (
-      <p className="text-sm leading-relaxed text-gray-600">{review.body}</p>
+    {review.review_text && (
+      <p className="text-sm leading-relaxed text-gray-600">{review.review_text}</p>
     )}
   </article>
 );
@@ -394,11 +374,47 @@ const ProductDetailPage: React.FC = () => {
   const [cartSuccess, setCartSuccess] = useState<string | null>(null);
   const [cartError, setCartError] = useState<string | null>(null);
 
+  // ── Review pagination state ──────────────────────────────────────────────────
+
+  const [reviewPage, setReviewPage] = useState<number>(1);
+
+  // ── Fetch reviews via dedicated endpoint ─────────────────────────────────────
+
+  const {
+    data: reviewsData,
+    isLoading: reviewsLoading,
+    isError: reviewsError,
+  } = useQuery<ReviewsResponse, Error>({
+    queryKey: ['reviews', productId, reviewPage],
+    queryFn: () => getProductReviews(productId!, reviewPage, REVIEWS_PER_PAGE),
+    enabled: !!productId,
+  });
+
+  // ── Review form mutation ──────────────────────────────────────────────────────
+
+  const reviewMutation = useMutation({
+    mutationFn: ({ rating, review_text }: { rating: number; review_text: string }) =>
+      createProductReview(productId!, { rating, review_text }),
+    onSuccess: () => {
+      setReviewSuccess('Thank you! Your review has been submitted.');
+      setReviewError(null);
+      setReviewRating(5);
+      setReviewText('');
+      setReviewPage(1);
+      queryClient.invalidateQueries({ queryKey: ['reviews', productId] });
+      queryClient.invalidateQueries({ queryKey: ['product', productId] });
+    },
+    onError: (err: unknown) => {
+      const msg = err instanceof Error ? err.message : 'Failed to submit review.';
+      setReviewError(msg);
+      setReviewSuccess(null);
+    },
+  });
+
   // ── Review form state ────────────────────────────────────────────────────────
 
   const [reviewRating, setReviewRating] = useState<number>(5);
-  const [reviewComment, setReviewComment] = useState<string>('');
-  const [reviewSubmitting, setReviewSubmitting] = useState<boolean>(false);
+  const [reviewText, setReviewText] = useState<string>('');
   const [reviewSuccess, setReviewSuccess] = useState<string | null>(null);
   const [reviewError, setReviewError] = useState<string | null>(null);
 
@@ -530,32 +546,18 @@ const ProductDetailPage: React.FC = () => {
   // ── Review submission ────────────────────────────────────────────────────────
 
   const handleReviewSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!user) {
         navigate('/login');
         return;
       }
       if (!productId) return;
-
-      setReviewSubmitting(true);
-      setReviewError(null);
       setReviewSuccess(null);
-
-      try {
-        await createProductReview(productId, { rating: reviewRating, comment: reviewComment });
-        setReviewSuccess('Thank you! Your review has been submitted.');
-        setReviewRating(5);
-        setReviewComment('');
-        queryClient.invalidateQueries({ queryKey: ['product', productId] });
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : 'Failed to submit review.';
-        setReviewError(msg);
-      } finally {
-        setReviewSubmitting(false);
-      }
+      setReviewError(null);
+      reviewMutation.mutate({ rating: reviewRating, review_text: reviewText });
     },
-    [user, navigate, productId, reviewRating, reviewComment, queryClient]
+    [user, navigate, productId, reviewRating, reviewText, reviewMutation]
   );
 
   // ── Render: loading ───────────────────────────────────────────────────────────
@@ -631,10 +633,13 @@ const ProductDetailPage: React.FC = () => {
       : 'out_of_stock'
     : 'unknown';
 
-  const reviews: Review[] = product.reviews ?? [];
+  // Reviews come from the dedicated React Query call above
+  const reviews: ReviewApiItem[] = reviewsData?.reviews ?? [];
+  const totalReviews: number = reviewsData?.total_reviews ?? 0;
+  const totalReviewPages: number = Math.max(1, Math.ceil(totalReviews / REVIEWS_PER_PAGE));
   const avgRating: number | null =
-    reviews.length > 0
-      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    reviewsData?.average_rating != null
+      ? reviewsData.average_rating
       : product.average_rating ?? null;
 
   const needsSizeSelection = allSizes.length > 0 && selectedSize === null;
@@ -713,8 +718,8 @@ const ProductDetailPage: React.FC = () => {
               <StarRating rating={avgRating} />
               <span className="text-sm text-gray-500">
                 {avgRating.toFixed(1)}{' '}
-                ({product.review_count > 0 ? product.review_count : reviews.length}{' '}
-                {(product.review_count === 1 || reviews.length === 1) ? 'review' : 'reviews'})
+                ({totalReviews > 0 ? totalReviews : (product.review_count ?? 0)}{' '}
+                {(totalReviews === 1 || product.review_count === 1) ? 'review' : 'reviews'})
               </span>
             </div>
           )}
@@ -950,19 +955,69 @@ const ProductDetailPage: React.FC = () => {
           className="mb-8 text-2xl font-extrabold text-gray-900"
         >
           Customer Reviews
-          {reviews.length > 0 && (
+          {totalReviews > 0 && (
             <span className="ml-2 text-lg font-normal text-gray-400">
-              ({reviews.length})
+              ({totalReviews})
             </span>
           )}
         </h2>
 
-        {reviews.length > 0 ? (
-          <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+        {/* Reviews list */}
+        {reviewsLoading ? (
+          <div
+            aria-busy="true"
+            aria-label="Loading reviews"
+            className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-32 animate-pulse rounded-xl border border-gray-200 bg-gray-100"
+              />
             ))}
           </div>
+        ) : reviewsError ? (
+          <p className="mb-10 text-sm text-red-600" role="alert">
+            Failed to load reviews. Please refresh and try again.
+          </p>
+        ) : reviews.length > 0 ? (
+          <>
+            <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {reviews.map((review) => (
+                <ReviewCard key={review.id} review={review} />
+              ))}
+            </div>
+
+            {/* Pagination controls */}
+            {totalReviewPages > 1 && (
+              <nav
+                aria-label="Reviews pagination"
+                className="mb-10 flex items-center justify-center gap-3"
+              >
+                <button
+                  type="button"
+                  onClick={() => setReviewPage((p) => Math.max(1, p - 1))}
+                  disabled={reviewPage <= 1}
+                  aria-label="Previous reviews page"
+                  className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                >
+                  Previous
+                </button>
+                <span className="text-sm text-gray-500" aria-live="polite">
+                  Page {reviewPage} of {totalReviewPages}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setReviewPage((p) => Math.min(totalReviewPages, p + 1))}
+                  disabled={reviewPage >= totalReviewPages}
+                  aria-label="Next reviews page"
+                  className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                >
+                  Next
+                </button>
+              </nav>
+            )}
+          </>
         ) : (
           <p className="mb-10 text-gray-500">
             No reviews yet — be the first to share your thoughts!
@@ -998,17 +1053,19 @@ const ProductDetailPage: React.FC = () => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="review-comment"
+                  htmlFor="review-text"
                   className="mb-2 block text-sm font-semibold text-gray-700"
                 >
-                  Comment <span className="font-normal text-gray-400">(optional)</span>
+                  Review <span className="font-normal text-gray-400">(required)</span>
                 </label>
                 <textarea
-                  id="review-comment"
-                  value={reviewComment}
-                  onChange={(e) => setReviewComment(e.target.value)}
+                  id="review-text"
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
                   rows={4}
+                  required
                   placeholder="What did you think of these boots?"
+                  aria-label="Review text"
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 resize-y"
                 />
               </div>
@@ -1026,10 +1083,10 @@ const ProductDetailPage: React.FC = () => {
 
               <button
                 type="submit"
-                disabled={reviewSubmitting}
+                disabled={reviewMutation.isPending}
                 className="rounded-lg bg-gray-900 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700 disabled:cursor-wait disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-gray-900"
               >
-                {reviewSubmitting ? 'Submitting…' : 'Submit Review'}
+                {reviewMutation.isPending ? 'Submitting…' : 'Submit Review'}
               </button>
             </form>
           )}
