@@ -15,11 +15,19 @@ class RegisterRequest(BaseModel):
 
 
 class RegisterResponse(BaseModel):
-    """Response schema for POST /api/v1/auth/register (US-001)."""
+    """Response schema for POST /api/v1/auth/register (US-001).
+
+    Returns user info plus JWT tokens so the user is automatically
+    authenticated after account creation (no separate login required).
+    """
 
     user_id: str
     email: str
     message: str = "Registration successful. Please check your email for confirmation."
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int = 1800
 
 
 class TokenResponse(BaseModel):

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
+from typing import AsyncIterator
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -28,6 +31,31 @@ configure_logging()
 logger = get_logger(__name__)
 
 
+@asynccontextmanager
+async def lifespan(application: FastAPI) -> AsyncIterator[None]:
+    """Application lifespan: auto-create DB tables for SQLite/dev environments."""
+    from app.core.database import engine, Base  # noqa: F401
+    # Import all models so metadata is populated before create_all
+    import app.domains.account.models  # noqa: F401
+    import app.domains.auth.models  # noqa: F401
+    import app.domains.categories.models  # noqa: F401
+    import app.domains.products.models  # noqa: F401
+    import app.domains.cart.models  # noqa: F401
+    import app.domains.checkout.models  # noqa: F401
+
+    url = str(engine.url)
+    if "sqlite" in url:
+        # SQLite fallback (CI / dev without Postgres) — create all tables on startup
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("SQLite tables created/verified on startup")
+
+    yield
+
+    # Cleanup on shutdown
+    await engine.dispose()
+
+
 def create_app() -> FastAPI:
     application = FastAPI(
         title="Boots Shopping App",
@@ -35,6 +63,7 @@ def create_app() -> FastAPI:
         docs_url="/docs",
         redoc_url="/redoc",
         openapi_url="/openapi.json",
+        lifespan=lifespan,
     )
 
     # CORS middleware

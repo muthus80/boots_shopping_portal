@@ -27,8 +27,13 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user } = useAuth();
-  if (!user) {
+  const { isAuthenticated, isLoading } = useAuth();
+  // While the session is being restored from a stored refresh token, don't
+  // redirect yet — the token exchange may still be in flight.
+  if (isLoading) {
+    return null;
+  }
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   return <>{children}</>;

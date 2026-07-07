@@ -71,6 +71,8 @@ class AuthService:
             user_id=str(user.id),
             email=user.email,
             message="Registration successful. Please check your email for confirmation.",
+            access_token=access_token,
+            refresh_token=refresh_token_str,
         )
 
     async def login(self, payload: LoginRequest) -> TokenResponse:

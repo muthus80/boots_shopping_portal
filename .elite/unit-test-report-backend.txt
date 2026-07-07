@@ -1,40 +1,13 @@
-============================= test session starts ==============================
-platform linux -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/bin/python
-cachedir: .pytest_cache
-metadata: {'Python': '3.12.13', 'Platform': 'Linux-7.0.0-1006-aws-x86_64-with-glibc2.43', 'Packages': {'pytest': '9.1.1', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1', 'asyncio': '1.4.0', 'anyio': '4.14.1'}, 'AWS_REGION': 'us-east-1'}
-rootdir: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app
-configfile: pyproject.toml
-plugins: json-report-1.5.0, metadata-3.1.1, asyncio-1.4.0, anyio-4.14.1
-asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
-collecting ... collected 28 items
+........................................................................ [ 24%]
+........................................................................ [ 48%]
+........................................................................ [ 73%]
+........................................................................ [ 97%]
+.......                                                                  [100%]
+=============================== warnings summary ===============================
+tests/unit/sprint_1/test_auth_login.py: 17 warnings
+tests/unit/sprint_1/test_auth_session_t008.py: 32 warnings
+  /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/jose/jwt.py:311: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = timegm(datetime.utcnow().utctimetuple())
 
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac1_add_item_with_variant_returns_201 PASSED [  3%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac2_response_is_full_cart_read_envelope PASSED [  7%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac3_guest_user_can_add_to_cart PASSED [ 10%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac4_confirmation_item_count_reflects_new_item PASSED [ 14%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac5_adding_same_variant_twice_merges_quantity PASSED [ 17%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac6_two_distinct_products_show_item_count_2 PASSED [ 21%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac7_nonexistent_product_returns_404 PASSED [ 25%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac8_nonexistent_variant_returns_404 PASSED [ 28%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_ac9_exceeding_stock_returns_400 PASSED [ 32%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_add_without_variant_succeeds PASSED [ 35%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_invalid_quantity_zero_returns_422 PASSED [ 39%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestAddCartItemEndpoint::test_cart_total_reflects_item_price PASSED [ 42%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceGetOrCreateCart::test_creates_new_cart_for_guest_session PASSED [ 46%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceGetOrCreateCart::test_returns_existing_cart_for_same_session PASSED [ 50%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceGetOrCreateCart::test_creates_cart_for_user PASSED [ 53%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceGetOrCreateCart::test_returns_existing_user_cart PASSED [ 57%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceGetCart::test_raises_not_found_for_missing_session PASSED [ 60%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceGetCart::test_raises_not_found_for_missing_user PASSED [ 64%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceAddItem::test_adds_product_without_variant PASSED [ 67%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceAddItem::test_adds_product_with_variant PASSED [ 71%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceAddItem::test_merges_same_variant_on_second_add PASSED [ 75%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceAddItem::test_unit_price_captured_from_product_base_price PASSED [ 78%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceAddItem::test_raises_not_found_for_missing_product PASSED [ 82%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceAddItem::test_raises_bad_request_when_stock_exceeded PASSED [ 85%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceAddItem::test_cart_total_updated_after_add PASSED [ 89%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceAddItem::test_item_count_equals_sum_of_quantities PASSED [ 92%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceGetCartById::test_returns_cart_with_items PASSED [ 96%]
-tests/unit/sprint_2/test_cart_api_t022.py::TestCartServiceGetCartById::test_raises_not_found_for_missing_cart_id PASSED [100%]
-
-============================== 28 passed in 5.02s ==============================
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+295 passed, 49 warnings in 70.35s (0:01:10)
