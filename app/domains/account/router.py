@@ -5,7 +5,8 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.deps import get_current_user, require_member
+from app.core.database import get_db
+from app.core.deps import get_current_user
 from app.domains.account.schemas import (
     OrderRead,
     PasswordChange,
@@ -28,7 +29,7 @@ async def get_profile(
 async def update_profile(
     payload: UserUpdate,
     current_user=Depends(get_current_user),
-    db: AsyncSession = Depends(require_member),
+    db: AsyncSession = Depends(get_db),
 ) -> UserRead:
     service = AccountService(db)
     updated = await service.update_profile(current_user.id, payload)
@@ -44,7 +45,7 @@ async def update_profile(
 async def change_password(
     payload: PasswordChange,
     current_user=Depends(get_current_user),
-    db: AsyncSession = Depends(require_member),
+    db: AsyncSession = Depends(get_db),
 ) -> dict:
     service = AccountService(db)
     await service.change_password(current_user.id, payload)
@@ -54,7 +55,7 @@ async def change_password(
 @router.get("/orders", response_model=List[OrderRead])
 async def get_order_history(
     current_user=Depends(get_current_user),
-    db: AsyncSession = Depends(require_member),
+    db: AsyncSession = Depends(get_db),
 ) -> List[OrderRead]:
     service = AccountService(db)
     orders = await service.get_order_history(current_user.id)
@@ -65,7 +66,7 @@ async def get_order_history(
 async def get_order(
     order_id: str,
     current_user=Depends(get_current_user),
-    db: AsyncSession = Depends(require_member),
+    db: AsyncSession = Depends(get_db),
 ) -> OrderRead:
     service = AccountService(db)
     order = await service.get_order(current_user.id, order_id)
