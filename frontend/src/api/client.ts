@@ -41,6 +41,21 @@ export const setAuthToken = (token: string | null, refreshToken?: string | null)
   }
 };
 
+/**
+ * Register a callback that is invoked when a token refresh fails and the
+ * session cannot be recovered. The application uses this to clear React auth
+ * state and redirect the user to /login.
+ */
+let authFailureHandler: (() => void) | null = null;
+
+export const registerAuthFailureHandler = (handler: () => void): void => {
+  authFailureHandler = handler;
+};
+
+export const clearAuthFailureHandler = (): void => {
+  authFailureHandler = null;
+};
+
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     if (authToken && config.headers) {
@@ -63,6 +78,7 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (!refreshTokenValue) {
         setAuthToken(null, null);
+        authFailureHandler?.();
         return Promise.reject(error);
       }
 
@@ -105,6 +121,8 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         setAuthToken(null, null);
+        // Notify the React auth layer so it can clear state and redirect to /login
+        authFailureHandler?.();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
