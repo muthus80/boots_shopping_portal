@@ -1,6 +1,7 @@
 -- ============================================================
 -- Sprint 3 — Checkout, Payments, Reviews & Accessibility
 -- Task T-025: Orders database schema (US-003 Guest Checkout)
+-- Task T-018: Reviews database schema (US-008 Purchase-Verified Reviews)
 -- Engine: PostgreSQL
 -- ------------------------------------------------------------
 -- All core table DDL (orders, order_items, reviews) was
@@ -71,6 +72,23 @@ CREATE INDEX IF NOT EXISTS ix_reviews_order_id
     ON reviews (order_id);
 
 -- ============================================================
+-- Migration 0005: Sprint 3 T-018 purchase-verified reviews
+-- ============================================================
+
+-- ----------------------------------------------------------------
+-- T-018 (US-008): One review per user per product.
+-- Drop the non-unique composite index from Sprint 2 (0002) and
+-- replace with a UNIQUE constraint that provides the same index
+-- efficiency while also enforcing the data-integrity rule.
+-- POST /api/v1/products/{product_id}/reviews
+-- ----------------------------------------------------------------
+DROP INDEX IF EXISTS ix_reviews_user_id_product_id;
+
+ALTER TABLE reviews
+    ADD CONSTRAINT uq_reviews_user_product
+    UNIQUE (user_id, product_id);
+
+-- ============================================================
 -- Sprint 3 query patterns (informational)
 -- ============================================================
 
@@ -122,3 +140,25 @@ CREATE INDEX IF NOT EXISTS ix_reviews_order_id
 --   FROM orders
 --   GROUP BY status;
 --   Index used: ix_orders_status
+
+-- T-018 (Purchase-Verified Review): Submit a review — check for duplicate
+--   Enforced automatically by uq_reviews_user_product UNIQUE constraint.
+--   Service layer raises HTTP 409 on IntegrityError before INSERT.
+--   Verification query (purchase gate):
+--   SELECT o.id
+--   FROM orders o
+--   JOIN order_items oi ON oi.order_id = o.id
+--   WHERE o.user_id     = :user_id
+--     AND oi.product_id = :product_id
+--     AND o.status IN ('confirmed', 'shipped', 'delivered')
+--   LIMIT 1;
+--   Indexes used: ix_orders_user_id, ix_order_items_order_id,
+--                 ix_order_items_product_id, ix_orders_status
+
+-- T-018 (Review Lookup): Get all approved reviews for a product
+--   SELECT r.*
+--   FROM reviews r
+--   WHERE r.product_id  = :product_id
+--     AND r.is_approved = TRUE
+--   ORDER BY r.created_at DESC;
+--   Index used: ix_reviews_product_id

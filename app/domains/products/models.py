@@ -3,8 +3,10 @@ from __future__ import annotations
 import uuid as _uuid
 from typing import List
 
+import sqlalchemy as sa
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     Column,
     DateTime,
     Float,
@@ -15,6 +17,7 @@ from sqlalchemy import (
     String,
     Text,
     TypeDecorator,
+    UniqueConstraint,
     func,
     types,
 )
@@ -155,8 +158,45 @@ class ProductVariant(Base):
 
 
 class Review(Base):
+    """Purchase-verified product review linking product, user, and verifying order.
+
+    T-018 (US-008) — one review per user per product enforced at DB level
+    via UNIQUE(user_id, product_id).
+
+    Fields
+    ------
+    id                  : UUID PK
+    product_id          : FK → products.id ON DELETE CASCADE
+    user_id             : FK → users.id ON DELETE CASCADE
+    order_id            : nullable FK → orders.id ON DELETE SET NULL
+                          Used for purchase-verification (T-018 gate).
+    rating              : INTEGER CHECK (1..5)
+    title               : VARCHAR(255) nullable
+    body                : TEXT nullable
+    is_verified_purchase: BOOLEAN default False — set True when order_id
+                          is confirmed as a completed purchase.
+    is_approved         : BOOLEAN default True
+    helpful_votes       : INTEGER default 0
+    created_at          : TIMESTAMPTZ
+    updated_at          : TIMESTAMPTZ (updated via trigger on PostgreSQL)
+
+    Table-level constraints
+    -----------------------
+    uq_reviews_user_product : UNIQUE(user_id, product_id)
+        Enforces one review per user per product.  Adding migration 0005
+        also drops the non-unique ix_reviews_user_id_product_id index (0002)
+        in favour of this UNIQUE index.
+    chk_reviews_rating      : CHECK(rating BETWEEN 1 AND 5)
+    """
+
     __tablename__ = "reviews"
     __allow_unmapped__ = True
+    __table_args__ = (
+        # T-018: one review per user per product
+        sa.UniqueConstraint("user_id", "product_id", name="uq_reviews_user_product"),
+        # Re-declare check constraint so SQLite (unit tests) sees it too
+        sa.CheckConstraint("rating BETWEEN 1 AND 5", name="chk_reviews_rating"),
+    )
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=_uuid.uuid4, index=True)
     product_id = Column(
@@ -177,7 +217,7 @@ class Review(Base):
         nullable=True,
         index=True,
     )
-    rating = Column(Integer, nullable=False)  # 1-5
+    rating = Column(Integer, nullable=False)  # 1-5 enforced by chk_reviews_rating
     title = Column(String(255), nullable=True)
     body = Column(Text, nullable=True)
     is_verified_purchase = Column(Boolean, nullable=False, default=False)

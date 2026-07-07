@@ -759,20 +759,27 @@ class TestReviewSchema:
 
     @pytest.mark.asyncio
     async def test_reviews_filterable_by_product(self, db: AsyncSession):
-        """Multiple reviews on a product can be fetched by product_id."""
-        user = _user()
+        """Multiple reviews on a product can be fetched by product_id.
+
+        T-018 (Sprint 3) adds UNIQUE(user_id, product_id) — each review
+        must come from a distinct user.
+        """
         cat = _category()
-        db.add_all([user, cat])
+        db.add(cat)
         await db.flush()
 
         prod = _product(cat.id)
         db.add(prod)
         await db.flush()
 
+        # Three different reviewers, each rates the product once
         for rating in (5, 4, 3):
+            reviewer = _user()
+            db.add(reviewer)
+            await db.flush()
             db.add(Review(
                 product_id=prod.id,
-                user_id=user.id,
+                user_id=reviewer.id,
                 rating=rating,
             ))
         await db.flush()
