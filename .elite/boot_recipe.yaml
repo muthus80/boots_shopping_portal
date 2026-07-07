@@ -1,0 +1,43 @@
+name: python_fastapi_sqlalchemy_async_postgres
+description: FastAPI + SQLAlchemy 2.x async + Alembic + PostgreSQL 16 boots-shopping-app
+  scaffold
+detector:
+  all_of:
+  - file_exists: boots-shopping-app/alembic.ini
+  - file_exists: boots-shopping-app/requirements.txt
+  - file_contains:
+      path: boots-shopping-app/requirements.txt
+      substring: fastapi
+  - file_contains:
+      path: boots-shopping-app/requirements.txt
+      substring: asyncpg
+  - file_contains:
+      path: boots-shopping-app/alembic.ini
+      substring: sqlalchemy.url
+  any_of: []
+  none_of: []
+setup:
+- cmd: pip install -r boots-shopping-app/requirements.txt
+  timeout_seconds: 300
+  use_python_sandbox: true
+boot_probes:
+- name: alembic_upgrade_head
+  cmd: cd boots-shopping-app && alembic upgrade head
+  timeout_seconds: 90
+  expect_exit: 0
+  failure_signals: []
+  use_python_sandbox: true
+- name: app_import_check
+  cmd: cd boots-shopping-app && python -c "from app.main import app; assert callable(app)"
+  timeout_seconds: 30
+  expect_exit: 0
+  failure_signals: []
+  use_python_sandbox: true
+- name: app_routes_registered
+  cmd: 'cd boots-shopping-app && python -c "from app.main import app; routes = [r.path
+    for r in app.routes]; assert any(''/products'' in p for p in routes), f''products
+    route missing: {routes}''"'
+  timeout_seconds: 30
+  expect_exit: 0
+  failure_signals: []
+  use_python_sandbox: true

@@ -1,0 +1,17 @@
+{
+  "name": "e2e-tests",
+  "version": "1.0.0",
+  "description": "Playwright E2E tests — no LLM dependency at runtime",
+  "scripts": {
+    "postinstall": "npx playwright install chromium",
+    "test": "playwright test",
+    "test:local": "cross-env BASE_URL=http://localhost:3000 playwright test",
+    "test:headed": "cross-env BASE_URL=http://localhost:3000 playwright test --headed",
+    "test:ui": "cross-env BASE_URL=http://localhost:3000 playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "cross-env": "^7.0.3"
+  }
+}
