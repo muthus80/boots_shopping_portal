@@ -13,7 +13,7 @@ PROJECT_ROOT = FIXTURES.parent.parent
 MANIFEST = PROJECT_ROOT / ".elite" / "test-credentials.json"
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
-    "postgresql://boots_shopping_app_test_app:NuxSjSLdbVatOQjmWEnlMqVaflWcB-Dc@localhost:5432/boots_shopping_app_test",
+    "postgresql://boots_shopping_app_test_app:Qwsj2Yk1W8PeGRfxVGK2bx7SPOqjEtnk@localhost:5432/boots_shopping_app_test",
 )
 
 # Make the app importable so we can call its own hash helper.

@@ -3,449 +3,299 @@ _The Context Engineer has already selected what you need for this task. Use the 
 
 ### Essentials (inline — use these directly)
 
-#### qa_engineer output
-_AUTHORITATIVE: QA engineer output from testing stage — primary handoff containing failing assertions and root cause hypotheses that frontend_dev must address._
+#### Sprint 3 — Deliver the complete guest checkout flow with Stripe payment
+_Sprint 3 plan directly defines the tasks T-025 and T-018 that the db_architect must implement._
+
+Deliver the complete guest checkout flow with Stripe payment integration, order confirmation emails, order history for authenticated users, purchase-verified product reviews, and full WCAG 2.1 AA keyboard accessibility across the application.
+
+#### Sprint 3 — Deliver the complete guest checkout flow with Stripe payment
+_Alternate Sprint 3 plan also covering T-025 and T-018 scope, providing additional task detail context._
+
+Deliver the complete guest checkout flow with Stripe payment integration, order confirmation emails, and full WCAG 2.1 AA keyboard accessibility across the application.
+
+#### Architecture — full document
+_Full architecture document containing all data models, ADRs, and guidelines directly needed to implement Sprint 3 DB tasks._
+
+Architecture: pattern=modular_monolith. 6 components, 17 endpoints, 10 data models, 5 ADRs, 7 diagrams.
+
+#### db_architect output
+_Sprint 1 db_architect output with initial schema migration SQL needed to understand existing table definitions before adding Sprint 3 tables._
 
 {
-  "agent_observations": [
+  "changes_made": [
+    "SDK session generated 3 ORM model file(s), 1 migration(s), 2 test file(s) in workspace boots-shopping-app (Sprint 1)"
+  ],
+  "dialect": "postgresql",
+  "files": [],
+  "indexes": [],
+  "migrations": [
     {
-      "assigned_role": "frontend_dev",
-      "failing_assertion": "expect(successHeading.or(homeHeading)).toBeVisible \u2014 page shows `alert: Not Found` before form submission",
-      "root_cause_hypothesis": "The RegisterPage shows a `role=\"alert\"` with \"Not Found\" before the form is submitted. This indicates the frontend AuthContext or a mounted component 
+      "description": "Sprint 1 initial schema \u2014 users, refresh_tokens, categories, products,",
+      "downgrade_sql": "DROP FUNCTION IF EXISTS _products_search_ve
 
-#### frontend_dev output
-_Prior frontend_dev development output — contains the existing frontend codebase state, file conflicts, and implementation details that must be understood before fixing test failures._
-
-{
-  "_merge_metadata": {
-    "file_conflicts": [
-      {
-        "also_by": "T-015",
-        "claimed_by": "T-013",
-        "path": "frontend/src/api/products.ts"
-      },
-      {
-        "also_by": "T-015",
-        "claimed_by": "T-011",
-        "path": "frontend/src/pages/ProductListPage.tsx"
-      },
-      {
-        "also_by": "T-023",
-        "claimed_by": "T-013",
-        "path": "frontend/sr
-
-#### ADR-002 — JWT with Refresh Token Rotation for Session Management
-_ADR-002 on JWT/refresh token strategy directly governs AuthContext implementation, which is implicated in the RegisterPage 'Not Found' alert bug identified by QA._
+#### db_architect output
+_Alternate Sprint 1 db_architect output with migration details for baseline schema context._
 
 {
-  "adr_id": "ADR-002",
-  "alternatives": [
-    "Session cookies with server-side session store \u2014 rejected because it requires Redis or DB session store and is less suitable for a SPA architecture",
-    "Long-lived JWTs without refresh \u2014 rejected because they cannot be revoked on logout, violating security requirements",
-    "OAuth2 provider (e.g., Auth0) \u2014 rejected because the user specified auth: none (no third-party auth provider)"
+  "changes_made": [
+    "SDK session generated 3 ORM model file(s), 1 migration(s), 2 test file(s) in workspace boots-shopping-app (Sprint 1)"
   ],
-  "consequences": [
-    "Access tokens are stateless and verifiable without DB lookup on every request",
-    "Logout and token revocation are supported via the revoked flag in refresh_tokens table",
-    "httpOnly cookie for refresh token prevents XSS access to the long-lived token",
-    "Token refresh adds one extra API call when access token expires, but this is transparent to the user"
+  "dialect": "postgresql",
+  "indexes": [],
+  "migrations": [
+    {
+      "description": "Sprint 1 initial schema \u2014 users, refresh_tokens, categories, products,",
+      "downgrade_sql": "DROP FUNCTION IF EXISTS _products_search_vector_update() C
+
+#### Data Model: Order
+_Order data model definition directly required for T-025 (checkout/order schema work)._
+
+{
+  "description": "Completed purchase order for guest or authenticated user",
+  "fields": [
+    {
+      "constraints": [
+        "PRIMARY KEY"
+      ],
+      "default": "gen_random_uuid()",
+      "name": "id",
+      "nullable": false,
+      "type": "UUID"
+    },
+    {
+      "constraints": [
+        "UNIQUE",
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "order_number",
+      "nullable": false,
+      "type": "VARCHAR(50)"
+    },
+    {
+      "constraints": [
+        "FK users.id ON DELETE SET NULL"
+      ],
+      "default": null,
+      "name": "user_id",
+      "nullable": true,
+      "type": "UUID"
+    },
+    {
+      "constraints": [],
+      "default": null,
+      "name": "guest_email",
+      "nullable": true,
+      "type": "VARCHAR(255)"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": "'pending'",
+      "name": "status",
+      "nullable": false,
+      "type": "VARCHAR(50)"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "total_amount",
+      "nullable": false,
+      "type": "NUMERIC(10,2)"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": "'{}'",
+      "name": "shipping_address",
+      "nullable": false,
+      "type": "JSONB"
+    },
+    {
+      "constraints": [],
+      "default": null,
+      "name": "stripe_payment_intent_id",
+      "nullable": true,
+      "type": "VARCHAR(255)"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": "NOW()",
+      "name": "created_at",
+      "nullable": false,
+      "type": "TIMESTAMPTZ"
+    }
   ],
-  "context": "US-013 requires session persistence across page refreshes and new tabs, with graceful redirect to login on expiry. The user preference specifies no dedicated auth service (auth: none in preferences means no third-party auth provider). We need a stateless auth mechanism that supports the browser's multi-tab scenario while allowing token revocation for logout. Storing hashed refresh tokens in PostgreSQL provides revocability without a separate Redis cache.",
-  "decision": "Issue short-lived (30-minute) JWT access tokens and long-lived (7-day) refresh tokens. Store a SHA-256 hash of the refresh token in the refresh_tokens table with a revoked flag. The React frontend stores the access token in memory and the refresh token in an httpOnly cookie. On access token expiry, silently call POST /api/v1/auth/refresh before retrying the original request.",
-  "related_requirements": [
-    "US-002",
-    "US-013",
-    "NFR-security-password-hashing"
+  "indexes": [
+    {
+      "columns": [
+        "user_id"
+      ],
+      "name": "ix_orders_user_id",
+      "unique": false
+    },
+    {
+      "columns": [
+        "order_number"
+      ],
+      "name": "ix_orders_order_number",
+      "unique": true
+    }
   ],
-  "status": "accepted",
-  "title": "JWT with Refresh Token Rotation for Session Management"
+  "name": "Order",
+  "relationships": [
+    {
+      "foreign_key": "user_id",
+      "target": "User",
+      "type": "many_to_one"
+    },
+    {
+      "foreign_key": "order_id",
+      "target": "OrderItem",
+      "type": "one_to_many"
+    },
+    {
+      "foreign_key": "order_id",
+      "target": "Review",
+      "type": "one_to_many"
+    }
+  ],
+  "used_by_endpoints": [
+    "/api/v1/checkout/confirm",
+    "/api/v1/account/orders"
+  ]
 }
 
-#### ADR-005 — React 18 SPA with React Query for Server State Management
-_ADR-005 defines the React 18 + React Query + Axios + React Hook Form stack — directly governs how frontend state and forms should be implemented._
+#### Data Model: OrderItem
+_OrderItem data model definition directly required for T-025 order schema implementation._
 
 {
-  "adr_id": "ADR-005",
-  "alternatives": [
-    "Next.js \u2014 considered for SSR performance benefits but rejected because the user explicitly specified react (not next.js) and SSR adds deployment complexity beyond Docker Compose",
-    "Redux Toolkit \u2014 rejected in favour of React Query which handles server state, caching, and loading/error states more ergonomically with less boilerplate"
+  "description": "Individual line item in an order with captured unit price",
+  "fields": [
+    {
+      "constraints": [
+        "PRIMARY KEY"
+      ],
+      "default": "gen_random_uuid()",
+      "name": "id",
+      "nullable": false,
+      "type": "UUID"
+    },
+    {
+      "constraints": [
+        "NOT NULL",
+        "FK orders.id ON DELETE CASCADE"
+      ],
+      "default": null,
+      "name": "order_id",
+      "nullable": false,
+      "type": "UUID"
+    },
+    {
+      "constraints": [
+        "NOT NULL",
+        "FK product_variants.id"
+      ],
+      "default": null,
+      "name": "product_variant_id",
+      "nullable": false,
+      "type": "UUID"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "quantity",
+      "nullable": false,
+      "type": "INTEGER"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "unit_price",
+      "nullable": false,
+      "type": "NUMERIC(10,2)"
+    }
   ],
-  "consequences": [
-    "React Query provides built-in loading/error/empty state management satisfying US-014 with minimal custom code",
-    "SPA routing via React Router v6 enables fast client-side navigation",
-    "No SSR means first-paint depends on CDN-cached static JS bundle; CDN delivery is required to meet LCP 2.5s NFR",
-    "Stripe Elements integrates cleanly as a React component within the checkout flow"
+  "indexes": [
+    {
+      "columns": [
+        "order_id"
+      ],
+      "name": "ix_order_items_order_id",
+      "unique": false
+    }
   ],
-  "context": "The frontend needs to satisfy US-014 (loading, empty, error states), US-015 (keyboard accessibility), and perform well enough to meet the LCP 2.5s NFR. The user specified React as the frontend framework. A SPA architecture serves the dynamic filtering (US-005) and cart state updates (US-010) without full page reloads.",
-  "decision": "Use React 18 SPA with React Query (TanStack Query) for server state, Axios as the HTTP client, and React Hook Form for all form handling. Tailwind CSS for styling. All forms implement ARIA labels; interactive components use semantic HTML (button, input, nav) for keyboard accessibility.",
-  "related_requirements": [
-    "US-014",
-    "US-015",
-    "NFR-performance-lcp",
-    "NFR-accessibility"
+  "name": "OrderItem",
+  "relationships": [
+    {
+      "foreign_key": "order_id",
+      "target": "Order",
+      "type": "many_to_one"
+    },
+    {
+      "foreign_key": "product_variant_id",
+      "target": "ProductVariant",
+      "type": "many_to_one"
+    }
   ],
-  "status": "accepted",
-  "title": "React 18 SPA with React Query for Server State Management"
+  "used_by_endpoints": [
+    "/api/v1/checkout/confirm",
+    "/api/v1/account/orders"
+  ]
 }
+
+#### Data Model: Review
+_Review data model definition directly required for T-018 (reviews schema work)._
+
+Purchase-verified product review linking product, user, and verifying order
+
+#### API: POST /api/v1/checkout/confirm
+_POST /api/v1/checkout/confirm API contract defines the data requirements the Order/OrderItem tables must satisfy._
+
+Confirm payment, create order, send confirmation email
+
+#### API: POST /api/v1/products/{product_id}/reviews
+_POST /api/v1/products/{product_id}/reviews API contract defines data requirements for the reviews table._
+
+Submit a purchase-verified product review
+
+#### ADR-004 — PostgreSQL Full-Text Search for Product Discovery
+_ADR-004 defines PostgreSQL full-text search approach relevant to any search_vector considerations in Sprint 3 schema._
+
+Use PostgreSQL tsvector and tsquery for full-text search on products. Maintain a search_vector TSVECTOR column updated via database trigger combining name, brand, and description fields. Use a GIN index on search_vector for sub-100ms query performance. Filtering uses standard SQL JOINs to product_variants with indexed columns.
 
 #### ADR-003 — Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance
-_ADR-003 on Stripe PaymentIntents/Elements is directly relevant to checkout frontend implementation that QA may be testing._
+_ADR-003 defines Stripe PaymentIntents integration pattern that informs the order/payment schema design for T-025._
 
-{
-  "adr_id": "ADR-003",
-  "alternatives": [
-    "Stripe Checkout (redirect) \u2014 rejected because it takes the user off-site, breaking the 5-step checkout UX requirement",
-    "Braintree \u2014 rejected because Stripe is the only provider explicitly referenced in the NFRs and user preference",
-    "Manual card collection + server-side Stripe charge \u2014 rejected because it places card data on application servers, violating PCI-DSS"
-  ],
-  "consequences": [
-    "Application servers never see raw card data \u2014 achieves PCI-DSS SAQ A compliance",
-    "PaymentIntent server-side creation ensures the amount is set by the backend, preventing client-side tampering",
-    "Two API calls required for checkout (create PaymentIntent + confirm), but both fit within the 5-step UX constraint",
-    "Stripe webhook handling should be added post-MVP for reliable payment status updates"
-  ],
-  "context": "The critical NFR requires PCI-DSS compliance ensuring no cardholder data is stored on application servers. The checkout must be completable in 5 steps or fewer (US-011). We need a payment integration that handles card data entirely within the Stripe iframe while giving the backend control over order amounts.",
-  "decision": "Use Stripe PaymentIntents API on the backend to create server-authorised payment intents with the correct order total, and Stripe Elements (CardElement React component) on the frontend for card capture. The frontend confirms the payment directly with Stripe using the client_secret; the backend then verifies payment_intent status before creating the order record.",
-  "related_requirements": [
-    "US-011",
-    "NFR-security-pci"
-  ],
-  "status": "accepted",
-  "title": "Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance"
-}
+Use Stripe PaymentIntents API on the backend to create server-authorised payment intents with the correct order total, and Stripe Elements (CardElement React component) on the frontend for card capture. The frontend confirms the payment directly with Stripe using the client_secret; the backend then verifies payment_intent status before creating the order record.
 
-#### API: POST /api/v1/auth/register
-_POST /api/v1/auth/register contract is directly implicated in the RegisterPage bug identified by QA._
+#### Sprint Plan — full
+_Sprint plan with story point breakdown and sprint scope for all 3 sprints, providing full planning context for Sprint 3 tasks._
 
-{
-  "auth_required": false,
-  "description": "Validates email uniqueness, hashes password with bcrypt, persists user, sends confirmation email.",
-  "idempotent": false,
-  "method": "POST",
-  "pagination": false,
-  "path": "/api/v1/auth/register",
-  "query_params": [],
-  "rate_limit": "10/minute",
-  "related_stories": [
-    "US-001"
-  ],
-  "request_body": {
-    "email": "string",
-    "password": "string"
-  },
-  "required_role": null,
-  "response_schema": {
-    "email": "string",
-    "message": "string",
-    "user_id": "string (UUID)"
-  },
-  "status_codes": {
-    "201": "User created successfully",
-    "409": "Email already registered",
-    "422": "Validation error (password complexity)"
-  },
-  "summary": "Register a new user account"
-}
+Sprint Plan: 3 sprints, 6 weeks, 186 story points
 
-#### API: POST /api/v1/auth/login
-_POST /api/v1/auth/login contract is needed to correctly implement AuthContext and login flow being tested._
+#### Data Model: Product
+_Product data model needed as foreign key reference context for both Order and Review tables._
 
-{
-  "auth_required": false,
-  "description": "Validates credentials against bcrypt hash, issues short-lived access JWT and long-lived refresh token.",
-  "idempotent": false,
-  "method": "POST",
-  "pagination": false,
-  "path": "/api/v1/auth/login",
-  "query_params": [],
-  "rate_limit": "5/minute",
-  "related_stories": [
-    "US-002"
-  ],
-  "request_body": {
-    "email": "string",
-    "password": "string"
-  },
-  "required_role": null,
-  "response_schema": {
-    "access_token": "string (JWT)",
-    "expires_in": "integer (seconds)",
-    "refresh_token": "string",
-    "token_type": "bearer"
-  },
-  "status_codes": {
-    "200": "Login successful",
-    "401": "Invalid credentials",
-    "429": "Rate limit exceeded"
-  },
-  "summary": "Authenticate user and issue JWT tokens"
-}
+Boot product with images, attributes, and variants
 
-#### API: POST /api/v1/auth/refresh
-_POST /api/v1/auth/refresh contract governs the silent token refresh logic in AuthContext that is implicated in the QA-identified bug._
+#### API: GET /api/v1/account/orders
+_GET /api/v1/account/orders API contract informs what order query patterns the schema must support._
 
-{
-  "auth_required": false,
-  "description": "Validates refresh token, checks revocation status, issues new access token.",
-  "idempotent": false,
-  "method": "POST",
-  "pagination": false,
-  "path": "/api/v1/auth/refresh",
-  "query_params": [],
-  "rate_limit": "20/minute",
-  "related_stories": [
-    "US-013"
-  ],
-  "request_body": {
-    "refresh_token": "string"
-  },
-  "required_role": null,
-  "response_schema": {
-    "access_token": "string (JWT)",
-    "expires_in": "integer (seconds)",
-    "token_type": "bearer"
-  },
-  "status_codes": {
-    "200": "New access token issued",
-    "401": "Refresh token invalid or expired"
-  },
-  "summary": "Issue new access token from valid refresh token"
-}
-
-#### API: POST /api/v1/auth/logout
-_POST /api/v1/auth/logout contract needed for complete auth flow implementation._
-
-{
-  "auth_required": true,
-  "description": "Marks the refresh token as revoked in the database, effectively ending the session.",
-  "idempotent": true,
-  "method": "POST",
-  "pagination": false,
-  "path": "/api/v1/auth/logout",
-  "query_params": [],
-  "rate_limit": null,
-  "related_stories": [
-    "US-013"
-  ],
-  "request_body": {
-    "refresh_token": "string"
-  },
-  "required_role": null,
-  "response_schema": {
-    "message": "string"
-  },
-  "status_codes": {
-    "200": "Logged out successfully",
-    "401": "Not authenticated"
-  },
-  "summary": "Revoke refresh token and invalidate session"
-}
-
-#### integration_smoke output
-_Integration smoke test results confirm what is passing vs failing, providing context for what the frontend_dev needs to preserve while fixing issues._
-
-{
-  "checks_failed": [],
-  "checks_passed": [
-    "health",
-    "auth_login",
-    "protected_requires_auth",
-    "frontend_renders"
-  ],
-  "cycles": 1,
-  "error": null,
-  "fixes_applied": [],
-  "status": "passed"
-}
-
-#### Page: Register
-_Register page UI design spec directly relevant to the failing RegisterPage test._
-
-{
-  "auth_required": false,
-  "components": [
-    "SiteHeader",
-    "Footer",
-    "Input",
-    "Button",
-    "Alert"
-  ],
-  "description": "New user account creation page.",
-  "layout": "MinimalLayout",
-  "name": "Register",
-  "related_stories": [
-    "US-001",
-    "US-012",
-    "US-014",
-    "US-015"
-  ],
-  "responsive_notes": "Centered card layout. Full width on mobile with slight padding.",
-  "route": "/register"
-}
-
-#### Page: Login
-_Login page UI design spec needed for correct auth page implementation._
-
-{
-  "auth_required": false,
-  "components": [
-    "SiteHeader",
-    "Footer",
-    "Input",
-    "Button",
-    "Alert"
-  ],
-  "description": "User authentication page.",
-  "layout": "MinimalLayout",
-  "name": "Login",
-  "related_stories": [
-    "US-002",
-    "US-012",
-    "US-013",
-    "US-014",
-    "US-015"
-  ],
-  "responsive_notes": "Centered card layout. Full width on mobile with slight padding.",
-  "route": "/login"
-}
-
-#### US-001 — User Registration
-_US-001 User Registration acceptance criteria define what the RegisterPage must satisfy for tests to pass._
-
-{
-  "acceptance_criteria": [
-    "Given I am on the registration page, when I enter a valid email and a password meeting complexity requirements, then my account is created.",
-    "Given my account is created, when I check my email, then I receive a confirmation message.",
-    "Given I try to register with an email that already exists, when I submit the form, then I see an error message indicating the email is already in use."
-  ],
-  "as_a": "new user",
-  "dependencies": [],
-  "epic": "User Authentication & Account Management",
-  "i_want": "to create an account using my email and a password",
-  "id": "US-001",
-  "priority": "high",
-  "so_that": "I can track my orders and save my information for future purchases.",
-  "story_points": 5,
-  "title": "User Registration"
-}
-
-#### US-002 — User Login
-_US-002 User Login acceptance criteria needed to validate correct login flow implementation._
-
-{
-  "acceptance_criteria": [
-    "Given I am on the login page, when I enter my correct credentials, then I am successfully logged in and redirected to the homepage.",
-    "Given I am on the login page, when I enter incorrect credentials, then I see an error message and remain on the login page."
-  ],
-  "as_a": "registered user",
-  "dependencies": [],
-  "epic": "User Authentication & Account Management",
-  "i_want": "to log in to my account",
-  "id": "US-002",
-  "priority": "critical",
-  "so_that": "I can access my profile and order history.",
-  "story_points": 3,
-  "title": "User Login"
-}
-
-#### US-013 — Session Continuity
-_US-013 Session Continuity acceptance criteria govern the AuthContext/refresh token behavior implicated in the QA bug._
-
-{
-  "acceptance_criteria": [
-    "Given I am logged in, when I refresh the current page, then I remain logged in.",
-    "Given I am logged in, when I open a new browser tab and navigate to the site, then I am already logged in.",
-    "Given my session token expires due to inactivity, when I try to perform an action requiring authentication, then I am gracefully redirected to the login page."
-  ],
-  "as_a": "logged-in user",
-  "dependencies": [],
-  "epic": "Core User Experience & Accessibility",
-  "i_want": "my session to persist across page refreshes and new tabs",
-  "id": "US-013",
-  "priority": "high",
-  "so_that": "I don't have to log in repeatedly.",
-  "story_points": 5,
-  "title": "Session Continuity"
-}
-
-#### Technology Stack
-_Tech stack summary provides version context for React, Axios, and other frontend dependencies._
-
-Tech stack: backend=FastAPI 0.111; database=PostgreSQL 16; orm=SQLAlchemy 2.0; frontend=React 18; language=Python 3.12; hosting=Docker Compose 2.27; payment=Stripe latest; web_server=Nginx 1.25; migrations=Alembic 1.13
-
-#### Component: ReactFrontend
-_ReactFrontend component description summarizes the SPA's responsibilities including client-side routing and accessibility._
-
-React 18 single-page application served as static files via Nginx. Handles all UI rendering, client-side routing, form validation, cart state, and WCAG 2.1 AA accessibility.
-
-#### code_reviewer output
-_Code reviewer output may contain frontend-relevant findings (e.g., CORS misconfiguration) that affect frontend API calls._
-
-{
-  "blocking_issues": [],
-  "changes_made": [
-    "app/domains/products/router.py"
-  ],
-  "findings": [
-    {
-      "category": "security",
-      "code_snippet": null,
-      "description": "CORS configured with allow_origins=[\"*\"] combined with allow_credentials=True \u2014 this combination is rejected by browsers and is a misconfiguration that could expose credentials to any origin",
-      "fi
-
-#### backend_dev output
-_Backend dev output summary provides context on backend API implementation state that frontend must integrate against._
-
-{
-  "_merge_metadata": {
-    "file_conflicts": [
-      {
-        "also_by": "T-012",
-        "claimed_by": "T-010",
-        "path": "app/domains/cart/router.py"
-      },
-      {
-        "also_by": "T-012",
-        "claimed_by": "T-010",
-        "path": "app/domains/cart/service.py"
-      },
-      {
-        "also_by": "T-012",
-        "claimed_by": "T-010",
-        "path": "app/domains/cart/schemas
-
-#### Page: Checkout
-_Checkout page design spec relevant if QA tests cover checkout flow._
-
-Multi-step checkout flow including shipping, payment via Stripe Elements, and confirmation.
-
-#### Page: Cart
-_Cart page design spec relevant to cart-related test scenarios._
-
-Shopping cart review page showing items, quantities, and subtotal.
-
-#### Page: Home
-_Home page design spec relevant since QA assertion checks for homeHeading visibility after registration._
-
-Landing page featuring search, category highlights, and featured products.
-
-#### US-012 — Consistent Site Navigation
-_US-012 Consistent Site Navigation acceptance criteria relevant to navigation header tests._
-
-As a user, I want to see a consistent navigation header on every page so that I can easily access main sections like categories, my account, and the shopping cart.
-
-#### US-015 — Keyboard Accessibility
-_US-015 Keyboard Accessibility requirements may be tested in the testing stage._
-
-As a keyboard-only user, I want to navigate and interact with all site features using only my keyboard so that I can use the application without a mouse.
-
-#### US-014 — System Feedback States
-_US-014 System Feedback States requirements relevant to loading/error state tests._
-
-As a user, I want to see loading, empty, and error states for dynamic content so that I understand the system's status and am not left guessing.
+Related stories: US-003
 
 ### Also available (Read a specific section on demand only if the essentials above don't cover it)
-- Development Guidelines
+- db_architect output
 
 > The `docs/` folder in your workspace mirrors the upstream phase outputs (PRD, sprint plan, architecture decision doc). The structured essentials you need are inline above. **Do NOT bulk-read the `docs/` folder** — open at most one specific section, and only if something inline is genuinely missing.
 
@@ -542,165 +392,87 @@ promoted into this charter so the next run does not repeat it.
 
 ---
 
-You are an elite Frontend Developer Agent for the Elite AI Pod system.
-You generate production-ready frontend source code scoped to your assigned work, using whatever framework and styling system the architecture specifies.
+You are an elite Database Architect Agent. You design and implement production-grade database schemas in whatever SQL/NoSQL system the architecture specifies, scoped to your assigned work.
 
 ## Authoritative Context
-- `tech_stack` — frontend framework, language, styling system, state management, build tooling. Use EXACTLY what is listed.
-- `development_guidelines` — coding standards, frontend patterns (state management choice, styling approach, component patterns, form handling, API client setup), API standards. Follow them.
-- `theme_config` — actionable theme values (colors, typography, breakpoints, component variants) that you paste into the appropriate config file for the chosen styling system.
-- `auth_strategy`, `design_specs`, `api_contracts`, `components`, `sequence_diagrams` — what to implement.
+- `tech_stack` — database engine (PostgreSQL, MySQL, SQL Server, MongoDB, DynamoDB, etc.) and the migration tool (Alembic, Flyway, Liquibase, Entity Framework Migrations, Knex, etc.), and the ORM/data-access layer (SQLAlchemy, Hibernate, EF Core, Prisma, TypeORM, MyBatis, jOOQ, GORM, ActiveRecord, etc.). Use EXACTLY what is listed.
+- `development_guidelines` — naming conventions, migration style, index naming pattern, backend patterns (architecture layers). Follow them.
+- `data_models`, `api_contracts`, `data_classification`, `erd_diagram`, `security_architecture` — what to model and how.
 
-If `tech_stack` or `development_guidelines` are missing or silent on a detail, pick a reasonable, idiomatic choice for the framework and note it in `changes_made`.
+If `tech_stack` is silent on a detail, pick an idiomatic choice for the chosen engine and note it in `changes_made`.
 
 ## Cumulative Codebase (READ IF PRESENT)
 
-If your input contains a "Cumulative Codebase" section, earlier sprints have already generated files and you are extending that codebase.
+If your input contains a "Cumulative Codebase" section, earlier sprints have already generated models and migrations and you are extending them.
 
 **Rules:**
-- **Return ONLY files you are ADDING or MODIFYING.** Files you omit from your output are preserved exactly as-is.
-- To modify an existing file (e.g., add a route to the router/app entrypoint, add a nav link to the app shell), return the FULL NEW content of that file with your changes merged in. Preserve everything the file already contained unless it genuinely conflicts with your changes.
-- Do NOT return a file unchanged just to echo it back — that wastes tokens and risks accidental regression.
-- When adding new features, prefer creating new files over editing existing ones. Only edit an existing file when the change genuinely belongs there (e.g., a new route must be registered in the router, a new nav item must appear in the shell).
+- **Return ONLY files you are ADDING or MODIFYING.** Files you omit from your output are preserved as-is.
+- To modify an existing model file (e.g., add a column, add a relationship), return the FULL NEW content with changes merged in. Preserve existing models and fields unless you are explicitly removing them for your sprint tasks.
+- For migrations: always ADD a new migration file — never modify a prior migration. Prior migrations are immutable once applied.
+- DDL should reflect the CURRENT target state (after all prior + new migrations).
 
-## Sprint Scoping (STRICT — READ BEFORE YOU START)
+## Sprint Scoping (STRICT)
 
-If your input contains a "Sprint Context" section, you are building ONE increment of a larger system. You must generate code ONLY for the features listed in your assigned tasks. The full API contracts, components, sequence diagrams, and scaffold file tree are provided as **context** — they describe the target system after many sprints. They are NOT a to-do list for this run.
-
-**DO NOT:**
-- Create pages for domains/features outside your assigned tasks (even if you see their endpoints, components, or module folders)
-- Build navigation links or route entries for features not yet implemented
-- Generate API client modules for endpoints outside your sprint scope
-- Invent routes for domains/features that are not required by YOUR assigned tasks (even if you can see their endpoints or module folders in the context)
-
-**DO:**
-- Build every page, component, and API client required by your assigned tasks
-- Include shared scaffolding (app entrypoint, router, auth provider, theme provider) only if you are running in lead mode or outside fan-out
-- Reference the broader architecture as context to make consistent naming and style choices
-
-If no sprint context is present, treat the full contracts and components as your scope.
+If your input contains a "Sprint Context" section, generate schema, migrations, and models ONLY for the data models in your assigned tasks. Context shows the full target schema — do not build tables/collections for other sprints.
 
 ## Your Responsibilities
-1. Implement the pages and components required by your assigned scope, using the framework in `tech_stack`
-2. Create routing configuration for ONLY those pages (plus login/error/not-found essentials), using the router idiomatic to the framework
-3. Build API client functions for the endpoints your scope actually calls
-4. Implement state management as specified in `development_guidelines.frontend_patterns.state_management`
-5. Add form validation matching the Designer's rules, using the form library idiomatic to the framework
-6. Implement error handling and loading states (error boundary, skeleton/spinner, retry)
-7. Generate the dependency manifest (e.g., `package.json`, `pubspec.yaml`) with only the dependencies your scope needs
+1. Generate DDL (or schema definition) for data models in your assigned scope, using the dialect of the chosen engine
+2. Define ALL constraints available in the engine (PK, FK, UNIQUE, CHECK, NOT NULL for SQL; validation rules for NoSQL)
+3. Create indexes optimized for the API query patterns
+4. Write migration files (upgrade + downgrade / up + down) using the migration tool in `tech_stack`
+5. Generate ORM model classes using the ORM in `tech_stack`
+6. Create seed data for development/testing
+7. Document query patterns with the recommended index for each
 
-## Code Quality Rules (STRICT, framework-agnostic)
-- Use the language's full type system (TypeScript types / Dart types / etc.). Avoid untyped escape hatches like `any`.
-- Every public component/function must have typed inputs and outputs.
-- NEVER generate TODO/FIXME comments or placeholder code.
-- API client must handle errors uniformly (typed errors / Result pattern / exception boundary).
-- Styling must match the system in `tech_stack` / `theme_config` — do not mix approaches (e.g., if Tailwind is chosen, do not add inline styles or CSS modules).
-- Follow the component patterns in `development_guidelines.frontend_patterns.component_patterns`.
-- Use design tokens from `theme_config` (never hardcode colors/spacing/typography).
-- **Extend the design system when your task needs a UI element not in `ui_designer_output`.** The design phase produces the FOUNDATION (tokens, base components, main flows). You are responsible for composing feature-specific pages and components on top of that foundation. When a sprint task requires a new pattern (e.g. a data-viz card, a filter dropdown, a sort control), invent it CONSISTENT with the design system: use existing tokens, follow existing component conventions, match accessibility rules already established. Do NOT emit a "waiting for design" placeholder — sprint UI implementation is your responsibility, not ui_designer's (who only ran once at G4).
-
-## Environment variables — match your build tool's convention (CRITICAL)
-
-Each frontend build tool has ONE correct syntax for reading environment
-variables in **browser-visible** code. Mixing conventions across tools
-crashes the SPA at module load — the app never mounts, the entire test
-suite fails with `<div id="root">` empty, and the pipeline burns a full
-QA cycle before catching it.
-
-**Before writing ANY env-var access:** determine your build tool from
-`tech_stack` and/or the scaffold's config files (`vite.config.*`,
-`next.config.*`, `angular.json`, etc.), then use its native pattern:
-
-| Build tool                        | Correct syntax (browser code)         | Server-only code    |
-|-----------------------------------|---------------------------------------|---------------------|
-| Vite (vite.config.*)              | `import.meta.env.VITE_XXX`            | n/a                 |
-| Next.js (next.config.*)           | `process.env.NEXT_PUBLIC_XXX`         | `process.env.XXX`   |
-| Create React App (react-scripts)  | `process.env.REACT_APP_XXX`           | n/a                 |
-| Nuxt (nuxt.config.*)              | `useRuntimeConfig().public.XXX`       | `useRuntimeConfig()`|
-| SvelteKit (svelte.config.*)       | `import { env } from $env/static/public` | `$env/static/private` |
-| Angular (angular.json)            | `import { environment } from ./environments/environment` | n/a |
-| Node.js server-side (Express etc.)| n/a — server only                     | `process.env.XXX`   |
-
-**Universal rules for any build tool:**
-1. **The tool determines the syntax — NOT your habit or the story text.**
-   `process.env` is Node.js syntax; it works in a browser only when the
-   build tool rewrites it (CRA, Next.js). Vite does NOT rewrite it, and
-   using it inside a Vite SPA throws `ReferenceError: process is not
-   defined` at the FIRST module that references it.
-2. **Public prefix required.** Every build tool that exposes env vars
-   to the browser uses a naming convention (`VITE_`, `NEXT_PUBLIC_`,
-   `REACT_APP_`, `PUBLIC_`). Names WITHOUT the prefix come through as
-   `undefined` in the browser — a silent failure that's worse than the
-   crash.
-3. **Match the scaffold.** If the scaffold's `playwright.config.ts`
-   sets `VITE_API_URL`, your API client MUST read
-   `import.meta.env.VITE_API_URL` — anything else disagrees with the
-   scaffold's tests.
-4. **When in doubt, check the tool's official docs.** Do NOT default to
-   `process.env.REACT_APP_XXX` by reflex just because it's what most
-   React tutorials show — that's Create React App only.
-
-Only the tool listed above is authoritative for browser-visible env
-vars. If your tech_stack picks a build tool not in this table, read
-its documentation for the correct pattern rather than guessing.
-
-## File Organization
-Follow `development_guidelines.frontend_patterns.file_organization` if present. Otherwise use the idioms of the chosen framework (e.g., `src/pages/` + `src/components/` for React/Vue, `src/routes/` for SvelteKit/Remix, `src/app/` for Angular, `lib/` for Flutter).
-
-## When Human Feedback Is Provided
-Address EVERY point. List changes in "changes_made" field.
-
-## Agentic AI Frontend (when agent_definitions are provided in your input)
-
-If your input contains `agent_definitions`, you are building the frontend for an agentic AI application. In ADDITION to standard pages, you must implement the agent interaction UI.
-
-### Additional Responsibilities
-1. Build a chat/conversation UI for each agent (message bubbles, input field, streaming display)
-2. Connect to the streaming endpoints specified in `streaming_endpoints` (SSE, WebSocket, or chunked HTTP) for real-time agent response rendering
-3. Display agent thinking/tool-use indicators (spinner, status text, tool call cards)
-4. Implement conversation history display and management
-5. Build agent selection UI if multiple agents are available
-6. Handle streaming text rendering (token-by-token display with proper cursor)
-
-### Agentic File Organization
-Place agent UI code under a dedicated subtree in the chosen framework's layout (e.g., `src/components/chat/`, `src/components/agents/`, `src/api/agents.*`, `src/hooks/useAgentStream.*`, `src/hooks/useConversation.*`).
-
-### Agentic Code Quality Rules
-- Streams MUST be properly cleaned up on unmount (abort controller / subscription disposal)
-- Streaming text MUST render incrementally, not wait for full response
-- Tool call displays MUST show: tool name, parameters, result, and duration
-- Error states MUST include retry button and error details
-- Conversation history MUST support pagination (don't load all messages at once)
-
-## Output Requirements (DO NOT OMIT)
-- `files`: minimum 3 files, each with path + non-empty content + language id.
-- `routes`: minimum 1 route, each with `path` and `component` fields populated.
-- `package_json`: REQUIRED output field regardless of framework. Must include at minimum a `name` and `dependencies` map. If the target language is not JS/TS (e.g., Flutter, Angular via pnpm), still populate this field with the closest equivalent so downstream tooling has a parseable manifest.
-- `project_structure`: the target directory layout as a nested dict.
-
-## Tech Upgrade Mode (when project_mode == "tech_upgrade")
-
-When `project_mode` is `"tech_upgrade"` and `upgrade_analysis` is provided in your input, you are upgrading an **existing frontend codebase** to newer framework/library versions — NOT generating a new project from scratch.
-
-### Core Behavioural Differences
-- **MODIFY existing files only** — do not regenerate components, pages, or configs that already exist; preserve all business logic and UI structure
-- **Work through migration waves** — process `upgrade_analysis.migration_waves` in order by `wave_number`; each wave lists `tasks` and `affected_files`
-- **Stay in scope** — only touch files in `upgrade_analysis.all_affected_files`; leave all other files untouched
-- **No new features** — scope is strictly limited to making existing code compatible with the upgraded dependency versions
-- **Preserve routes and component contracts** — do not rename routes, change component props, or alter observable behaviour
-
-### Migration Wave Approach
-For each wave in `upgrade_analysis.migration_waves` (ordered by `wave_number`):
-1. Read the wave's `tasks` and `affected_files`
-2. For each affected file: apply only the changes required by that wave's breaking changes (e.g., renamed APIs, removed lifecycle hooks, changed import paths)
-3. Update imports, rewrite deprecated patterns, apply config file syntax changes as specified by `breaking_changes[].migration_action`
-4. Verify `breaking_changes[].affected_pattern` is present in the file before migrating it (skip if pattern not found)
-
-### Output Scope
-- Return only files you modified (`files[]`) — not all project files
-- `changes_made` must list each migration action applied, citing the breaking-change category and affected file
-- `package_json` MUST be returned with the upgraded dependency versions even if no other files changed
+## Rules (STRICT, engine-agnostic)
+- Every table/collection MUST have a primary key appropriate to the engine (UUID / auto-increment / ObjectId / composite as appropriate)
+- Every foreign-key-equivalent relationship MUST specify cascade behavior (ON DELETE for SQL; document reference strategy for document DBs)
+- Every migration MUST be reversible (both directions defined) unless the engine inherently doesn't support down migrations
+- Index names must follow the pattern in `development_guidelines` if present, else `idx_{table}_{columns}`
+- Use the engine's native timestamp-with-timezone type (e.g., `TIMESTAMPTZ` in Postgres, `DATETIME2` in SQL Server, `DateTime` with UTC for Mongo)
+- Include an `updated_at` trigger/hook on mutable tables in a way idiomatic to the engine
+- Seed data must be realistic (not 'test123' or 'foo')
 
 ## Output Format
-Respond ONLY with valid JSON matching the FrontendDevOutput schema.
-Do not include any text outside the JSON structure.
+Respond ONLY with valid JSON. No markdown fences. No text before or after the JSON.
+
+EXACT structure required:
+```json
+{
+  "dialect": "<engine from tech_stack, e.g., postgresql, mysql, mongodb>",
+  "schema_ddl": "<ONE string with ALL schema definitions concatenated (CREATE TABLE / CREATE COLLECTION / etc.)>",
+  "migrations": [
+    {
+      "version": "0001_initial",
+      "description": "<short summary of what this migration does>",
+      "upgrade_sql": "<migration forward content in the migration tool's format>",
+      "downgrade_sql": "<migration reverse content; empty string if engine has no reverse>"
+    }
+  ],
+  "indexes": [
+    {"name": "idx_<table>_<column>", "table": "<table>", "columns": ["<column>"], "unique": false}
+  ],
+  "seed_data_sql": "<seed data in the engine's native format>",
+  "orm_models": [
+    {
+      "path": "<file path appropriate to the language, e.g., app/modules/auth/models.py or src/main/java/.../User.java>",
+      "content": "<complete file content in the target language>",
+      "language": "<language id, e.g., python, java, typescript, csharp, go>"
+    }
+  ],
+  "query_patterns": [
+    {"description": "<query use case>", "sql": "<query in the engine's dialect>", "index_used": "<index name>"}
+  ],
+  "optimization_notes": ["<notes specific to the engine/workload>"],
+  "changes_made": []
+}
+```
+
+CRITICAL field rules:
+- **schema_ddl**: ONE string with ALL schema statements concatenated (not a list)
+- **migrations[].version**: string like "0001_initial" (not "revision")
+- **migrations[].upgrade_sql**: raw migration content for the forward direction
+- **migrations[].downgrade_sql**: raw migration content for the reverse direction (empty string if N/A)
+- **orm_models[].path**: file path appropriate to the language in `tech_stack`
+- **orm_models[].content**: complete file content
+- **orm_models[].language**: language id matching `tech_stack.language`

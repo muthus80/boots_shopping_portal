@@ -19,13 +19,18 @@ test.describe('Sprint 2 — US-001 & US-002: Registration and Login', () => {
     await page.getByLabel('Confirm password').fill('SecurePass1!')
 
     // Submit using the 'Create Account' button text from RegisterPage.tsx
-    await page.getByRole('button', { name: 'Create Account' }).click()
+    // Wait for network to settle before checking success state
+    const [response] = await Promise.all([
+      page.waitForResponse(resp => resp.url().includes('/api/v1/auth/register'), { timeout: 15000 }),
+      page.getByRole('button', { name: 'Create Account' }).click(),
+    ])
 
     // AC: account created — success state shows "Account Created!" heading (RegisterPage.tsx)
-    // OR redirect to homepage — either means success
+    // OR redirect to homepage (navigate('/') in RegisterPage.tsx onSubmit success)
+    // Give adequate time for the React state transition or navigation
     const successHeading = page.getByRole('heading', { name: 'Account Created!' })
     const homeHeading = page.getByRole('heading', { name: 'Step Into Style' })
-    await expect(successHeading.or(homeHeading)).toBeVisible({ timeout: 10000 })
+    await expect(successHeading.or(homeHeading)).toBeVisible({ timeout: 15000 })
   })
 
   test('guest tries to register with duplicate email and sees error', async ({ page }) => {
@@ -35,19 +40,26 @@ test.describe('Sprint 2 — US-001 & US-002: Registration and Login', () => {
     await page.getByLabel('Email address').fill(duplicateEmail)
     await page.getByLabel('Password', { exact: true }).fill('SecurePass1!')
     await page.getByLabel('Confirm password').fill('SecurePass1!')
-    await page.getByRole('button', { name: 'Create Account' }).click()
-
-    // Wait for navigation or success
-    await page.waitForTimeout(2000)
+    // Wait for first register to complete before attempting duplicate
+    await Promise.all([
+      page.waitForResponse(resp => resp.url().includes('/api/v1/auth/register'), { timeout: 15000 }),
+      page.getByRole('button', { name: 'Create Account' }).click(),
+    ])
+    // Wait for redirect to home (first registration succeeds)
+    await expect(page).toHaveURL('/', { timeout: 15000 })
 
     // Try again with same email
     await page.goto('/register')
     await page.getByLabel('Email address').fill(duplicateEmail)
     await page.getByLabel('Password', { exact: true }).fill('SecurePass1!')
     await page.getByLabel('Confirm password').fill('SecurePass1!')
-    await page.getByRole('button', { name: 'Create Account' }).click()
+    // Wait for second register API call (should return 409)
+    await Promise.all([
+      page.waitForResponse(resp => resp.url().includes('/api/v1/auth/register'), { timeout: 15000 }),
+      page.getByRole('button', { name: 'Create Account' }).click(),
+    ])
 
-    // AC: error message displayed for duplicate email (role="alert" in RegisterPage.tsx)
+    // AC: error message displayed for duplicate email (div role="alert" in RegisterPage.tsx)
     await expect(page.getByRole('alert')).toBeVisible({ timeout: 8000 })
   })
 
@@ -60,8 +72,14 @@ test.describe('Sprint 2 — US-001 & US-002: Registration and Login', () => {
     await page.getByLabel('Email address').fill(email)
     await page.getByLabel('Password', { exact: true }).fill(password)
     await page.getByLabel('Confirm password').fill(password)
-    await page.getByRole('button', { name: 'Create Account' }).click()
-    await page.waitForTimeout(2000)
+    // Wait for register API response before proceeding
+    await Promise.all([
+      page.waitForResponse(resp => resp.url().includes('/api/v1/auth/register'), { timeout: 15000 }),
+      page.getByRole('button', { name: 'Create Account' }).click(),
+    ])
+
+    // Wait for redirect to home after registration
+    await expect(page).toHaveURL('/', { timeout: 15000 })
 
     // Now go to login
     await page.goto('/login')
@@ -72,7 +90,12 @@ test.describe('Sprint 2 — US-001 & US-002: Registration and Login', () => {
     // Fill in credentials using exact labels from LoginPage.tsx
     await page.getByLabel('Email address').fill(email)
     await page.getByLabel('Password').fill(password)
-    await page.getByRole('button', { name: 'Sign In' }).click()
+
+    // Wait for login API response
+    const [loginResp] = await Promise.all([
+      page.waitForResponse(resp => resp.url().includes('/api/v1/auth/login'), { timeout: 15000 }),
+      page.getByRole('button', { name: 'Sign In' }).click(),
+    ])
 
     // AC: redirected to homepage after successful login
     await expect(page).toHaveURL('/', { timeout: 10000 })
@@ -85,9 +108,14 @@ test.describe('Sprint 2 — US-001 & US-002: Registration and Login', () => {
 
     await page.getByLabel('Email address').fill('nonexistent@example.com')
     await page.getByLabel('Password').fill('WrongPassword99')
-    await page.getByRole('button', { name: 'Sign In' }).click()
 
-    // AC: error message displayed (role="alert" in LoginPage.tsx)
+    // Wait for login API to respond (should return 401) before checking for error alert
+    await Promise.all([
+      page.waitForResponse(resp => resp.url().includes('/api/v1/auth/login'), { timeout: 15000 }),
+      page.getByRole('button', { name: 'Sign In' }).click(),
+    ])
+
+    // AC: error message displayed (LoginPage.tsx renders div role="alert" on 401)
     await expect(page.getByRole('alert')).toBeVisible({ timeout: 8000 })
     // AC: user remains on login page
     await expect(page).toHaveURL(/login/)

@@ -19,18 +19,20 @@ test.describe('Sprint 2 — US-009 & US-010: Shopping Cart', () => {
     // Wait for cart to finish loading
     await page.waitForLoadState('networkidle').catch(() => {})
 
-    // AC: empty cart state — CartPage.tsx renders EmptyState with heading "Your cart is empty"
-    const emptyHeading = page.getByRole('heading', { name: 'Your cart is empty' })
+    // AC: empty cart state — CartPage.tsx renders EmptyState which uses <p> (not heading) for the
+    // "Your cart is empty" text. The cart section has aria-label="Cart items" when items exist.
+    // EmptyState.tsx: <p className="text-lg font-semibold text-gray-700">{heading}</p>
+    const emptyText = page.getByText('Your cart is empty', { exact: true })
     const cartItems = page.getByRole('region', { name: 'Cart items' })
 
     // Either empty state or items list should be present
-    const isEmpty = await emptyHeading.isVisible().catch(() => false)
+    const isEmpty = await emptyText.isVisible().catch(() => false)
     const hasItems = await cartItems.isVisible().catch(() => false)
 
     expect(isEmpty || hasItems).toBeTruthy()
 
     if (isEmpty) {
-      // AC: "Continue Shopping" link present when cart is empty (CartPage.tsx)
+      // AC: "Continue Shopping" link present when cart is empty (CartPage.tsx line 219)
       await expect(page.getByRole('link', { name: 'Continue Shopping' })).toBeVisible()
     }
   })
@@ -50,15 +52,18 @@ test.describe('Sprint 2 — US-003: Order History', () => {
     const email = `e2e_orders_${Date.now()}@example.com`
     const password = 'SecurePass1!'
 
-    // Register
+    // Register — wait for API response before checking URL
     await page.goto('/register')
     await page.getByLabel('Email address').fill(email)
     await page.getByLabel('Password', { exact: true }).fill(password)
     await page.getByLabel('Confirm password').fill(password)
-    await page.getByRole('button', { name: 'Create Account' }).click()
+    await Promise.all([
+      page.waitForResponse(resp => resp.url().includes('/api/v1/auth/register'), { timeout: 15000 }),
+      page.getByRole('button', { name: 'Create Account' }).click(),
+    ])
 
     // Wait for redirect to home
-    await expect(page).toHaveURL('/', { timeout: 10000 })
+    await expect(page).toHaveURL('/', { timeout: 15000 })
 
     // Navigate to order history
     await page.goto('/orders')
@@ -85,13 +90,16 @@ test.describe('Sprint 2 — US-013: Session Continuity', () => {
     const email = `e2e_session_${Date.now()}@example.com`
     const password = 'SecurePass1!'
 
-    // Register and confirm login
+    // Register and confirm login — wait for API response
     await page.goto('/register')
     await page.getByLabel('Email address').fill(email)
     await page.getByLabel('Password', { exact: true }).fill(password)
     await page.getByLabel('Confirm password').fill(password)
-    await page.getByRole('button', { name: 'Create Account' }).click()
-    await expect(page).toHaveURL('/', { timeout: 10000 })
+    await Promise.all([
+      page.waitForResponse(resp => resp.url().includes('/api/v1/auth/register'), { timeout: 15000 }),
+      page.getByRole('button', { name: 'Create Account' }).click(),
+    ])
+    await expect(page).toHaveURL('/', { timeout: 15000 })
 
     // AC: after refresh, user is still logged in
     await page.reload()

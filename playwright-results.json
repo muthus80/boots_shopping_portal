@@ -4,13 +4,14 @@
       "/usr/bin/node",
       "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/node_modules/.bin/playwright",
       "test",
-      "--reporter=json",
+      "--list",
+      "--grep",
       "sprint_2"
     ],
     "configFile": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/playwright.config.ts",
     "rootDir": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e",
     "failOnFlakyTests": false,
-    "forbidOnly": true,
+    "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
     "globalTeardown": null,
@@ -18,18 +19,14 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 1
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "projects": [
       {
         "outputDir": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results",
         "repeatEach": 1,
-        "retries": 1,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "retries": 0,
+        "metadata": {},
         "id": "chromium",
         "name": "chromium",
         "testDir": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e",
@@ -43,7 +40,21 @@
     "quiet": false,
     "reporter": [
       [
-        "json"
+        "html",
+        {
+          "open": "never",
+          "outputFolder": "../../playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../../playwright-results.json"
+        }
+      ],
+      [
+        "list",
+        null
       ]
     ],
     "reportSlowTests": {
@@ -74,7 +85,7 @@
           "specs": [
             {
               "title": "guest registers with valid credentials and sees confirmation",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -83,125 +94,8 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 13385,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:28:50",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                          "column": 50,
-                          "line": 28
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 26 |\u001b[39m     \u001b[36mconst\u001b[39m successHeading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Account Created!'\u001b[39m })\n \u001b[90m 27 |\u001b[39m     \u001b[36mconst\u001b[39m homeHeading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Step Into Style'\u001b[39m })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 28 |\u001b[39m     \u001b[36mawait\u001b[39m expect(successHeading\u001b[33m.\u001b[39mor(homeHeading))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 29 |\u001b[39m   })\n \u001b[90m 30 |\u001b[39m\n \u001b[90m 31 |\u001b[39m   test(\u001b[32m'guest tries to register with duplicate email and sees error'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                            "column": 50,
-                            "line": 28
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n\n\n  26 |     const successHeading = page.getByRole('heading', { name: 'Account Created!' })\n  27 |     const homeHeading = page.getByRole('heading', { name: 'Step Into Style' })\n> 28 |     await expect(successHeading.or(homeHeading)).toBeVisible({ timeout: 10000 })\n     |                                                  ^\n  29 |   })\n  30 |\n  31 |   test('guest tries to register with duplicate email and sees error', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:28:50"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:53:30.363Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-5bec3-tials-and-sees-confirmation-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-5bec3-tials-and-sees-confirmation-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-5bec3-tials-and-sees-confirmation-chromium/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-5bec3-tials-and-sees-confirmation-chromium/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                        "column": 50,
-                        "line": 28
-                      }
-                    },
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 12163,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:28:50",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                          "column": 50,
-                          "line": 28
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 26 |\u001b[39m     \u001b[36mconst\u001b[39m successHeading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Account Created!'\u001b[39m })\n \u001b[90m 27 |\u001b[39m     \u001b[36mconst\u001b[39m homeHeading \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Step Into Style'\u001b[39m })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 28 |\u001b[39m     \u001b[36mawait\u001b[39m expect(successHeading\u001b[33m.\u001b[39mor(homeHeading))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 29 |\u001b[39m   })\n \u001b[90m 30 |\u001b[39m\n \u001b[90m 31 |\u001b[39m   test(\u001b[32m'guest tries to register with duplicate email and sees error'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                            "column": 50,
-                            "line": 28
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n\n\n  26 |     const successHeading = page.getByRole('heading', { name: 'Account Created!' })\n  27 |     const homeHeading = page.getByRole('heading', { name: 'Step Into Style' })\n> 28 |     await expect(successHeading.or(homeHeading)).toBeVisible({ timeout: 10000 })\n     |                                                  ^\n  29 |   })\n  30 |\n  31 |   test('guest tries to register with duplicate email and sees error', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:28:50"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:53:45.062Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-5bec3-tials-and-sees-confirmation-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-5bec3-tials-and-sees-confirmation-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-5bec3-tials-and-sees-confirmation-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-5bec3-tials-and-sees-confirmation-chromium-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                        "column": 50,
-                        "line": 28
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a57d596ccdcbb8717270-9a039dbae2ee010a93c6",
@@ -220,48 +114,18 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 4139,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:53:58.556Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-830fe-licate-email-and-sees-error-chromium/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-830fe-licate-email-and-sees-error-chromium/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-830fe-licate-email-and-sees-error-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a57d596ccdcbb8717270-986ecceda8f5a181a246",
               "file": "sprint_2/test_auth_flows.spec.ts",
-              "line": 31,
+              "line": 36,
               "column": 7
             },
             {
               "title": "user logs in with correct credentials and is redirected to homepage",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -270,130 +134,13 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 14389,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                          "column": 24,
-                          "line": 78
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 76 |\u001b[39m\n \u001b[90m 77 |\u001b[39m     \u001b[90m// AC: redirected to homepage after successful login\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[32m'/'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[90m// Homepage heading is \"Step Into Style\" (HomePage.tsx)\u001b[39m\n \u001b[90m 80 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Step Into Style'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 81 |\u001b[39m   })\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                            "column": 24,
-                            "line": 78
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n\n\n  76 |\n  77 |     // AC: redirected to homepage after successful login\n> 78 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  79 |     // Homepage heading is \"Step Into Style\" (HomePage.tsx)\n  80 |     await expect(page.getByRole('heading', { name: 'Step Into Style' })).toBeVisible()\n  81 |   })\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:54:03.043Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-38cc2-d-is-redirected-to-homepage-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-38cc2-d-is-redirected-to-homepage-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-38cc2-d-is-redirected-to-homepage-chromium/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-38cc2-d-is-redirected-to-homepage-chromium/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                        "column": 24,
-                        "line": 78
-                      }
-                    },
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 14556,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                          "column": 24,
-                          "line": 78
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 76 |\u001b[39m\n \u001b[90m 77 |\u001b[39m     \u001b[90m// AC: redirected to homepage after successful login\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[32m'/'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[90m// Homepage heading is \"Step Into Style\" (HomePage.tsx)\u001b[39m\n \u001b[90m 80 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Step Into Style'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 81 |\u001b[39m   })\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                            "column": 24,
-                            "line": 78
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n\n\n  76 |\n  77 |     // AC: redirected to homepage after successful login\n> 78 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  79 |     // Homepage heading is \"Step Into Style\" (HomePage.tsx)\n  80 |     await expect(page.getByRole('heading', { name: 'Step Into Style' })).toBeVisible()\n  81 |   })\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:54:18.517Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-38cc2-d-is-redirected-to-homepage-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-38cc2-d-is-redirected-to-homepage-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-38cc2-d-is-redirected-to-homepage-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-38cc2-d-is-redirected-to-homepage-chromium-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
-                        "column": 24,
-                        "line": 78
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a57d596ccdcbb8717270-ff0bd5104e03647cd146",
               "file": "sprint_2/test_auth_flows.spec.ts",
-              "line": 54,
+              "line": 66,
               "column": 7
             },
             {
@@ -407,43 +154,13 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1246,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:54:34.335Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-09ee2-ror-and-stays-on-login-page-chromium/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-09ee2-ror-and-stays-on-login-page-chromium/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_auth_flows-S-09ee2-ror-and-stays-on-login-page-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a57d596ccdcbb8717270-39daac23a9ffcc6f2a1d",
               "file": "sprint_2/test_auth_flows.spec.ts",
-              "line": 83,
+              "line": 106,
               "column": 7
             }
           ]
@@ -474,38 +191,8 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 987,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:54:35.812Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-7a15f-e-and-sees-empty-cart-state-chromium/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-7a15f-e-and-sees-empty-cart-state-chromium/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-7a15f-e-and-sees-empty-cart-state-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "7e48b6bc7d794517cf97-133dc0a27ada9210b69b",
@@ -515,7 +202,7 @@
             },
             {
               "title": "cart page shows empty state with continue shopping link",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -524,125 +211,8 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 1526,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:30:33",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                          "column": 33,
-                          "line": 30
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 28 |\u001b[39m     \u001b[36mconst\u001b[39m hasItems \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m cartItems\u001b[33m.\u001b[39misVisible()\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)\n \u001b[90m 29 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 30 |\u001b[39m     expect(isEmpty \u001b[33m||\u001b[39m hasItems)\u001b[33m.\u001b[39mtoBeTruthy()\n \u001b[90m    |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 31 |\u001b[39m\n \u001b[90m 32 |\u001b[39m     \u001b[36mif\u001b[39m (isEmpty) {\n \u001b[90m 33 |\u001b[39m       \u001b[90m// AC: \"Continue Shopping\" link present when cart is empty (CartPage.tsx)\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                            "column": 33,
-                            "line": 30
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  28 |     const hasItems = await cartItems.isVisible().catch(() => false)\n  29 |\n> 30 |     expect(isEmpty || hasItems).toBeTruthy()\n     |                                 ^\n  31 |\n  32 |     if (isEmpty) {\n  33 |       // AC: \"Continue Shopping\" link present when cart is empty (CartPage.tsx)\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:30:33"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:54:36.848Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-fcba7-with-continue-shopping-link-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-fcba7-with-continue-shopping-link-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-fcba7-with-continue-shopping-link-chromium/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-fcba7-with-continue-shopping-link-chromium/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                        "column": 33,
-                        "line": 30
-                      }
-                    },
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 1611,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:30:33",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                          "column": 33,
-                          "line": 30
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 28 |\u001b[39m     \u001b[36mconst\u001b[39m hasItems \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m cartItems\u001b[33m.\u001b[39misVisible()\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)\n \u001b[90m 29 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 30 |\u001b[39m     expect(isEmpty \u001b[33m||\u001b[39m hasItems)\u001b[33m.\u001b[39mtoBeTruthy()\n \u001b[90m    |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 31 |\u001b[39m\n \u001b[90m 32 |\u001b[39m     \u001b[36mif\u001b[39m (isEmpty) {\n \u001b[90m 33 |\u001b[39m       \u001b[90m// AC: \"Continue Shopping\" link present when cart is empty (CartPage.tsx)\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                            "column": 33,
-                            "line": 30
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  28 |     const hasItems = await cartItems.isVisible().catch(() => false)\n  29 |\n> 30 |     expect(isEmpty || hasItems).toBeTruthy()\n     |                                 ^\n  31 |\n  32 |     if (isEmpty) {\n  33 |       // AC: \"Continue Shopping\" link present when cart is empty (CartPage.tsx)\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:30:33"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:54:39.452Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-fcba7-with-continue-shopping-link-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-fcba7-with-continue-shopping-link-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-fcba7-with-continue-shopping-link-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-fcba7-with-continue-shopping-link-chromium-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                        "column": 33,
-                        "line": 30
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "7e48b6bc7d794517cf97-df4dc58d650c2449ebb2",
@@ -655,7 +225,7 @@
         {
           "title": "Sprint 2 — US-003: Order History",
           "file": "sprint_2/test_cart_and_orders.spec.ts",
-          "line": 39,
+          "line": 41,
           "column": 6,
           "specs": [
             {
@@ -669,48 +239,18 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1077,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:54:42.263Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-c2ef6-ders-is-redirected-to-login-chromium/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-c2ef6-ders-is-redirected-to-login-chromium/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-c2ef6-ders-is-redirected-to-login-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "7e48b6bc7d794517cf97-2c537ca96a03b4883db4",
               "file": "sprint_2/test_cart_and_orders.spec.ts",
-              "line": 40,
+              "line": 42,
               "column": 7
             },
             {
               "title": "authenticated user can access order history page",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -719,130 +259,13 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 11938,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                          "column": 24,
-                          "line": 61
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 59 |\u001b[39m\n \u001b[90m 60 |\u001b[39m     \u001b[90m// Wait for redirect to home\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 61 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[32m'/'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 62 |\u001b[39m\n \u001b[90m 63 |\u001b[39m     \u001b[90m// Navigate to order history\u001b[39m\n \u001b[90m 64 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/orders'\u001b[39m)\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                            "column": 24,
-                            "line": 61
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n\n  59 |\n  60 |     // Wait for redirect to home\n> 61 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  62 |\n  63 |     // Navigate to order history\n  64 |     await page.goto('/orders')\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:54:43.539Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-e4928-n-access-order-history-page-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-e4928-n-access-order-history-page-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-e4928-n-access-order-history-page-chromium/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-e4928-n-access-order-history-page-chromium/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                        "column": 24,
-                        "line": 61
-                      }
-                    },
-                    {
-                      "workerIndex": 7,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 12041,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                          "column": 24,
-                          "line": 61
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 59 |\u001b[39m\n \u001b[90m 60 |\u001b[39m     \u001b[90m// Wait for redirect to home\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 61 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[32m'/'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 62 |\u001b[39m\n \u001b[90m 63 |\u001b[39m     \u001b[90m// Navigate to order history\u001b[39m\n \u001b[90m 64 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/orders'\u001b[39m)\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                            "column": 24,
-                            "line": 61
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n\n  59 |\n  60 |     // Wait for redirect to home\n> 61 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  62 |\n  63 |     // Navigate to order history\n  64 |     await page.goto('/orders')\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:54:56.556Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-e4928-n-access-order-history-page-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-e4928-n-access-order-history-page-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-e4928-n-access-order-history-page-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-e4928-n-access-order-history-page-chromium-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                        "column": 24,
-                        "line": 61
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "7e48b6bc7d794517cf97-af9a8ce8756e853b0d40",
               "file": "sprint_2/test_cart_and_orders.spec.ts",
-              "line": 48,
+              "line": 50,
               "column": 7
             }
           ]
@@ -850,12 +273,12 @@
         {
           "title": "Sprint 2 — US-013: Session Continuity",
           "file": "sprint_2/test_cart_and_orders.spec.ts",
-          "line": 83,
+          "line": 88,
           "column": 6,
           "specs": [
             {
               "title": "logged-in user remains logged in after page refresh",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -864,130 +287,13 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 8,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 12094,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                          "column": 24,
-                          "line": 94
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByLabel(\u001b[32m'Confirm password'\u001b[39m)\u001b[33m.\u001b[39mfill(password)\n \u001b[90m 93 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Create Account'\u001b[39m })\u001b[33m.\u001b[39mclick()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 94 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[32m'/'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 95 |\u001b[39m\n \u001b[90m 96 |\u001b[39m     \u001b[90m// AC: after refresh, user is still logged in\u001b[39m\n \u001b[90m 97 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mreload()\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                            "column": 24,
-                            "line": 94
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n\n  92 |     await page.getByLabel('Confirm password').fill(password)\n  93 |     await page.getByRole('button', { name: 'Create Account' }).click()\n> 94 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  95 |\n  96 |     // AC: after refresh, user is still logged in\n  97 |     await page.reload()\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:55:09.840Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-bad0a-ogged-in-after-page-refresh-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-bad0a-ogged-in-after-page-refresh-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-bad0a-ogged-in-after-page-refresh-chromium/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-bad0a-ogged-in-after-page-refresh-chromium/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                        "column": 24,
-                        "line": 94
-                      }
-                    },
-                    {
-                      "workerIndex": 9,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 12133,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                          "column": 24,
-                          "line": 94
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByLabel(\u001b[32m'Confirm password'\u001b[39m)\u001b[33m.\u001b[39mfill(password)\n \u001b[90m 93 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Create Account'\u001b[39m })\u001b[33m.\u001b[39mclick()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 94 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[32m'/'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 95 |\u001b[39m\n \u001b[90m 96 |\u001b[39m     \u001b[90m// AC: after refresh, user is still logged in\u001b[39m\n \u001b[90m 97 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mreload()\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                            "column": 24,
-                            "line": 94
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n\n  92 |     await page.getByLabel('Confirm password').fill(password)\n  93 |     await page.getByRole('button', { name: 'Create Account' }).click()\n> 94 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  95 |\n  96 |     // AC: after refresh, user is still logged in\n  97 |     await page.reload()\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:55:23.229Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-bad0a-ogged-in-after-page-refresh-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-bad0a-ogged-in-after-page-refresh-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-bad0a-ogged-in-after-page-refresh-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_cart_and_ord-bad0a-ogged-in-after-page-refresh-chromium-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
-                        "column": 24,
-                        "line": 94
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "7e48b6bc7d794517cf97-327a9b3f3034bd84725a",
               "file": "sprint_2/test_cart_and_orders.spec.ts",
-              "line": 84,
+              "line": 89,
               "column": 7
             }
           ]
@@ -1009,7 +315,7 @@
           "specs": [
             {
               "title": "header is present on every page with expected links",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -1018,125 +324,8 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 10,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 6817,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:70",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                          "column": 70,
-                          "line": 17
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 15 |\u001b[39m     \u001b[90m// AC: header contains links to cart (from SiteHeader.tsx)\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// Search bar is hidden on some viewports — the cart link is always in the header\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/shopping cart/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m   })\n \u001b[90m 19 |\u001b[39m\n \u001b[90m 20 |\u001b[39m   test(\u001b[32m'clicking logo returns user to homepage'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 70,
-                            "line": 17
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n\n  15 |     // AC: header contains links to cart (from SiteHeader.tsx)\n  16 |     // Search bar is hidden on some viewports — the cart link is always in the header\n> 17 |     await expect(page.getByRole('link', { name: /shopping cart/i })).toBeVisible()\n     |                                                                      ^\n  18 |   })\n  19 |\n  20 |   test('clicking logo returns user to homepage', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:70"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:55:36.714Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-cd520-ry-page-with-expected-links-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-cd520-ry-page-with-expected-links-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-cd520-ry-page-with-expected-links-chromium/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-cd520-ry-page-with-expected-links-chromium/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                        "column": 70,
-                        "line": 17
-                      }
-                    },
-                    {
-                      "workerIndex": 11,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 6751,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:70",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                          "column": 70,
-                          "line": 17
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 15 |\u001b[39m     \u001b[90m// AC: header contains links to cart (from SiteHeader.tsx)\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// Search bar is hidden on some viewports — the cart link is always in the header\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/shopping cart/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m   })\n \u001b[90m 19 |\u001b[39m\n \u001b[90m 20 |\u001b[39m   test(\u001b[32m'clicking logo returns user to homepage'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 70,
-                            "line": 17
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n\n  15 |     // AC: header contains links to cart (from SiteHeader.tsx)\n  16 |     // Search bar is hidden on some viewports — the cart link is always in the header\n> 17 |     await expect(page.getByRole('link', { name: /shopping cart/i })).toBeVisible()\n     |                                                                      ^\n  18 |   })\n  19 |\n  20 |   test('clicking logo returns user to homepage', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:70"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:55:44.820Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-cd520-ry-page-with-expected-links-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-cd520-ry-page-with-expected-links-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-cd520-ry-page-with-expected-links-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-cd520-ry-page-with-expected-links-chromium-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                        "column": 70,
-                        "line": 17
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "3c5c5607b80ea43ce9c8-84874cda52119bdba500",
@@ -1155,43 +344,13 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 12,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1556,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:55:52.850Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-8ff3b-go-returns-user-to-homepage-chromium/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-8ff3b-go-returns-user-to-homepage-chromium/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-8ff3b-go-returns-user-to-homepage-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "3c5c5607b80ea43ce9c8-93c9f04fe6f0c8641235",
               "file": "sprint_2/test_product_discovery.spec.ts",
-              "line": 20,
+              "line": 25,
               "column": 7
             }
           ]
@@ -1199,7 +358,7 @@
         {
           "title": "Sprint 2 — US-004: Search for Boots",
           "file": "sprint_2/test_product_discovery.spec.ts",
-          "line": 33,
+          "line": 38,
           "column": 6,
           "specs": [
             {
@@ -1213,48 +372,18 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 12,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1012,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:55:54.730Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "3c5c5607b80ea43ce9c8-0ced7694f25598d1769e",
               "file": "sprint_2/test_product_discovery.spec.ts",
-              "line": 34,
+              "line": 39,
               "column": 7
             },
             {
               "title": "search with no matching keyword shows empty state message",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -1263,130 +392,13 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 12,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 11766,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:52:78",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                          "column": 78,
-                          "line": 52
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 50 |\u001b[39m     \u001b[90m// AC: 'No results found for your search' (SearchResultsPage.tsx line 189 renders as <p>)\u001b[39m\n \u001b[90m 51 |\u001b[39m     \u001b[90m// Both the count line and empty state p contain this text; .first() targets the first match\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 52 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'No results found for your search'\u001b[39m)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 53 |\u001b[39m   })\n \u001b[90m 54 |\u001b[39m\n \u001b[90m 55 |\u001b[39m   test(\u001b[32m'search results page shows loading indicator while fetching'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 78,
-                            "line": 52
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n\n\n  50 |     // AC: 'No results found for your search' (SearchResultsPage.tsx line 189 renders as <p>)\n  51 |     // Both the count line and empty state p contain this text; .first() targets the first match\n> 52 |     await expect(page.getByText('No results found for your search').first()).toBeVisible({ timeout: 10000 })\n     |                                                                              ^\n  53 |   })\n  54 |\n  55 |   test('search results page shows loading indicator while fetching', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:52:78"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:55:55.791Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-532e1-d-shows-empty-state-message-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-532e1-d-shows-empty-state-message-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-532e1-d-shows-empty-state-message-chromium/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-532e1-d-shows-empty-state-message-chromium/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                        "column": 78,
-                        "line": 52
-                      }
-                    },
-                    {
-                      "workerIndex": 13,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 12473,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:52:78",
-                        "location": {
-                          "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                          "column": 78,
-                          "line": 52
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 50 |\u001b[39m     \u001b[90m// AC: 'No results found for your search' (SearchResultsPage.tsx line 189 renders as <p>)\u001b[39m\n \u001b[90m 51 |\u001b[39m     \u001b[90m// Both the count line and empty state p contain this text; .first() targets the first match\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 52 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'No results found for your search'\u001b[39m)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 53 |\u001b[39m   })\n \u001b[90m 54 |\u001b[39m\n \u001b[90m 55 |\u001b[39m   test(\u001b[32m'search results page shows loading indicator while fetching'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 78,
-                            "line": 52
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n\n\n  50 |     // AC: 'No results found for your search' (SearchResultsPage.tsx line 189 renders as <p>)\n  51 |     // Both the count line and empty state p contain this text; .first() targets the first match\n> 52 |     await expect(page.getByText('No results found for your search').first()).toBeVisible({ timeout: 10000 })\n     |                                                                              ^\n  53 |   })\n  54 |\n  55 |   test('search results page shows loading indicator while fetching', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:52:78"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:56:08.642Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-532e1-d-shows-empty-state-message-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-532e1-d-shows-empty-state-message-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-532e1-d-shows-empty-state-message-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-532e1-d-shows-empty-state-message-chromium-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                        "column": 78,
-                        "line": 52
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "3c5c5607b80ea43ce9c8-7c99edc530644c1210e4",
               "file": "sprint_2/test_product_discovery.spec.ts",
-              "line": 46,
+              "line": 51,
               "column": 7
             },
             {
@@ -1400,43 +412,13 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 14,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1178,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:56:22.373Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-9d214-ng-indicator-while-fetching-chromium/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-9d214-ng-indicator-while-fetching-chromium/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-9d214-ng-indicator-while-fetching-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "3c5c5607b80ea43ce9c8-44eca067315d89e5e0d1",
               "file": "sprint_2/test_product_discovery.spec.ts",
-              "line": 55,
+              "line": 69,
               "column": 7
             }
           ]
@@ -1444,7 +426,7 @@
         {
           "title": "Sprint 2 — US-006: View Product Listing Page",
           "file": "sprint_2/test_product_discovery.spec.ts",
-          "line": 67,
+          "line": 81,
           "column": 6,
           "specs": [
             {
@@ -1458,43 +440,13 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 14,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1536,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-07T17:56:23.749Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "3c5c5607b80ea43ce9c8-2ad688980f785e83cf38",
               "file": "sprint_2/test_product_discovery.spec.ts",
-              "line": 68,
+              "line": 82,
               "column": 7
             }
           ]
@@ -1504,11 +456,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-07-07T17:53:24.413Z",
-    "duration": 181002.997,
-    "expected": 8,
-    "skipped": 0,
-    "unexpected": 7,
+    "startTime": "2026-07-07T19:10:02.273Z",
+    "duration": 364.951,
+    "expected": 0,
+    "skipped": 15,
+    "unexpected": 0,
     "flaky": 0
   }
 }

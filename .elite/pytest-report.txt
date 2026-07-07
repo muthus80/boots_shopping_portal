@@ -11,4 +11,4 @@ tests/integration/sprint_2/test_products.py::TestProductReviews::test_authentica
     now = timegm(datetime.utcnow().utctimetuple())
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-30 passed, 7 warnings in 21.33s
+30 passed, 7 warnings in 21.13s
