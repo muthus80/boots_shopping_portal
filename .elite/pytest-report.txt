@@ -267,11 +267,11 @@ AttributeError: 'User' object has no attribute 'execute'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_account.TestOrderHistory object at 0x726b409400e0>
-async_client = <httpx.AsyncClient object at 0x726b40977c20>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b409b3980>
-registered_user = {'user': <User id=f88248c9-9aea-4886-b95d-5c23a94a874c email=user_4e5ce9a1@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiI1MmZkODEwMy0yMjg0LTQ1MjYtOTQzMC05YmNjM2EzZjM1YjgifQ.5rJiBq9J5GVrWImlWRJtxst3J1CDxJf1K2chQ21mz6Y'}
-user_order = <app.domains.checkout.models.Order object at 0x726b400fb980>
+self = <integration.sprint_1.test_account.TestOrderHistory object at 0x7b5e9784fb30>
+async_client = <httpx.AsyncClient object at 0x7b5e978dbe00>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e97825970>
+registered_user = {'user': <User id=f2d9dfab-064f-4c56-8e41-f900b170447d email=user_c6e99e28@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiIwYWY1YjM2NC1lNmU5LTRhNWUtODQzNC1iOThjMjkxZTM1ZDUifQ.SfeIysXSEhPxLQDW6A0Tk9kNvMqzAEZBPum1bnBZmxQ'}
+user_order = <app.domains.checkout.models.Order object at 0x7b5e96e3fa10>
 
     async def test_authenticated_user_sees_their_orders(
         self,
@@ -363,8 +363,8 @@ app/domains/account/router.py:60: in get_order_history
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.account.service.AccountService object at 0x726b400c67b0>
-user_id = UUID('f88248c9-9aea-4886-b95d-5c23a94a874c')
+self = <app.domains.account.service.AccountService object at 0x7b5e96e1a360>
+user_id = UUID('f2d9dfab-064f-4c56-8e41-f900b170447d')
 
     async def get_order_history(self, user_id: UUID) -> List[OrderRead]:
 >       result = await self.db.execute(
@@ -378,13 +378,13 @@ E       AttributeError: 'User' object has no attribute 'execute'
 
 app/domains/account/service.py:86: AttributeError
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "36de15a5-432b-44e7-9b54-7d02db7f870c", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:34.428517Z"}
-{"request_id": "36de15a5-432b-44e7-9b54-7d02db7f870c", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:23:34.776206Z"}
+{"request_id": "defc310e-17db-4982-9a73-da2ab13e4806", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:15.432010Z"}
+{"request_id": "defc310e-17db-4982-9a73-da2ab13e4806", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:15.778166Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "b007e069-5385-4c58-83e2-a4c56b17aa9f", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:34.906481Z"}
+{"request_id": "e8ccd5bd-cea9-4d91-bc70-32d064fec49c", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:15.819934Z"}
 __________ TestOrderHistory.test_order_history_shows_expected_fields ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -652,11 +652,11 @@ AttributeError: 'User' object has no attribute 'execute'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_account.TestOrderHistory object at 0x726b40941a60>
-async_client = <httpx.AsyncClient object at 0x726b409766c0>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b409b1430>
-registered_user = {'user': <User id=8a492934-71f9-4039-beb8-a429ba13c5cc email=user_90e31c7c@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiJlYTNlODBjMy03YTczLTQ3YmEtYmJlMS1kM2ZhMTRhOTRmN2MifQ.EuHW-xl9U0WfNdYqcCermZQ57QcxnE21hXoBp0Dcrvo'}
-user_order = <app.domains.checkout.models.Order object at 0x726b3eaa58b0>
+self = <integration.sprint_1.test_account.TestOrderHistory object at 0x7b5e9784e120>
+async_client = <httpx.AsyncClient object at 0x7b5e978d12e0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e96e1b290>
+registered_user = {'user': <User id=4a7006be-b4d7-4d06-b775-b5fd4264d64a email=user_1722121b@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiJiNDk1ZWUyYy1mZjIyLTRlZGEtOTVmMS03Nzk4ZTczYzE2MWUifQ.SpVTv56N2vTpfJyxyDSclEAunAr1CGhHQv85fmkk0jY'}
+user_order = <app.domains.checkout.models.Order object at 0x7b5e959b1610>
 
     async def test_order_history_shows_expected_fields(
         self,
@@ -748,8 +748,8 @@ app/domains/account/router.py:60: in get_order_history
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.account.service.AccountService object at 0x726b3eaa6960>
-user_id = UUID('8a492934-71f9-4039-beb8-a429ba13c5cc')
+self = <app.domains.account.service.AccountService object at 0x7b5e9655cd70>
+user_id = UUID('4a7006be-b4d7-4d06-b775-b5fd4264d64a')
 
     async def get_order_history(self, user_id: UUID) -> List[OrderRead]:
 >       result = await self.db.execute(
@@ -763,13 +763,13 @@ E       AttributeError: 'User' object has no attribute 'execute'
 
 app/domains/account/service.py:86: AttributeError
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "98f020db-0bf7-488d-b0ad-484b2efca62d", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:35.974039Z"}
-{"request_id": "98f020db-0bf7-488d-b0ad-484b2efca62d", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:23:36.315316Z"}
+{"request_id": "c7594d3c-ab54-41e3-94ed-be14c2b47128", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:16.884500Z"}
+{"request_id": "c7594d3c-ab54-41e3-94ed-be14c2b47128", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:17.224366Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "31d50864-6a41-432f-b096-98370a5d650b", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:36.349559Z"}
+{"request_id": "bd71e61f-6ca4-4aad-9690-e0b0b0a83206", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:17.260215Z"}
 ____________ TestOrderHistory.test_order_history_empty_for_new_user ____________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -1037,9 +1037,9 @@ AttributeError: 'User' object has no attribute 'execute'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_account.TestOrderHistory object at 0x726b40941d60>
-async_client = <httpx.AsyncClient object at 0x726b409b1940>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3f723920>
+self = <integration.sprint_1.test_account.TestOrderHistory object at 0x7b5e9784e450>
+async_client = <httpx.AsyncClient object at 0x7b5e959cb050>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e978d9310>
 
     async def test_order_history_empty_for_new_user(
         self,
@@ -1135,8 +1135,8 @@ app/domains/account/router.py:60: in get_order_history
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.account.service.AccountService object at 0x726b3eacc7d0>
-user_id = UUID('b9360266-5cde-4cd7-8266-632c3278839b')
+self = <app.domains.account.service.AccountService object at 0x7b5e959e2c90>
+user_id = UUID('a58a0535-b746-4a7c-98ee-bb1c62f01765')
 
     async def get_order_history(self, user_id: UUID) -> List[OrderRead]:
 >       result = await self.db.execute(
@@ -1150,10 +1150,10 @@ E       AttributeError: 'User' object has no attribute 'execute'
 
 app/domains/account/service.py:86: AttributeError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "5fb82dcf-caef-48a6-8a52-0182ecdd50e9", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:37.332674Z"}
-{"request_id": "5fb82dcf-caef-48a6-8a52-0182ecdd50e9", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:23:37.672296Z"}
+{"request_id": "d6369f32-8b8a-48c8-a9c3-05b25a94557c", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:18.241725Z"}
+{"request_id": "d6369f32-8b8a-48c8-a9c3-05b25a94557c", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:18.581855Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "d8e50fc2-a126-43b2-9629-d5e489a4f13e", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:37.673466Z"}
+{"request_id": "d9d67a56-f9cf-4b5e-bacf-56782d7c7ad5", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:18.583024Z"}
 ------------------------------ Captured log call -------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 _______________ TestOrderHistory.test_user_only_sees_own_orders ________________
@@ -1423,9 +1423,9 @@ AttributeError: 'User' object has no attribute 'execute'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_account.TestOrderHistory object at 0x726b40942300>
-async_client = <httpx.AsyncClient object at 0x726b3eadbec0>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3f65f770>
+self = <integration.sprint_1.test_account.TestOrderHistory object at 0x7b5e9784e9f0>
+async_client = <httpx.AsyncClient object at 0x7b5e95d0faa0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e959f73e0>
 
     async def test_user_only_sees_own_orders(
         self,
@@ -1538,8 +1538,8 @@ app/domains/account/router.py:60: in get_order_history
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.account.service.AccountService object at 0x726b3eec9dc0>
-user_id = UUID('52c83e57-7b3e-44d0-8c54-8f0befa39806')
+self = <app.domains.account.service.AccountService object at 0x7b5e95d6df10>
+user_id = UUID('e73f1737-7ce4-40e3-bb81-5aafcffa8379')
 
     async def get_order_history(self, user_id: UUID) -> List[OrderRead]:
 >       result = await self.db.execute(
@@ -1553,17 +1553,17 @@ E       AttributeError: 'User' object has no attribute 'execute'
 
 app/domains/account/service.py:86: AttributeError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "f41c5f4d-a596-42cb-9ff8-f1715c994b53", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:39.411709Z"}
-{"request_id": "f41c5f4d-a596-42cb-9ff8-f1715c994b53", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:23:39.752383Z"}
+{"request_id": "b2fc48f0-fe88-42a7-8970-e7afe9948c52", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:20.417758Z"}
+{"request_id": "b2fc48f0-fe88-42a7-8970-e7afe9948c52", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:20.758263Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "fabca5d1-ddbe-47de-bea6-5df3fdf05057", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:39.753557Z"}
+{"request_id": "63e25c0c-174f-428d-8a66-fae2f2083786", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:20.759422Z"}
 ------------------------------ Captured log call -------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ______ TestUserLogin.test_token_refresh_issues_new_tokens_and_revokes_old ______
 
-self = <integration.sprint_1.test_auth.TestUserLogin object at 0x726b40943c80>
-async_client = <httpx.AsyncClient object at 0x726b3f308920>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3eabf650>
+self = <integration.sprint_1.test_auth.TestUserLogin object at 0x7b5e978d1a60>
+async_client = <httpx.AsyncClient object at 0x7b5e9655e630>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e978d0560>
 
     async def test_token_refresh_issues_new_tokens_and_revokes_old(
         self, async_client: AsyncClient, db_session: AsyncSession
@@ -1586,15 +1586,15 @@ db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3eabf6
         assert refresh_resp.status_code == 200
         new_data = refresh_resp.json()
 >       assert new_data["access_token"] != login_resp.json()["access_token"]
-E       AssertionError: assert 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3MGZhYWNiOC05NzA5LTQ4ZGQtOGI2Mi03MWQ2NjkyZjY4MTkiLCJpYXQiOjE3ODM0MTYyMjcsImV4cCI6MTc4MzQxODAyNywidHlwZSI6ImFjY2VzcyJ9.EGhhzzFGtbgIG6PreKsHMs8A5-KzkZ9pTIAMlEgn0wU' != 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3MGZhYWNiOC05NzA5LTQ4ZGQtOGI2Mi03MWQ2NjkyZjY4MTkiLCJpYXQiOjE3ODM0MTYyMjcsImV4cCI6MTc4MzQxODAyNywidHlwZSI6ImFjY2VzcyJ9.EGhhzzFGtbgIG6PreKsHMs8A5-KzkZ9pTIAMlEgn0wU'
+E       AssertionError: assert 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOTg4YTBiOC05MTc2LTQwOGUtYmQwZS05OTA1ODdlZDllYzciLCJpYXQiOjE3ODM0MTgwMDgsImV4cCI6MTc4MzQxOTgwOCwidHlwZSI6ImFjY2VzcyJ9.SbfaK7X64ikFZjRIwW9cBnOpOuTSSKoyuSDRvFjOGS8' != 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOTg4YTBiOC05MTc2LTQwOGUtYmQwZS05OTA1ODdlZDllYzciLCJpYXQiOjE3ODM0MTgwMDgsImV4cCI6MTc4MzQxOTgwOCwidHlwZSI6ImFjY2VzcyJ9.SbfaK7X64ikFZjRIwW9cBnOpOuTSSKoyuSDRvFjOGS8'
 
 tests/integration/sprint_1/test_auth.py:194: AssertionError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "5bbf26d9-98cc-4ada-80a1-68a8de7e4025", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:47.187235Z"}
-{"request_id": "5bbf26d9-98cc-4ada-80a1-68a8de7e4025", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:23:47.528312Z"}
+{"request_id": "88ce9343-c1f5-4813-9289-baa733b2e341", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:28.254785Z"}
+{"request_id": "88ce9343-c1f5-4813-9289-baa733b2e341", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:28.596007Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "e7f52b03-89ce-4f3c-b311-937c4b3443de", "method": "POST", "path": "/api/v1/auth/refresh", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:47.529501Z"}
-{"request_id": "e7f52b03-89ce-4f3c-b311-937c4b3443de", "method": "POST", "path": "/api/v1/auth/refresh", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:23:47.540460Z"}
+{"request_id": "efa59920-be71-4ff7-8c74-48f8ae4656f5", "method": "POST", "path": "/api/v1/auth/refresh", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:28.597212Z"}
+{"request_id": "efa59920-be71-4ff7-8c74-48f8ae4656f5", "method": "POST", "path": "/api/v1/auth/refresh", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:28.608013Z"}
 HTTP Request: POST http://test/api/v1/auth/refresh "HTTP/1.1 200 OK"
 ------------------------------ Captured log call -------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
@@ -1768,8 +1768,8 @@ ____________ TestCartManagement.test_anonymous_user_gets_empty_cart ____________
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 3 validation errors:
     |   {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3ed62d80>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3ed62d80>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e95c31760>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e95c31760>}
     | 
     +------------------------------------
 
@@ -1854,15 +1854,15 @@ Traceback (most recent call last):
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 3 validation errors:
   {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3ed62d80>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3ed62d80>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e95c31760>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e95c31760>}
 
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_cart.TestCartManagement object at 0x726b409748c0>
-async_client = <httpx.AsyncClient object at 0x726b3ed076e0>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3ee304d0>
+self = <integration.sprint_1.test_cart.TestCartManagement object at 0x7b5e9784c140>
+async_client = <httpx.AsyncClient object at 0x7b5e95dcef30>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e96e1a960>
 
     async def test_anonymous_user_gets_empty_cart(
         self,
@@ -1945,7 +1945,7 @@ app/core/middleware.py:30: in dispatch
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
 field = ModelField(field_info=FieldInfo(annotation=CartRead, required=True), name='Response_get_cart_api_v1_cart_get', mode='serialization')
-response_content = <app.domains.cart.models.Cart object at 0x726b3ed62d80>
+response_content = <app.domains.cart.models.Cart object at 0x7b5e95c31760>
 include = None, exclude = None, by_alias = True, exclude_unset = False
 exclude_defaults = False, exclude_none = False, is_coroutine = True
 
@@ -1987,12 +1987,12 @@ exclude_defaults = False, exclude_none = False, is_coroutine = True
                 )
 E               fastapi.exceptions.ResponseValidationError: 3 validation errors:
 E                 {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-E                 {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3ed62d80>}
-E                 {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3ed62d80>}
+E                 {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e95c31760>}
+E                 {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e95c31760>}
 
 .sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:155: ResponseValidationError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "615f78bc-f3ff-4413-a55e-03b630130224", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:49.067662Z"}
+{"request_id": "d92e6918-eceb-429d-9b55-3636fef4ac2e", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:30.133936Z"}
 __ TestCartManagement.test_authenticated_user_cart_is_associated_with_account __
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -2161,8 +2161,8 @@ __ TestCartManagement.test_authenticated_user_cart_is_associated_with_account __
     |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 2 validation errors:
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3f3c04d0>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3f3c04d0>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e98a3cdd0>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e98a3cdd0>}
     | 
     +------------------------------------
 
@@ -2246,16 +2246,16 @@ Traceback (most recent call last):
   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 2 validation errors:
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3f3c04d0>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3f3c04d0>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e98a3cdd0>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e98a3cdd0>}
 
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_cart.TestCartManagement object at 0x726b40943ec0>
-async_client = <httpx.AsyncClient object at 0x726b3ed1e570>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3ed07110>
-registered_user = {'user': <User id=e1f5f259-32be-4a7c-9198-2d9035323f57 email=user_b686f578@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiJkMGVmZTIzZC1iNDA3LTQyOTQtYTMyMC02MzNmYzVmNjIzODAifQ.ZaoPYz1RM2raFaCxBehGu3fhqQfXoYjGYKkxGsy62AI'}
+self = <integration.sprint_1.test_cart.TestCartManagement object at 0x7b5e9784ecf0>
+async_client = <httpx.AsyncClient object at 0x7b5e95c4a6f0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e96e68890>
+registered_user = {'user': <User id=4a842ef3-9f2b-4856-9d5c-25d08aadcbf3 email=user_55860be5@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiI2ODYyMGE4OC0wNGI3LTQyNTMtOTYwNi02M2FhM2FjNmU2YWIifQ.qZe4CjoJsOStLc6cJ7XHS1rbuimx71FdO0-UH_i_Eyo'}
 
     async def test_authenticated_user_cart_is_associated_with_account(
         self,
@@ -2341,7 +2341,7 @@ app/core/middleware.py:30: in dispatch
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
 field = ModelField(field_info=FieldInfo(annotation=CartRead, required=True), name='Response_get_cart_api_v1_cart_get', mode='serialization')
-response_content = <app.domains.cart.models.Cart object at 0x726b3f3c04d0>
+response_content = <app.domains.cart.models.Cart object at 0x7b5e98a3cdd0>
 include = None, exclude = None, by_alias = True, exclude_unset = False
 exclude_defaults = False, exclude_none = False, is_coroutine = True
 
@@ -2382,18 +2382,18 @@ exclude_defaults = False, exclude_none = False, is_coroutine = True
                     errors=_normalize_errors(errors), body=response_content
                 )
 E               fastapi.exceptions.ResponseValidationError: 2 validation errors:
-E                 {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3f3c04d0>}
-E                 {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b3f3c04d0>}
+E                 {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e98a3cdd0>}
+E                 {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e98a3cdd0>}
 
 .sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:155: ResponseValidationError
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "a50b86b4-7062-4778-8232-3aeb6f98c56b", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:50.182952Z"}
-{"request_id": "a50b86b4-7062-4778-8232-3aeb6f98c56b", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:23:50.522505Z"}
+{"request_id": "2b7b4cfa-a2d0-4ef9-9c54-4dbc325afafa", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:31.126649Z"}
+{"request_id": "2b7b4cfa-a2d0-4ef9-9c54-4dbc325afafa", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:31.466893Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "6e6a546c-0356-4434-974b-84ca57d9dc2f", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:50.524558Z"}
+{"request_id": "6db7bf13-1cfb-4c01-b4f2-a76b65a0547e", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:31.468929Z"}
 ____ TestCartManagement.test_cart_shows_items_with_price_quantity_subtotal _____
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -2562,10 +2562,10 @@ ____ TestCartManagement.test_cart_shows_items_with_price_quantity_subtotal _____
     |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 4 validation errors:
-    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x726b400ef200>}
-    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x726b400ef200>}
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b400c6a50>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b400c6a50>}
+    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b5e9656d7c0>}
+    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b5e9656d7c0>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e9656d940>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e9656d940>}
     | 
     +------------------------------------
 
@@ -2649,19 +2649,19 @@ Traceback (most recent call last):
   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 4 validation errors:
-  {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x726b400ef200>}
-  {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x726b400ef200>}
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b400c6a50>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b400c6a50>}
+  {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b5e9656d7c0>}
+  {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b5e9656d7c0>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e9656d940>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e9656d940>}
 
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_cart.TestCartManagement object at 0x726b40943980>
-async_client = <httpx.AsyncClient object at 0x726b3eec9e20>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3ed608f0>
-registered_user = {'user': <User id=59c3ea6c-d2b8-485e-8c2a-8986f19c437b email=user_c2638fcc@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiJiOWMxOTIxNC04ZDk4LTQ5MTYtYTA4Mi1hNTQ4YTQzZWM3YjMifQ.h4-tfx_ry1ks4Y1IZ3qZpHuYOq6DWCSTtf_4V9G47Ps'}
-sample_product = (<app.domains.products.models.Product object at 0x726b400f8a70>, <app.domains.products.models.ProductVariant object at 0x726b3ed61c40>)
+self = <integration.sprint_1.test_cart.TestCartManagement object at 0x7b5e9784ebd0>
+async_client = <httpx.AsyncClient object at 0x7b5e965460c0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e95d2c620>
+registered_user = {'user': <User id=aa1553f9-b42a-49e4-a92e-82955604e08e email=user_48ad9eb4@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiI5MTQ3MjE3Ni1lZDIwLTQzMzgtOTMyMi0wMjdkYjg4ZWRmYzUifQ.SkoqKbkhfwUGaMc9_5xL_PLN1cKgMAgTiyxspi-ACes'}
+sample_product = (<app.domains.products.models.Product object at 0x7b5e95dcd4c0>, <app.domains.products.models.ProductVariant object at 0x7b5e9656ecc0>)
 
     async def test_cart_shows_items_with_price_quantity_subtotal(
         self,
@@ -2765,7 +2765,7 @@ app/core/middleware.py:30: in dispatch
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
 field = ModelField(field_info=FieldInfo(annotation=CartRead, required=True), name='Response_get_cart_api_v1_cart_get', mode='serialization')
-response_content = <app.domains.cart.models.Cart object at 0x726b400c6a50>
+response_content = <app.domains.cart.models.Cart object at 0x7b5e9656d940>
 include = None, exclude = None, by_alias = True, exclude_unset = False
 exclude_defaults = False, exclude_none = False, is_coroutine = True
 
@@ -2806,20 +2806,20 @@ exclude_defaults = False, exclude_none = False, is_coroutine = True
                     errors=_normalize_errors(errors), body=response_content
                 )
 E               fastapi.exceptions.ResponseValidationError: 4 validation errors:
-E                 {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x726b400ef200>}
-E                 {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x726b400ef200>}
-E                 {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b400c6a50>}
-E                 {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x726b400c6a50>}
+E                 {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b5e9656d7c0>}
+E                 {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b5e9656d7c0>}
+E                 {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e9656d940>}
+E                 {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b5e9656d940>}
 
 .sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:155: ResponseValidationError
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "8bcafd22-968a-4daf-a8b4-7a869a8e9263", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:51.513738Z"}
-{"request_id": "8bcafd22-968a-4daf-a8b4-7a869a8e9263", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:23:51.853799Z"}
+{"request_id": "5a68e21f-83ed-42e4-b29a-2c77374032fb", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:32.465122Z"}
+{"request_id": "5a68e21f-83ed-42e4-b29a-2c77374032fb", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:32.805147Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "7b6c6025-90ba-449f-8f70-a72b97859c9d", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:51.884184Z"}
+{"request_id": "5ec56cc6-8afb-4d1f-b223-fd827680a0a4", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:32.834644Z"}
 __________ TestSearchAndFilter.test_search_returns_matching_products ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3087,10 +3087,10 @@ TypeError: attribute name must be string, not 'NoneType'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x726b40974f20>
-async_client = <httpx.AsyncClient object at 0x726b3f3c31a0>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3ee2f0e0>
-sample_product = (<app.domains.products.models.Product object at 0x726b3ef4afc0>, <app.domains.products.models.ProductVariant object at 0x726b3ef4a330>)
+self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x7b5e9784f9b0>
+async_client = <httpx.AsyncClient object at 0x7b5e95fac620>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e95f939e0>
+sample_product = (<app.domains.products.models.Product object at 0x7b5e95f3a780>, <app.domains.products.models.ProductVariant object at 0x7b5e95faea80>)
 
     async def test_search_returns_matching_products(
         self,
@@ -3180,7 +3180,7 @@ app/domains/products/router.py:31: in list_products
     return await service.list_products(
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3ef48a70>
+self = <app.domains.products.service.ProductService object at 0x7b5e95c4b380>
 category_id = None, search = 'hiking', min_price = None, max_price = None
 in_stock = None, sort_by = None, sort_order = 'desc', page = 1, page_size = 20
 
@@ -3243,7 +3243,7 @@ E       TypeError: attribute name must be string, not 'NoneType'
 
 app/domains/products/service.py:72: TypeError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "641b0391-6236-4f59-87e8-0e8ca2071e55", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:53.829590Z"}
+{"request_id": "847fe43a-5b62-4e49-ab03-f339c05025bb", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:34.783367Z"}
 ___________ TestSearchAndFilter.test_search_no_results_returns_empty ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3511,9 +3511,9 @@ TypeError: attribute name must be string, not 'NoneType'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x726b409752b0>
-async_client = <httpx.AsyncClient object at 0x726b3efc7f80>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3f3534a0>
+self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x7b5e9784ea50>
+async_client = <httpx.AsyncClient object at 0x7b5e95fd7ec0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e95c95640>
 
     async def test_search_no_results_returns_empty(
         self,
@@ -3601,7 +3601,7 @@ app/domains/products/router.py:31: in list_products
     return await service.list_products(
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3ef3ba10>
+self = <app.domains.products.service.ProductService object at 0x7b5e9658d370>
 category_id = None, search = 'nonexistent_xyzzy_boot_99999', min_price = None
 max_price = None, in_stock = None, sort_by = None, sort_order = 'desc', page = 1
 page_size = 20
@@ -3665,7 +3665,7 @@ E       TypeError: attribute name must be string, not 'NoneType'
 
 app/domains/products/service.py:72: TypeError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "9f99750e-2ef5-4ec3-9902-e9f58ed85861", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:54.480464Z"}
+{"request_id": "d28753f4-d042-4aff-b759-c61b4a88fc2d", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:35.470858Z"}
 _____ TestSearchAndFilter.test_filter_by_category_returns_correct_products _____
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3933,11 +3933,11 @@ TypeError: attribute name must be string, not 'NoneType'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x726b40975670>
-async_client = <httpx.AsyncClient object at 0x726b3eb6b860>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3ef3ac90>
-sample_product = (<app.domains.products.models.Product object at 0x726b3eb925d0>, <app.domains.products.models.ProductVariant object at 0x726b3eb91eb0>)
-sample_category = <Category id=334642f0-7244-4c59-bf62-fec58f471d13 name='Work Boots' slug='work-boots'>
+self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x7b5e978d1940>
+async_client = <httpx.AsyncClient object at 0x7b5e95f53b90>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e95fa37d0>
+sample_product = (<app.domains.products.models.Product object at 0x7b5e962bbc80>, <app.domains.products.models.ProductVariant object at 0x7b5e95fa02c0>)
+sample_category = <Category id=5fd31966-41c2-4cca-8179-fd441552ac33 name='Work Boots' slug='work-boots'>
 
     async def test_filter_by_category_returns_correct_products(
         self,
@@ -4029,8 +4029,8 @@ app/domains/products/router.py:31: in list_products
     return await service.list_products(
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3eb90d70>
-category_id = UUID('334642f0-7244-4c59-bf62-fec58f471d13'), search = None
+self = <app.domains.products.service.ProductService object at 0x7b5e962ba4e0>
+category_id = UUID('5fd31966-41c2-4cca-8179-fd441552ac33'), search = None
 min_price = None, max_price = None, in_stock = None, sort_by = None
 sort_order = 'desc', page = 1, page_size = 20
 
@@ -4093,7 +4093,7 @@ E       TypeError: attribute name must be string, not 'NoneType'
 
 app/domains/products/service.py:72: TypeError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "39a6331c-10c1-4ed1-8f1b-8b63102165a9", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:55.149372Z"}
+{"request_id": "dda539d2-80a1-4e9e-af77-cd9fd5cd5d10", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:36.201980Z"}
 _____ TestSearchAndFilter.test_product_listing_page_shows_required_fields ______
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -4361,10 +4361,10 @@ TypeError: attribute name must be string, not 'NoneType'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x726b40975a30>
-async_client = <httpx.AsyncClient object at 0x726b3eb99f70>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3eb8fb90>
-sample_product = (<app.domains.products.models.Product object at 0x726b3eb9bce0>, <app.domains.products.models.ProductVariant object at 0x726b3eb9b620>)
+self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x7b5e978d3f80>
+async_client = <httpx.AsyncClient object at 0x7b5e9656ede0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e978dbfb0>
+sample_product = (<app.domains.products.models.Product object at 0x7b5e96544650>, <app.domains.products.models.ProductVariant object at 0x7b5e96545b80>)
 
     async def test_product_listing_page_shows_required_fields(
         self,
@@ -4452,7 +4452,7 @@ app/domains/products/router.py:31: in list_products
     return await service.list_products(
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3eb9a540>
+self = <app.domains.products.service.ProductService object at 0x7b5e96e29010>
 category_id = None, search = None, min_price = None, max_price = None
 in_stock = None, sort_by = None, sort_order = 'desc', page = 1, page_size = 20
 
@@ -4515,7 +4515,7 @@ E       TypeError: attribute name must be string, not 'NoneType'
 
 app/domains/products/service.py:72: TypeError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "a4d66af6-0062-4dcf-b3fc-3ccea5b2b7cf", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:55.820220Z"}
+{"request_id": "b33f37ce-ccfc-4433-a2df-a77ca18ba7d9", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:37.024747Z"}
 ____________ TestSearchAndFilter.test_products_paginated_correctly _____________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -4783,10 +4783,10 @@ TypeError: attribute name must be string, not 'NoneType'
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x726b40975dc0>
-async_client = <httpx.AsyncClient object at 0x726b3f42b170>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3eb02a20>
-sample_category = <Category id=6d4aef4c-bd1d-4bea-b28d-4d9ca2c9f5b6 name='Work Boots' slug='work-boots'>
+self = <integration.sprint_1.test_products.TestSearchAndFilter object at 0x7b5e978d1880>
+async_client = <httpx.AsyncClient object at 0x7b5e962aedb0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e95d6e150>
+sample_category = <Category id=584e826f-b2e9-4cb8-afe0-09fa5a92cbf2 name='Work Boots' slug='work-boots'>
 
     async def test_products_paginated_correctly(
         self,
@@ -4889,7 +4889,7 @@ app/domains/products/router.py:31: in list_products
     return await service.list_products(
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3f415d00>
+self = <app.domains.products.service.ProductService object at 0x7b5e9624e240>
 category_id = None, search = None, min_price = None, max_price = None
 in_stock = None, sort_by = None, sort_order = 'desc', page = 1, page_size = 2
 
@@ -4952,7 +4952,7 @@ E       TypeError: attribute name must be string, not 'NoneType'
 
 app/domains/products/service.py:72: TypeError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "a9a87088-6fec-4868-b598-a6a76fd4d8ae", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:56.478653Z"}
+{"request_id": "00d92227-de81-4cc1-86d4-3890e5e054db", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:37.690965Z"}
 ________ TestProductDetail.test_product_detail_returns_full_information ________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -5132,7 +5132,7 @@ ________ TestProductDetail.test_product_detail_returns_full_information ________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3eabcda0>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e9627f620>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -5227,15 +5227,15 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3eabcda0>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e9627f620>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestProductDetail object at 0x726b40976240>
-async_client = <httpx.AsyncClient object at 0x726b3eaa7710>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b409b1910>
-sample_product = (<app.domains.products.models.Product object at 0x726b3eabcda0>, <app.domains.products.models.ProductVariant object at 0x726b3eabe000>)
+self = <integration.sprint_1.test_products.TestProductDetail object at 0x7b5e978d1190>
+async_client = <httpx.AsyncClient object at 0x7b5e9627ecf0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e9624e090>
+sample_product = (<app.domains.products.models.Product object at 0x7b5e9627f620>, <app.domains.products.models.ProductVariant object at 0x7b5e9627f800>)
 
     async def test_product_detail_returns_full_information(
         self,
@@ -5325,8 +5325,8 @@ app/domains/products/router.py:47: in get_product
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3eadbf50>
-product_id = UUID('cc5bbe9b-eef3-4b8b-ab3d-892d069d0479')
+self = <app.domains.products.service.ProductService object at 0x7b5e9627f290>
+product_id = UUID('254954b6-bcf9-4119-87d7-e36274407819')
 
     async def get_product(self, product_id: UUID) -> ProductRead:
         stmt = (
@@ -5347,12 +5347,12 @@ product_id = UUID('cc5bbe9b-eef3-4b8b-ab3d-892d069d0479')
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E       pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E       price
-E         Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3eabcda0>, input_type=Product]
+E         Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e9627f620>, input_type=Product]
 E           For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 app/domains/products/service.py:109: ValidationError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "be0877fc-c5e8-4ef8-97b7-ad6eb2e24f58", "method": "GET", "path": "/api/v1/products/cc5bbe9b-eef3-4b8b-ab3d-892d069d0479", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:57.353722Z"}
+{"request_id": "770acf63-5e6c-491f-bad6-c9cba4860a5b", "method": "GET", "path": "/api/v1/products/254954b6-bcf9-4119-87d7-e36274407819", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:38.368087Z"}
 ____________ TestProductReviews.test_guest_can_read_product_reviews ____________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -5532,7 +5532,7 @@ ____________ TestProductReviews.test_guest_can_read_product_reviews ____________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f473b00>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95eb7d10>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -5627,15 +5627,15 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f473b00>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95eb7d10>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestProductReviews object at 0x726b40943bc0>
-async_client = <httpx.AsyncClient object at 0x726b3f4724e0>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3f409640>
-sample_product = (<app.domains.products.models.Product object at 0x726b3f473b00>, <app.domains.products.models.ProductVariant object at 0x726b3f473a70>)
+self = <integration.sprint_1.test_products.TestProductReviews object at 0x7b5e978d0590>
+async_client = <httpx.AsyncClient object at 0x7b5e95eb6690>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e962afb30>
+sample_product = (<app.domains.products.models.Product object at 0x7b5e95eb7d10>, <app.domains.products.models.ProductVariant object at 0x7b5e95eb7c80>)
 
     async def test_guest_can_read_product_reviews(
         self,
@@ -5742,8 +5742,8 @@ app/domains/products/router.py:63: in list_reviews
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3f472db0>
-product_id = UUID('86b9e70d-ae3d-4cf0-b082-6d4564b54ed2')
+self = <app.domains.products.service.ProductService object at 0x7b5e95eb6f30>
+product_id = UUID('a11b0f10-61aa-4631-b91b-baf7c76aa2e6')
 
     async def get_product(self, product_id: UUID) -> ProductRead:
         stmt = (
@@ -5764,12 +5764,12 @@ product_id = UUID('86b9e70d-ae3d-4cf0-b082-6d4564b54ed2')
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E       pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E       price
-E         Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f473b00>, input_type=Product]
+E         Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95eb7d10>, input_type=Product]
 E           For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 app/domains/products/service.py:109: ValidationError
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "228c1aba-b119-4d2f-93bb-38cd66f8000a", "method": "GET", "path": "/api/v1/products/86b9e70d-ae3d-4cf0-b082-6d4564b54ed2/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:58.838611Z"}
+{"request_id": "a10c11be-4b52-4d18-b41c-d2680d46ba2a", "method": "GET", "path": "/api/v1/products/a11b0f10-61aa-4631-b91b-baf7c76aa2e6/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:39.826118Z"}
 __________ TestProductReviews.test_authenticated_user_submits_review ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -5949,7 +5949,7 @@ __________ TestProductReviews.test_authenticated_user_submits_review ___________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f182ea0>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95b4b080>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -6044,16 +6044,16 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f182ea0>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95b4b080>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestProductReviews object at 0x726b40976120>
-async_client = <httpx.AsyncClient object at 0x726b3f1811f0>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3f4178f0>
-sample_product = (<app.domains.products.models.Product object at 0x726b3f182ea0>, <app.domains.products.models.ProductVariant object at 0x726b3f1827e0>)
-registered_user = {'user': <User id=b44a166a-4fb2-48d1-9f85-507e94a676a7 email=user_49638d85@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiI3ZDhkZjRiNC1iZmJlLTQ5YzQtYjllZi0xODFiOTYwNjM3NDgifQ.DW8qDV_mWbUBBzwh9-O2XgV4ERV_AuHMwBWfQml5S2Y'}
+self = <integration.sprint_1.test_products.TestProductReviews object at 0x7b5e978d0890>
+async_client = <httpx.AsyncClient object at 0x7b5e95b493d0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e95baf140>
+sample_product = (<app.domains.products.models.Product object at 0x7b5e95b4b080>, <app.domains.products.models.ProductVariant object at 0x7b5e95b4a9c0>)
+registered_user = {'user': <User id=083d513d-1edb-429b-9e17-fc0c965a9ffe email=user_fb3a6ede@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiI4OGE0ODc0ZC1lNTk1LTRkNmMtYmI1My05NDAwYTU2ZGFmMmEifQ.69tPUZZUEZqFbnwZgmiU30Ls09wEEJIPb3G6LNoXYHY'}
 
     async def test_authenticated_user_submits_review(
         self,
@@ -6148,8 +6148,8 @@ app/domains/products/router.py:87: in create_review
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3f181a00>
-product_id = UUID('0c2fbabb-8ad7-43d9-9465-359381340ed7')
+self = <app.domains.products.service.ProductService object at 0x7b5e95b4acf0>
+product_id = UUID('5ad2ab2c-1ffe-4e94-ab99-a6ad0a0f71a5')
 
     async def get_product(self, product_id: UUID) -> ProductRead:
         stmt = (
@@ -6170,18 +6170,18 @@ product_id = UUID('0c2fbabb-8ad7-43d9-9465-359381340ed7')
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E       pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E       price
-E         Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f182ea0>, input_type=Product]
+E         Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95b4b080>, input_type=Product]
 E           For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 app/domains/products/service.py:109: ValidationError
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "608782c0-c04b-45ef-9468-c8a55f1add54", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:23:59.850206Z"}
-{"request_id": "608782c0-c04b-45ef-9468-c8a55f1add54", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:24:00.189732Z"}
+{"request_id": "3f541770-e32f-4078-8ac8-338e1a615ba8", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:40.838059Z"}
+{"request_id": "3f541770-e32f-4078-8ac8-338e1a615ba8", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:41.177286Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "1efe318e-3e2b-4108-a1bc-7281878ead75", "method": "POST", "path": "/api/v1/products/0c2fbabb-8ad7-43d9-9465-359381340ed7/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:24:00.191810Z"}
+{"request_id": "d6b19f31-272d-41c1-8361-057d26b724f5", "method": "POST", "path": "/api/v1/products/5ad2ab2c-1ffe-4e94-ab99-a6ad0a0f71a5/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:41.179376Z"}
 ________ TestProductReviews.test_user_cannot_review_same_product_twice _________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -6361,7 +6361,7 @@ ________ TestProductReviews.test_user_cannot_review_same_product_twice _________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f2953a0>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95a21430>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -6456,16 +6456,16 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f2953a0>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95a21430>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
 
-self = <integration.sprint_1.test_products.TestProductReviews object at 0x726b40975490>
-async_client = <httpx.AsyncClient object at 0x726b3f227800>
-db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x726b3f101f10>
-sample_product = (<app.domains.products.models.Product object at 0x726b3f2953a0>, <app.domains.products.models.ProductVariant object at 0x726b3f294ce0>)
-registered_user = {'user': <User id=c2a2748d-a118-436d-b145-1cacf3f4cb13 email=user_00f812c0@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiIwZjM0Yjc1MS0zNDc3LTRiNDEtOGMzZS1iZWI0YWEwMWRjNTUifQ.FVPYgTTpU5O0GiXuvs6ez9dExzKn2We_r3DMZAmoCfU'}
+self = <integration.sprint_1.test_products.TestProductReviews object at 0x7b5e978d3c20>
+async_client = <httpx.AsyncClient object at 0x7b5e9631f9e0>
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x7b5e95e13620>
+sample_product = (<app.domains.products.models.Product object at 0x7b5e95a21430>, <app.domains.products.models.ProductVariant object at 0x7b5e95a20cb0>)
+registered_user = {'user': <User id=1f1e771f-14a6-4e7a-9e9c-fc537745de8e email=user_b8f011a9@example.com>, 'password': 'Password1!', 'ac...nJlZnJlc2giLCJqdGkiOiIxNDY2YmM4ZC01N2FlLTQzNzctYTE0OS0xMTQxNmVkZmFmZWIifQ.CU0fKmgnbRs0N-iGvcvxAdONr5r_u2kDYwPH_U_z2JE'}
 
     async def test_user_cannot_review_same_product_twice(
         self,
@@ -6561,8 +6561,8 @@ app/domains/products/router.py:87: in create_review
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <app.domains.products.service.ProductService object at 0x726b3e93a510>
-product_id = UUID('b0298810-e623-4dbc-9051-71f7d25d0388')
+self = <app.domains.products.service.ProductService object at 0x7b5e95a20980>
+product_id = UUID('6efb7424-e48b-4977-9c96-59a24551ce83')
 
     async def get_product(self, product_id: UUID) -> ProductRead:
         stmt = (
@@ -6583,18 +6583,18 @@ product_id = UUID('b0298810-e623-4dbc-9051-71f7d25d0388')
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E       pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E       price
-E         Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x726b3f2953a0>, input_type=Product]
+E         Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b5e95a21430>, input_type=Product]
 E           For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 app/domains/products/service.py:109: ValidationError
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "453ff1f9-924a-4d0c-b377-29ae92e82f52", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:24:01.649924Z"}
-{"request_id": "453ff1f9-924a-4d0c-b377-29ae92e82f52", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:24:01.991618Z"}
+{"request_id": "60725ee5-96cc-456f-b879-d2f490424fe1", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:42.637938Z"}
+{"request_id": "60725ee5-96cc-456f-b879-d2f490424fe1", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:53:42.977863Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "746215df-d335-4fa4-ac62-6a7d0c0e578b", "method": "POST", "path": "/api/v1/products/b0298810-e623-4dbc-9051-71f7d25d0388/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:24:01.993715Z"}
+{"request_id": "507146ea-660c-428f-923d-8e5441c4e875", "method": "POST", "path": "/api/v1/products/6efb7424-e48b-4977-9c96-59a24551ce83/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:53:42.979933Z"}
 =============================== warnings summary ===============================
 tests/integration/sprint_1/test_account.py: 4 warnings
 tests/integration/sprint_1/test_auth.py: 2 warnings
@@ -6622,4 +6622,4 @@ FAILED tests/integration/sprint_1/test_products.py::TestProductDetail::test_prod
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_guest_can_read_product_reviews
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_authenticated_user_submits_review
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_user_cannot_review_same_product_twice
-17 failed, 15 passed, 10 warnings in 28.69s
+17 failed, 15 passed, 10 warnings in 28.94s

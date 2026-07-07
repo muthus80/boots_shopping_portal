@@ -381,13 +381,13 @@ app/domains/account/service.py:86: in get_order_history
                    ^^^^^^^^^^^^^^^
 E   AttributeError: 'User' object has no attribute 'execute'
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "567d39c7-223e-47d4-969e-532dac5a1403", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:33.017173Z"}
-{"request_id": "567d39c7-223e-47d4-969e-532dac5a1403", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:33.362444Z"}
+{"request_id": "92d744d5-c9f2-453e-a2d5-fe24381208b0", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:36.109752Z"}
+{"request_id": "92d744d5-c9f2-453e-a2d5-fe24381208b0", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:36.457126Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "05de2a05-fd1d-4dc3-b875-12954f200db7", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:33.403652Z"}
+{"request_id": "4c1b116f-de61-48d1-be2d-cc1727922cc1", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:36.499358Z"}
 __________ TestOrderHistory.test_order_history_shows_expected_fields ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -734,13 +734,13 @@ app/domains/account/service.py:86: in get_order_history
                    ^^^^^^^^^^^^^^^
 E   AttributeError: 'User' object has no attribute 'execute'
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "8de7aca7-cee4-470b-8bbc-cf6dc7c79af7", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:34.466445Z"}
-{"request_id": "8de7aca7-cee4-470b-8bbc-cf6dc7c79af7", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:34.807187Z"}
+{"request_id": "ce9d0e6e-a32c-4dd8-ab7c-0ff058408699", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:37.583027Z"}
+{"request_id": "ce9d0e6e-a32c-4dd8-ab7c-0ff058408699", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:37.923250Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "81cf8ed3-54cf-4724-9d6a-600f12ebae70", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:34.843235Z"}
+{"request_id": "71384ff4-219b-4b8a-a19e-73e7c5f95a3e", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:37.958681Z"}
 ____________ TestOrderHistory.test_order_history_empty_for_new_user ____________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -1087,10 +1087,10 @@ app/domains/account/service.py:86: in get_order_history
                    ^^^^^^^^^^^^^^^
 E   AttributeError: 'User' object has no attribute 'execute'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "dba06ff4-4034-46d9-aeb8-38e2b062a89c", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:35.845517Z"}
-{"request_id": "dba06ff4-4034-46d9-aeb8-38e2b062a89c", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:36.185390Z"}
+{"request_id": "78f472f9-f94b-43b7-a67c-c8f9cdec0d88", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:38.944649Z"}
+{"request_id": "78f472f9-f94b-43b7-a67c-c8f9cdec0d88", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:39.284600Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "ae75d5bd-60c0-457a-bca1-c5b40853e582", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:36.186603Z"}
+{"request_id": "02aa7c39-f3df-4a21-8178-488d9e2e83bb", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:39.285776Z"}
 ------------------------------ Captured log call -------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 _______________ TestOrderHistory.test_user_only_sees_own_orders ________________
@@ -1439,22 +1439,22 @@ app/domains/account/service.py:86: in get_order_history
                    ^^^^^^^^^^^^^^^
 E   AttributeError: 'User' object has no attribute 'execute'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "730882ff-aedb-48c3-a62b-093baf2f6beb", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:37.921945Z"}
-{"request_id": "730882ff-aedb-48c3-a62b-093baf2f6beb", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:38.261778Z"}
+{"request_id": "94a90fc0-89a1-40e7-a42c-a2191c08205b", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:41.041349Z"}
+{"request_id": "94a90fc0-89a1-40e7-a42c-a2191c08205b", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:41.382329Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "72a72933-ca1b-49d4-a859-d3df9087bf1e", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:38.262931Z"}
+{"request_id": "bf686781-a802-460c-907b-c6b02bb5a003", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:41.383507Z"}
 ------------------------------ Captured log call -------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ______ TestUserLogin.test_token_refresh_issues_new_tokens_and_revokes_old ______
 tests/integration/sprint_1/test_auth.py:194: in test_token_refresh_issues_new_tokens_and_revokes_old
     assert new_data["access_token"] != login_resp.json()["access_token"]
-E   AssertionError: assert 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YzVmNmFlMC0zMDVhLTQ5ZGMtYTQxOS1kZjAzYjQ0MDBhMTQiLCJpYXQiOjE3ODM0MTY3NjYsImV4cCI6MTc4MzQxODU2NiwidHlwZSI6ImFjY2VzcyJ9.WgeYzSdljjard9LI2zF-F4OmzY0_htS08R5hruRh_U0' != 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YzVmNmFlMC0zMDVhLTQ5ZGMtYTQxOS1kZjAzYjQ0MDBhMTQiLCJpYXQiOjE3ODM0MTY3NjYsImV4cCI6MTc4MzQxODU2NiwidHlwZSI6ImFjY2VzcyJ9.WgeYzSdljjard9LI2zF-F4OmzY0_htS08R5hruRh_U0'
+E   AssertionError: assert 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZTBhZTExMS1jMzVkLTQzOTEtYTkzZi0xMmFlYTc5MjhjMTgiLCJpYXQiOjE3ODM0MTg1MDksImV4cCI6MTc4MzQyMDMwOSwidHlwZSI6ImFjY2VzcyJ9.yfNLAuXDOarpf86GB_e0sCO9bJA3yHN2-H-IQ-qs_rA' != 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZTBhZTExMS1jMzVkLTQzOTEtYTkzZi0xMmFlYTc5MjhjMTgiLCJpYXQiOjE3ODM0MTg1MDksImV4cCI6MTc4MzQyMDMwOSwidHlwZSI6ImFjY2VzcyJ9.yfNLAuXDOarpf86GB_e0sCO9bJA3yHN2-H-IQ-qs_rA'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "19d09b00-30b9-4ea5-ba4b-a1a96d15b4b6", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:45.824693Z"}
-{"request_id": "19d09b00-30b9-4ea5-ba4b-a1a96d15b4b6", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:46.165065Z"}
+{"request_id": "609bc811-de2c-42da-a46c-d37997c54a81", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:49.014842Z"}
+{"request_id": "609bc811-de2c-42da-a46c-d37997c54a81", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:49.354938Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "1bd0f2e0-37bf-430d-8b81-2e5f08add258", "method": "POST", "path": "/api/v1/auth/refresh", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:46.166289Z"}
-{"request_id": "1bd0f2e0-37bf-430d-8b81-2e5f08add258", "method": "POST", "path": "/api/v1/auth/refresh", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:46.177353Z"}
+{"request_id": "49436825-ed0e-4b24-83d3-bf20aa244d99", "method": "POST", "path": "/api/v1/auth/refresh", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:49.356176Z"}
+{"request_id": "49436825-ed0e-4b24-83d3-bf20aa244d99", "method": "POST", "path": "/api/v1/auth/refresh", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:49.367568Z"}
 HTTP Request: POST http://test/api/v1/auth/refresh "HTTP/1.1 200 OK"
 ------------------------------ Captured log call -------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
@@ -1628,8 +1628,8 @@ ____________ TestCartManagement.test_anonymous_user_gets_empty_cart ____________
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 3 validation errors:
     |   {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b2aacd40>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b2aacd40>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
     | 
     +------------------------------------
 
@@ -1714,8 +1714,8 @@ Traceback (most recent call last):
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 3 validation errors:
   {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b2aacd40>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b2aacd40>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
 
 
 During handling of the above exception, another exception occurred:
@@ -1793,10 +1793,10 @@ app/core/middleware.py:30: in dispatch
     raise ResponseValidationError(
 E   fastapi.exceptions.ResponseValidationError: 3 validation errors:
 E     {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b2aacd40>}
-E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b2aacd40>}
+E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
+E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "f389c527-7b13-4624-9d81-5c89e4f350a3", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:47.721218Z"}
+{"request_id": "ab061196-b229-4ad9-8b4c-e76f3758f7d0", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:50.915400Z"}
 __ TestCartManagement.test_authenticated_user_cart_is_associated_with_account __
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -1965,8 +1965,8 @@ __ TestCartManagement.test_authenticated_user_cart_is_associated_with_account __
     |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 2 validation errors:
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b1e7cfb0>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b1e7cfb0>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
     | 
     +------------------------------------
 
@@ -2050,8 +2050,8 @@ Traceback (most recent call last):
   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 2 validation errors:
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b1e7cfb0>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b1e7cfb0>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
 
 
 During handling of the above exception, another exception occurred:
@@ -2127,16 +2127,16 @@ app/core/middleware.py:30: in dispatch
 .sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:155: in serialize_response
     raise ResponseValidationError(
 E   fastapi.exceptions.ResponseValidationError: 2 validation errors:
-E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b1e7cfb0>}
-E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b1e7cfb0>}
+E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
+E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "162f6257-1a9b-454b-980b-1af944465b32", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:48.717946Z"}
-{"request_id": "162f6257-1a9b-454b-980b-1af944465b32", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:49.058372Z"}
+{"request_id": "64e6f21e-399b-484a-bbc1-ab1c5999915f", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:51.911907Z"}
+{"request_id": "64e6f21e-399b-484a-bbc1-ab1c5999915f", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:52.251676Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "5c6f2e95-3646-42e0-83b9-0f12d93c5d4d", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:49.060444Z"}
+{"request_id": "5be7496c-074d-4cfd-9450-19c23022ab7a", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:52.253704Z"}
 ____ TestCartManagement.test_cart_shows_items_with_price_quantity_subtotal _____
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -2305,10 +2305,10 @@ ____ TestCartManagement.test_cart_shows_items_with_price_quantity_subtotal _____
     |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 4 validation errors:
-    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7284b27efbf0>}
-    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7284b27efbf0>}
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b27ed670>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b27ed670>}
+    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
+    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
     | 
     +------------------------------------
 
@@ -2392,10 +2392,10 @@ Traceback (most recent call last):
   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 4 validation errors:
-  {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7284b27efbf0>}
-  {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7284b27efbf0>}
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b27ed670>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b27ed670>}
+  {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
+  {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
 
 
 During handling of the above exception, another exception occurred:
@@ -2471,18 +2471,18 @@ app/core/middleware.py:30: in dispatch
 .sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:155: in serialize_response
     raise ResponseValidationError(
 E   fastapi.exceptions.ResponseValidationError: 4 validation errors:
-E     {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7284b27efbf0>}
-E     {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7284b27efbf0>}
-E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b27ed670>}
-E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7284b27ed670>}
+E     {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
+E     {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
+E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
+E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "f38a51fc-f31f-4327-8a3a-a72d28b68cd9", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:50.056632Z"}
-{"request_id": "f38a51fc-f31f-4327-8a3a-a72d28b68cd9", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:50.396789Z"}
+{"request_id": "8ccdc7c5-6654-4fef-b384-36e36eab093a", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:53.270380Z"}
+{"request_id": "8ccdc7c5-6654-4fef-b384-36e36eab093a", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:53.610627Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "d0978915-d0be-417c-ab65-ca06b8c6374f", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:50.425305Z"}
+{"request_id": "cc202908-f8fe-438b-bef6-9ef8fdac5291", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:53.641065Z"}
 __________ TestSearchAndFilter.test_search_returns_matching_products ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -2828,7 +2828,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "389fc201-33ff-4b97-9483-03044035b8cd", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:52.360996Z"}
+{"request_id": "2e9efb9d-895a-4185-a879-9743e8d8a0d4", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:55.630733Z"}
 ___________ TestSearchAndFilter.test_search_no_results_returns_empty ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3174,7 +3174,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "0f6e00fd-79f6-467c-8b80-9bb067990d20", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:53.031244Z"}
+{"request_id": "1be15ed5-20fa-4290-b823-1a4857ed95fe", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:56.301641Z"}
 _____ TestSearchAndFilter.test_filter_by_category_returns_correct_products _____
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3520,7 +3520,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "81f1e395-a005-43d3-9909-1bcb8edc0a27", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:53.713280Z"}
+{"request_id": "30274d77-51b8-4df0-921c-bd47bad076c8", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:57.001949Z"}
 _____ TestSearchAndFilter.test_product_listing_page_shows_required_fields ______
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3867,7 +3867,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "8693e595-a24f-40c0-ac52-ddbb4f8471cf", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:54.503985Z"}
+{"request_id": "a8f7c623-a12e-4380-8323-09b88470aeb2", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:57.830330Z"}
 ____________ TestSearchAndFilter.test_products_paginated_correctly _____________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -4214,7 +4214,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "e052afd4-2e5f-46e1-ba14-30146c2b9e78", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:55.170153Z"}
+{"request_id": "b066f5c3-01c4-4257-a48b-60fe1c27548c", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:58.517289Z"}
 ________ TestProductDetail.test_product_detail_returns_full_information ________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -4394,7 +4394,7 @@ ________ TestProductDetail.test_product_detail_returns_full_information ________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b24f6f90>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bd6d4c0>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -4489,7 +4489,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b24f6f90>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bd6d4c0>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
@@ -4574,10 +4574,10 @@ app/domains/products/service.py:109: in get_product
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E   price
-E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b24f6f90>, input_type=Product]
+E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bd6d4c0>, input_type=Product]
 E       For further information visit https://errors.pydantic.dev/2.7/v/missing
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "9ad599cb-6903-4dbb-b538-e5260a39b11d", "method": "GET", "path": "/api/v1/products/9965a839-3af8-4115-bc35-e818f565a9a1", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:55.907951Z"}
+{"request_id": "0260a074-07fd-4773-b5c2-51878b085171", "method": "GET", "path": "/api/v1/products/3726cb12-8329-441d-99b6-a4069755ba90", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:59.212693Z"}
 ____________ TestProductReviews.test_guest_can_read_product_reviews ____________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -4757,7 +4757,7 @@ ____________ TestProductReviews.test_guest_can_read_product_reviews ____________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b25ee840>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bc32780>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -4852,7 +4852,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b25ee840>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bc32780>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
@@ -4937,10 +4937,10 @@ app/domains/products/service.py:109: in get_product
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E   price
-E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b25ee840>, input_type=Product]
+E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bc32780>, input_type=Product]
 E       For further information visit https://errors.pydantic.dev/2.7/v/missing
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "a5076ade-9015-4073-96e6-0f4241e2e1bc", "method": "GET", "path": "/api/v1/products/6c8780b2-426f-4d82-949f-5b229db5c69d/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:57.387125Z"}
+{"request_id": "b98a0a4e-5ac9-42b6-9c92-300034ba3cec", "method": "GET", "path": "/api/v1/products/349bb590-5dff-4c57-a358-c07d9db257bc/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:00.684276Z"}
 __________ TestProductReviews.test_authenticated_user_submits_review ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -5120,7 +5120,7 @@ __________ TestProductReviews.test_authenticated_user_submits_review ___________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b2446210>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f902ce150>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -5215,7 +5215,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b2446210>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f902ce150>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
@@ -5299,16 +5299,16 @@ app/domains/products/service.py:109: in get_product
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E   price
-E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b2446210>, input_type=Product]
+E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f902ce150>, input_type=Product]
 E       For further information visit https://errors.pydantic.dev/2.7/v/missing
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "b0ac21ff-00fe-4e35-9491-a9fbf63e650f", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:58.415980Z"}
-{"request_id": "b0ac21ff-00fe-4e35-9491-a9fbf63e650f", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:32:58.755500Z"}
+{"request_id": "c2b8bf29-6ef9-42ac-aa4a-5fea57b44259", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:01.730386Z"}
+{"request_id": "c2b8bf29-6ef9-42ac-aa4a-5fea57b44259", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:02:02.071344Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "9d1706fc-a42a-419e-b5ff-99c61d5ca70a", "method": "POST", "path": "/api/v1/products/4b7a3b4b-5c6a-4e7e-a846-00b6e60fbf0f/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:32:58.757533Z"}
+{"request_id": "cb081796-bc84-4232-ad72-809fcf4cd8eb", "method": "POST", "path": "/api/v1/products/34db7505-536b-455d-8845-dd254eb6fe5c/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:02.073753Z"}
 ________ TestProductReviews.test_user_cannot_review_same_product_twice _________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -5488,7 +5488,7 @@ ________ TestProductReviews.test_user_cannot_review_same_product_twice _________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b1ccf4a0>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f903f54c0>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -5583,7 +5583,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b1ccf4a0>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f903f54c0>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
@@ -5667,16 +5667,16 @@ app/domains/products/service.py:109: in get_product
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E   price
-E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7284b1ccf4a0>, input_type=Product]
+E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f903f54c0>, input_type=Product]
 E       For further information visit https://errors.pydantic.dev/2.7/v/missing
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "86d9f12c-e454-42ed-b6c4-45d6cd28889b", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:33:00.218850Z"}
-{"request_id": "86d9f12c-e454-42ed-b6c4-45d6cd28889b", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T09:33:00.559368Z"}
+{"request_id": "47acd0db-87f1-45d5-950b-5dfeaca221ee", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:03.689419Z"}
+{"request_id": "47acd0db-87f1-45d5-950b-5dfeaca221ee", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:02:04.031098Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "3bdd3737-d7e4-4edf-ab22-8e53c25ab830", "method": "POST", "path": "/api/v1/products/e14c9d67-dd86-462c-bbed-c03c4ba04ff1/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T09:33:00.561526Z"}
+{"request_id": "895259ef-e4eb-42e1-8372-8b2a55402e11", "method": "POST", "path": "/api/v1/products/8e4c3080-d64e-4d02-83e3-9d3ef19eb997/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:04.033262Z"}
 =============================== warnings summary ===============================
 tests/integration/sprint_1/test_account.py: 4 warnings
 tests/integration/sprint_1/test_auth.py: 2 warnings
@@ -5706,4 +5706,4 @@ FAILED tests/integration/sprint_1/test_products.py::TestProductDetail::test_prod
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_guest_can_read_product_reviews
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_authenticated_user_submits_review
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_user_cannot_review_same_product_twice
-================= 17 failed, 15 passed, 10 warnings in 28.93s ==================
+================= 17 failed, 15 passed, 10 warnings in 29.38s ==================

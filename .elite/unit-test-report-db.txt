@@ -6,7 +6,7 @@ rootdir: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/b
 configfile: pyproject.toml
 plugins: json-report-1.5.0, metadata-3.1.1, asyncio-1.4.0, anyio-4.14.1
 asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
-collecting ... collected 51 items / 20 deselected / 31 selected
+collecting ... collected 121 items / 90 deselected / 31 selected
 
 tests/unit/sprint_1/test_db_models.py::TestUserModel::test_create_user_minimal PASSED [  3%]
 tests/unit/sprint_1/test_db_models.py::TestUserModel::test_user_defaults PASSED [  6%]
@@ -40,4 +40,4 @@ tests/unit/sprint_1/test_db_models.py::TestRelationships::test_user_has_refresh_
 tests/unit/sprint_1/test_db_models.py::TestRelationships::test_product_variants_relationship PASSED [ 96%]
 tests/unit/sprint_1/test_db_models.py::TestRelationships::test_order_items_relationship PASSED [100%]
 
-====================== 31 passed, 20 deselected in 2.49s =======================
+====================== 31 passed, 90 deselected in 3.07s =======================
