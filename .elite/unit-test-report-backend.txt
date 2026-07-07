@@ -1,11 +1,4 @@
 ============================= test session starts ==============================
-platform linux -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/bin/python
-cachedir: .pytest_cache
-metadata: {'Python': '3.12.13', 'Platform': 'Linux-7.0.0-1006-aws-x86_64-with-glibc2.43', 'Packages': {'pytest': '9.1.1', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1', 'asyncio': '1.4.0', 'anyio': '4.14.1'}, 'AWS_REGION': 'us-east-1'}
-rootdir: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app
-configfile: pyproject.toml
-plugins: json-report-1.5.0, metadata-3.1.1, asyncio-1.4.0, anyio-4.14.1
-asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
 collecting ... collected 121 items
 
 tests/unit/sprint_1/test_auth_login.py::TestCreateAccessToken::test_returns_non_empty_string PASSED [  0%]
@@ -137,4 +130,4 @@ tests/unit/sprint_1/test_auth_session_t008.py: 32 warnings
     now = timegm(datetime.utcnow().utctimetuple())
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-====================== 121 passed, 49 warnings in 52.24s =======================
+====================== 121 passed, 49 warnings in 52.12s =======================
