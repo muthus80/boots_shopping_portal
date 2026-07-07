@@ -7,9 +7,18 @@ from sqlalchemy import exists, select, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.domains.checkout.models import Order, OrderItem
 from app.domains.products.models import Product, ProductVariant, Review
-from app.domains.products.schemas import ProductList, ProductRead, ReviewCreate, ReviewRead
-from app.core.exceptions import NotFoundError, ConflictError
+from app.domains.products.schemas import (
+    ProductList,
+    ProductRead,
+    ReviewContractRead,
+    ReviewCreate,
+    ReviewListResponse,
+    ReviewRead,
+    ReviewSubmit,
+)
+from app.core.exceptions import ConflictError, ForbiddenError, NotFoundError
 
 
 class ProductService:
@@ -154,50 +163,103 @@ class ProductService:
         self,
         product_id: UUID,
         user_id: UUID,
-        payload: ReviewCreate,
-    ) -> ReviewRead:
-        product_stmt = select(Product).where(Product.id == product_id)
-        product_result = await self.db.execute(product_stmt)
-        product = product_result.scalar_one_or_none()
+        payload: ReviewCreate | ReviewSubmit,
+    ) -> ReviewContractRead:
+        """Create a purchase-verified product review (T-019 / US-008).
 
+        Raises:
+            NotFoundError: product does not exist.
+            ForbiddenError: user has not purchased this product (no
+                confirmed/shipped/delivered order containing it).
+            ConflictError: user already reviewed this product.
+        """
+        # 1. Verify product exists
+        product_result = await self.db.execute(
+            select(Product).where(Product.id == product_id)
+        )
+        product = product_result.scalar_one_or_none()
         if product is None:
             raise NotFoundError(f"Product with id '{product_id}' not found.")
 
-        existing_stmt = select(Review).where(
-            and_(Review.product_id == product_id, Review.user_id == user_id)
+        # 2. Purchase verification gate (US-008) — user must have a
+        #    confirmed/shipped/delivered order containing this product.
+        _VERIFIED_STATUSES = ["confirmed", "shipped", "delivered"]
+        purchase_result = await self.db.execute(
+            select(Order)
+            .join(OrderItem, OrderItem.order_id == Order.id)
+            .where(
+                Order.user_id == user_id,
+                OrderItem.product_id == product_id,
+                Order.status.in_(_VERIFIED_STATUSES),
+            )
         )
-        existing_result = await self.db.execute(existing_stmt)
-        existing_review = existing_result.scalar_one_or_none()
+        verified_order = purchase_result.scalar_one_or_none()
+        if verified_order is None:
+            raise ForbiddenError(
+                "You can only review products you have purchased."
+            )
 
-        if existing_review is not None:
+        # 3. One-review-per-product-per-user gate
+        existing_result = await self.db.execute(
+            select(Review).where(
+                and_(Review.product_id == product_id, Review.user_id == user_id)
+            )
+        )
+        if existing_result.scalar_one_or_none() is not None:
             raise ConflictError("You have already reviewed this product.")
+
+        # 4. Normalise payload — ReviewSubmit uses review_text; ReviewCreate uses body
+        if isinstance(payload, ReviewSubmit):
+            body_text = payload.review_text
+            title_text: Optional[str] = None
+        else:
+            body_text = payload.body
+            title_text = payload.title
 
         review = Review(
             product_id=product_id,
             user_id=user_id,
+            order_id=verified_order.id,
             rating=payload.rating,
-            title=payload.title,
-            body=payload.body,
+            title=title_text,
+            body=body_text,
+            is_verified_purchase=True,
         )
         self.db.add(review)
         await self.db.commit()
         await self.db.refresh(review)
 
-        return ReviewRead.model_validate(review)
+        return ReviewContractRead.model_validate(review)
 
     async def get_product_reviews(
         self,
         product_id: UUID,
         page: int = 1,
         page_size: int = 20,
-    ) -> list[ReviewRead]:
-        product_stmt = select(Product).where(Product.id == product_id)
-        product_result = await self.db.execute(product_stmt)
-        product = product_result.scalar_one_or_none()
+    ) -> ReviewListResponse:
+        """Return paginated reviews with aggregate rating for a product (T-019).
 
-        if product is None:
+        Returns a ``ReviewListResponse`` matching the API contract:
+        ``{"average_rating": float, "reviews": [...], "total_reviews": int}``
+        """
+        # Verify product exists
+        product_result = await self.db.execute(
+            select(Product).where(Product.id == product_id)
+        )
+        if product_result.scalar_one_or_none() is None:
             raise NotFoundError(f"Product with id '{product_id}' not found.")
 
+        # Total count + average rating
+        agg_result = await self.db.execute(
+            select(func.count(Review.id), func.avg(Review.rating)).where(
+                Review.product_id == product_id
+            )
+        )
+        total_reviews, avg_rating = agg_result.one()
+        total_reviews = int(total_reviews or 0)
+        average_rating = float(avg_rating) if avg_rating is not None else 0.0
+
+        # Paginated reviews
         offset = (page - 1) * page_size
         stmt = (
             select(Review)
@@ -209,7 +271,11 @@ class ProductService:
         result = await self.db.execute(stmt)
         reviews = result.scalars().all()
 
-        return [ReviewRead.model_validate(r) for r in reviews]
+        return ReviewListResponse(
+            average_rating=average_rating,
+            reviews=[ReviewContractRead.model_validate(r) for r in reviews],
+            total_reviews=total_reviews,
+        )
 
     # Alias so router code using either name works.
     list_reviews = get_product_reviews

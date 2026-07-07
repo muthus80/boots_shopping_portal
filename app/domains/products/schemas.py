@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class ProductVariantRead(BaseModel):
@@ -20,6 +20,8 @@ class ProductVariantRead(BaseModel):
 
 
 class ReviewRead(BaseModel):
+    """Internal review read schema — preserves existing field names (body, title)."""
+
     id: UUID
     product_id: UUID
     user_id: UUID
@@ -33,9 +35,64 @@ class ReviewRead(BaseModel):
 
 
 class ReviewCreate(BaseModel):
+    """Internal review create schema used by service layer."""
+
     rating: int = Field(..., ge=1, le=5)
     title: Optional[str] = None
     body: Optional[str] = None
+
+
+# ── T-019 (US-008): API-contract schemas ────────────────────────────────────
+
+
+class ReviewSubmit(BaseModel):
+    """Request body for POST /api/v1/products/{product_id}/reviews.
+
+    Uses ``review_text`` as the field name per the API contract.
+    """
+
+    rating: int = Field(..., ge=1, le=5, description="Star rating between 1 and 5")
+    review_text: str = Field(..., description="Review text content")
+
+
+class ReviewContractRead(BaseModel):
+    """Response schema for review endpoints — matches API contract.
+
+    Maps the ORM ``body`` field to ``review_text`` for API-contract compliance.
+    """
+
+    id: UUID
+    rating: int
+    review_text: Optional[str] = None
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+    @model_validator(mode="before")
+    @classmethod
+    def _map_body_to_review_text(cls, data: object) -> object:
+        """Map ORM ``body`` attribute → ``review_text`` field."""
+        if hasattr(data, "body"):
+            # ORM model instance — extract into a plain dict
+            return {
+                "id": data.id,  # type: ignore[union-attr]
+                "rating": data.rating,  # type: ignore[union-attr]
+                "review_text": data.body,  # type: ignore[union-attr]
+                "created_at": data.created_at,  # type: ignore[union-attr]
+            }
+        # Already a dict (e.g. from JSON tests)
+        if isinstance(data, dict) and "review_text" not in data and "body" in data:
+            data = dict(data)
+            data["review_text"] = data.pop("body")
+        return data
+
+
+class ReviewListResponse(BaseModel):
+    """Paginated response for GET /api/v1/products/{product_id}/reviews."""
+
+    average_rating: float
+    reviews: List[ReviewContractRead]
+    total_reviews: int
 
 
 class ProductRead(BaseModel):

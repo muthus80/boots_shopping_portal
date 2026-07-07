@@ -7,7 +7,15 @@ from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import get_current_user, get_db
-from app.domains.products.schemas import ProductList, ProductRead, ReviewCreate, ReviewRead
+from app.domains.products.schemas import (
+    ProductList,
+    ProductRead,
+    ReviewContractRead,
+    ReviewCreate,
+    ReviewListResponse,
+    ReviewRead,
+    ReviewSubmit,
+)
 from app.domains.products.service import ProductService
 
 router = APIRouter(prefix="/api/v1/products", tags=["products"])
@@ -91,31 +99,46 @@ async def get_product(
     return await service.get_product(product_id=product_id)
 
 
-@router.get("/{product_id}/reviews", response_model=List[ReviewRead])
+@router.get(
+    "/{product_id}/reviews",
+    response_model=ReviewListResponse,
+    summary="List reviews for a product (T-019 / US-008)",
+    description=(
+        "Returns paginated reviews with average star rating for the product. "
+        "Auth not required."
+    ),
+)
 async def list_reviews(
     product_id: UUID,
-    page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
+    page: int = Query(1, ge=1, description="Page number (default 1)"),
+    per_page: int = Query(10, ge=1, le=100, description="Items per page (default 10)"),
     service: ProductService = Depends(get_product_service),
-) -> List[ReviewRead]:
+) -> ReviewListResponse:
+    """GET /api/v1/products/{product_id}/reviews — paginated reviews with rating aggregate."""
     return await service.get_product_reviews(
         product_id=product_id,
         page=page,
-        page_size=page_size,
+        page_size=per_page,
     )
 
 
 @router.post(
     "/{product_id}/reviews",
-    response_model=ReviewRead,
+    response_model=ReviewContractRead,
     status_code=status.HTTP_201_CREATED,
+    summary="Submit a purchase-verified product review (T-019 / US-008)",
+    description=(
+        "Creates a review. Verifies that the authenticated user has purchased the product. "
+        "Returns 403 if no matching purchase found."
+    ),
 )
 async def create_review(
     product_id: UUID,
-    payload: ReviewCreate,
+    payload: ReviewSubmit,
     current_user=Depends(get_current_user),
     service: ProductService = Depends(get_product_service),
-) -> ReviewRead:
+) -> ReviewContractRead:
+    """POST /api/v1/products/{product_id}/reviews — purchase-verified review submission."""
     return await service.create_review(
         product_id=product_id,
         user_id=current_user.id,
