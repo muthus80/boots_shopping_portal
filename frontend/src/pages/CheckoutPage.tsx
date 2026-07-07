@@ -104,6 +104,9 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ current, isGuest }) => {
           const isActive = step.key === current;
           const isCompleted = stepIdx < currentIdx;
 
+          // Build a descriptive label for screen readers
+          const srLabel = `${step.label}${isCompleted ? ' — completed' : isActive ? ' — current step' : ' — upcoming'}`;
+
           return (
             <li key={step.key} className="flex items-center">
               {i > 0 && (
@@ -115,6 +118,7 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ current, isGuest }) => {
               <div className="flex flex-col items-center gap-1">
                 <span
                   aria-current={isActive ? 'step' : undefined}
+                  aria-label={srLabel}
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors ${
                     isActive
                       ? 'bg-gray-900 text-white'
@@ -123,12 +127,14 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ current, isGuest }) => {
                       : 'bg-gray-200 text-gray-500'
                   }`}
                 >
-                  {isCompleted ? '✓' : i + 1}
+                  {/* Visual: checkmark for completed, number for others */}
+                  <span aria-hidden="true">{isCompleted ? '✓' : i + 1}</span>
                 </span>
                 <span
                   className={`hidden sm:block text-xs font-medium ${
                     isActive ? 'text-gray-900' : 'text-gray-400'
                   }`}
+                  aria-hidden="true"
                 >
                   {step.label}
                 </span>
@@ -616,12 +622,19 @@ const PaymentStepInner: React.FC<PaymentStepInnerProps> = ({
 
       {/* Card element */}
       <div className="mb-6">
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">
-          Card details
-        </label>
+        {/* Stripe CardElement renders an iframe; the label is purely visual/
+            informational. Stripe's iframe sets its own internal accessible name. */}
+        <p
+          id="card-details-label"
+          className="mb-1.5 block text-sm font-medium text-gray-700"
+          aria-hidden="true"
+        >
+          Card details <span className="text-red-500" aria-hidden="true">*</span>
+        </p>
         <div
+          role="group"
+          aria-labelledby="card-details-label"
           className="rounded-lg border border-gray-300 bg-white p-3 focus-within:border-gray-900 focus-within:ring-2 focus-within:ring-gray-900"
-          aria-label="Card details input"
         >
           <CardElement options={CARD_ELEMENT_OPTIONS} />
         </div>

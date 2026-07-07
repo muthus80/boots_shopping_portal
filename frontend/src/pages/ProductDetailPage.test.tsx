@@ -350,8 +350,10 @@ describe('ProductDetailPage', () => {
     fireEvent.click(incrementBtn);
 
     await waitFor(() => {
-      const spinbutton = screen.getByRole('spinbutton');
-      expect(spinbutton).toHaveTextContent('2');
+      // Quantity is now an <input type="number"> (ARIA role: spinbutton)
+      // Use toHaveValue() for inputs, not toHaveTextContent()
+      const qtyInput = screen.getByRole('spinbutton');
+      expect(qtyInput).toHaveValue(2);
     });
   });
 

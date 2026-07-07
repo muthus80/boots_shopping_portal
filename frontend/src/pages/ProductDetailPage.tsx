@@ -135,7 +135,7 @@ const StarRating: React.FC<StarRatingProps | InteractiveStarRatingProps> = (prop
               type="button"
               aria-label={`Rate ${i + 1} out of ${max}`}
               onClick={() => props.onChange(i + 1)}
-              className={`text-2xl leading-none transition-colors focus:outline-none ${
+              className={`text-2xl leading-none transition-colors rounded focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-1 ${
                 filled ? 'text-amber-400' : 'text-gray-300 hover:text-amber-300'
               }`}
             >
@@ -824,16 +824,23 @@ const ProductDetailPage: React.FC = () => {
                 >
                   −
                 </button>
-                <span
+                <input
                   id="pdp-quantity"
-                  role="spinbutton"
-                  aria-valuenow={quantity}
-                  aria-valuemin={1}
-                  aria-valuemax={selectedVariant?.stock_quantity ?? 99}
-                  className="w-10 text-center text-sm font-semibold text-gray-900"
-                >
-                  {quantity}
-                </span>
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={selectedVariant?.stock_quantity ?? 99}
+                  value={quantity}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value, 10);
+                    if (!isNaN(val) && val >= 1) {
+                      const maxQty = selectedVariant?.stock_quantity ?? 99;
+                      setQuantity(Math.min(maxQty, val));
+                    }
+                  }}
+                  aria-label="Quantity"
+                  className="w-10 border-0 bg-transparent text-center text-sm font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-900 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                />
                 <button
                   type="button"
                   aria-label="Increase quantity"

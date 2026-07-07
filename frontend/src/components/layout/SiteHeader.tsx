@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../stores/authStore';
@@ -253,8 +253,23 @@ const AccountActions: React.FC<AccountActionsProps> = ({ onLinkClick }) => {
 export const SiteHeader: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const cartCount = useCartCount();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const closeMobileMenu = (): void => setMobileMenuOpen(false);
+
+  // Close mobile menu on Escape key (WCAG 2.1 SC 2.1.2 — No Keyboard Trap)
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent): void => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        // Restore focus to the toggle button
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm" role="banner">
@@ -316,6 +331,7 @@ export const SiteHeader: React.FC = () => {
 
             {/* Mobile menu toggle */}
             <button
+              ref={menuButtonRef}
               type="button"
               aria-controls="mobile-menu"
               aria-expanded={mobileMenuOpen}
