@@ -1,383 +1,298 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { getCart, removeCartItem } from '../api/cart';
-import { apiClient } from '../api/client';
-import { Cart, CartItem } from '../types/index';
+/**
+ * CartPage — T-024 / US-010
+ *
+ * Displays all cart items with their price, quantity controls, and per-item
+ * subtotal.  Quantity changes and removals are committed immediately via React
+ * Query mutations, and the order summary recalculates optimistically.
+ */
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getCart, updateCartItem, removeCartItem } from '../api/cart';
+import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { ErrorMessage } from '../components/common/ErrorMessage';
+import { EmptyState } from '../components/common/EmptyState';
+import type { CartItem } from '../types/index';
 
-const updateCartItemQty = async (cartItemId: string, quantity: number): Promise<Cart> => {
-  const response = await apiClient.put<Cart>(`/api/v1/cart/items/${cartItemId}`, { quantity });
-  return response.data;
-};
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
-const removeCartItemAndRefetch = async (cartItemId: string): Promise<Cart> => {
-  await removeCartItem(cartItemId);
-  return getCart();
-};
+const formatPrice = (amount: number): string =>
+  new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(amount);
 
-const getItemPrice = (item: CartItem): number => {
-  return item.unit_price ?? 0;
-};
+// ── CartItemRow ───────────────────────────────────────────────────────────────
 
-export const CartPage: React.FC = () => {
-  const [cart, setCart] = useState<Cart | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
+interface CartItemRowProps {
+  item: CartItem;
+  isUpdating: boolean;
+  onQuantityChange: (item: CartItem, newQty: number) => void;
+  onRemove: (itemId: string) => void;
+}
 
-  const fetchCart = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await getCart();
-      setCart(data);
-    } catch (err: unknown) {
-      setError('Failed to load cart. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
-
-  const handleQuantityChange = async (item: CartItem, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setUpdatingItems((prev) => new Set(prev).add(item.id));
-    try {
-      const updatedCart = await updateCartItemQty(item.id, newQuantity);
-      setCart(updatedCart);
-    } catch (err: unknown) {
-      setError('Failed to update item quantity. Please try again.');
-    } finally {
-      setUpdatingItems((prev) => {
-        const next = new Set(prev);
-        next.delete(item.id);
-        return next;
-      });
-    }
-  };
-
-  const handleRemoveItem = async (itemId: string) => {
-    setUpdatingItems((prev) => new Set(prev).add(itemId));
-    try {
-      const updatedCart = await removeCartItemAndRefetch(itemId);
-      setCart(updatedCart);
-    } catch (err: unknown) {
-      setError('Failed to remove item. Please try again.');
-    } finally {
-      setUpdatingItems((prev) => {
-        const next = new Set(prev);
-        next.delete(itemId);
-        return next;
-      });
-    }
-  };
-
-  const handleProceedToCheckout = () => {
-    window.location.href = '/checkout';
-  };
-
-  const calculateTotal = (items: CartItem[]): number => {
-    return items.reduce((sum, item) => {
-      const price = getItemPrice(item);
-      return sum + price * item.quantity;
-    }, 0);
-  };
-
-  if (loading) {
-    return (
-      <div style={styles.container}>
-        <h1 style={styles.title}>Your Cart</h1>
-        <p style={styles.message}>Loading your cart...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div style={styles.container}>
-        <h1 style={styles.title}>Your Cart</h1>
-        <p style={styles.errorMessage}>{error}</p>
-        <button style={styles.retryButton} onClick={fetchCart}>
-          Retry
-        </button>
-      </div>
-    );
-  }
-
-  if (!cart || cart.items.length === 0) {
-    return (
-      <div style={styles.container}>
-        <h1 style={styles.title}>Your Cart</h1>
-        <p style={styles.message}>Your cart is empty.</p>
-        <button style={styles.continueShoppingButton} onClick={() => (window.location.href = '/products')}>
-          Continue Shopping
-        </button>
-      </div>
-    );
-  }
-
-  const total = calculateTotal(cart.items);
+const CartItemRow: React.FC<CartItemRowProps> = ({
+  item,
+  isUpdating,
+  onQuantityChange,
+  onRemove,
+}) => {
+  const unitPrice = item.unit_price ?? 0;
+  const lineTotal = unitPrice * item.quantity;
+  const productName = item.product?.name ?? item.product_id;
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Your Cart</h1>
-      {error && <p style={styles.errorMessage}>{error}</p>}
-      <div style={styles.cartContent}>
-        <div style={styles.itemsList}>
-          {cart.items.map((item: CartItem) => {
-            const isUpdating = updatingItems.has(item.id);
-            const price = getItemPrice(item);
-            const itemTotal = price * item.quantity;
+    <li
+      className={`flex flex-wrap items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-opacity ${
+        isUpdating ? 'opacity-50' : 'opacity-100'
+      }`}
+      aria-busy={isUpdating}
+    >
+      {/* Product image */}
+      {item.product?.image_url ? (
+        <img
+          src={item.product.image_url}
+          alt={productName}
+          className="h-20 w-20 flex-shrink-0 rounded-lg object-cover"
+        />
+      ) : (
+        <div
+          className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100"
+          aria-hidden="true"
+        >
+          <span className="text-3xl">👢</span>
+        </div>
+      )}
 
-            return (
-              <div key={item.id} style={{ ...styles.cartItem, opacity: isUpdating ? 0.6 : 1 }}>
-                <div style={styles.itemInfo}>
-                  <div style={styles.itemName}>
-                    {item.product?.name ?? item.product_id}
-                  </div>
-                  {item.variant && (
-                    <div style={styles.itemVariant}>
-                      {item.variant.size && <span>Size: {item.variant.size}</span>}
-                      {item.variant.color && <span style={{ marginLeft: '8px' }}>Color: {item.variant.color}</span>}
-                    </div>
-                  )}
-                  <div style={styles.itemPrice}>£{price.toFixed(2)} each</div>
-                </div>
-                <div style={styles.quantityControls}>
-                  <button
-                    style={styles.quantityButton}
-                    onClick={() => handleQuantityChange(item, item.quantity - 1)}
-                    disabled={isUpdating || item.quantity <= 1}
-                    aria-label="Decrease quantity"
-                  >
-                    −
-                  </button>
-                  <span style={styles.quantityDisplay}>{item.quantity}</span>
-                  <button
-                    style={styles.quantityButton}
-                    onClick={() => handleQuantityChange(item, item.quantity + 1)}
-                    disabled={isUpdating}
-                    aria-label="Increase quantity"
-                  >
-                    +
-                  </button>
-                </div>
-                <div style={styles.itemTotal}>£{itemTotal.toFixed(2)}</div>
-                <button
-                  style={styles.removeButton}
-                  onClick={() => handleRemoveItem(item.id)}
-                  disabled={isUpdating}
-                  aria-label="Remove item"
-                >
-                  Remove
-                </button>
-              </div>
-            );
-          })}
-        </div>
-        <div style={styles.orderSummary}>
-          <h2 style={styles.summaryTitle}>Order Summary</h2>
-          <div style={styles.summaryRow}>
-            <span>Subtotal ({cart.items.length} {cart.items.length === 1 ? 'item' : 'items'})</span>
-            <span>£{total.toFixed(2)}</span>
-          </div>
-          <div style={styles.summaryRow}>
-            <span>Shipping</span>
-            <span>Calculated at checkout</span>
-          </div>
-          <div style={{ ...styles.summaryRow, ...styles.totalRow }}>
-            <span>Total</span>
-            <span>£{total.toFixed(2)}</span>
-          </div>
-          <button
-            style={styles.checkoutButton}
-            onClick={handleProceedToCheckout}
-            disabled={cart.items.length === 0}
-          >
-            Proceed to Checkout
-          </button>
-          <button
-            style={styles.continueShoppingButton}
-            onClick={() => (window.location.href = '/products')}
-          >
-            Continue Shopping
-          </button>
-        </div>
+      {/* Item details */}
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-semibold text-gray-900">{productName}</p>
+        {item.variant && (
+          <p className="mt-0.5 text-xs text-gray-500">
+            {item.variant.size && <span>Size: {item.variant.size}</span>}
+            {item.variant.size && item.variant.color && <span className="mx-1">·</span>}
+            {item.variant.color && <span>Colour: {item.variant.color}</span>}
+          </p>
+        )}
+        <p className="mt-1 text-xs text-gray-500">{formatPrice(unitPrice)} each</p>
       </div>
-    </div>
+
+      {/* Quantity stepper */}
+      <div className="flex items-center gap-2" role="group" aria-label={`Quantity for ${productName}`}>
+        <button
+          type="button"
+          onClick={() => onQuantityChange(item, item.quantity - 1)}
+          disabled={isUpdating || item.quantity <= 1}
+          aria-label={`Decrease quantity of ${productName}`}
+          className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-gray-50 text-lg font-semibold text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-gray-900"
+        >
+          −
+        </button>
+        <span
+          className="min-w-[2rem] text-center text-sm font-semibold text-gray-900"
+          aria-live="polite"
+          aria-label={`Quantity: ${item.quantity}`}
+        >
+          {item.quantity}
+        </span>
+        <button
+          type="button"
+          onClick={() => onQuantityChange(item, item.quantity + 1)}
+          disabled={isUpdating}
+          aria-label={`Increase quantity of ${productName}`}
+          className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-gray-50 text-lg font-semibold text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-gray-900"
+        >
+          +
+        </button>
+      </div>
+
+      {/* Line total */}
+      <p className="min-w-[4.5rem] text-right text-sm font-semibold text-gray-900">
+        {formatPrice(lineTotal)}
+      </p>
+
+      {/* Remove button */}
+      <button
+        type="button"
+        onClick={() => onRemove(item.id)}
+        disabled={isUpdating}
+        aria-label={`Remove ${productName} from cart`}
+        className="rounded-md border border-red-300 px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-red-400"
+      >
+        Remove
+      </button>
+    </li>
   );
 };
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    maxWidth: '1100px',
-    margin: '0 auto',
-    padding: '32px 16px',
-    fontFamily: 'Arial, sans-serif',
-  },
-  title: {
-    fontSize: '28px',
-    fontWeight: 700,
-    marginBottom: '24px',
-    color: '#1a1a1a',
-  },
-  message: {
-    fontSize: '16px',
-    color: '#555',
-    marginBottom: '16px',
-  },
-  errorMessage: {
-    fontSize: '15px',
-    color: '#c0392b',
-    marginBottom: '16px',
-    padding: '12px',
-    backgroundColor: '#fdecea',
-    borderRadius: '6px',
-  },
-  retryButton: {
-    padding: '10px 20px',
-    backgroundColor: '#333',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-  },
-  cartContent: {
-    display: 'flex',
-    gap: '32px',
-    alignItems: 'flex-start',
-    flexWrap: 'wrap',
-  },
-  itemsList: {
-    flex: '1 1 500px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  cartItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '16px',
-    padding: '16px',
-    border: '1px solid #e0e0e0',
-    borderRadius: '8px',
-    backgroundColor: '#fff',
-    flexWrap: 'wrap',
-    transition: 'opacity 0.2s',
-  },
-  itemInfo: {
-    flex: '1 1 200px',
-  },
-  itemName: {
-    fontSize: '16px',
-    fontWeight: 600,
-    color: '#1a1a1a',
-    marginBottom: '4px',
-  },
-  itemVariant: {
-    fontSize: '13px',
-    color: '#666',
-    marginBottom: '4px',
-  },
-  itemPrice: {
-    fontSize: '14px',
-    color: '#444',
-  },
-  quantityControls: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  quantityButton: {
-    width: '32px',
-    height: '32px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    backgroundColor: '#f5f5f5',
-    cursor: 'pointer',
-    fontSize: '18px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    lineHeight: 1,
-  },
-  quantityDisplay: {
-    minWidth: '32px',
-    textAlign: 'center',
-    fontSize: '16px',
-    fontWeight: 600,
-  },
-  itemTotal: {
-    fontSize: '16px',
-    fontWeight: 600,
-    color: '#1a1a1a',
-    minWidth: '70px',
-    textAlign: 'right',
-  },
-  removeButton: {
-    padding: '6px 12px',
-    backgroundColor: 'transparent',
-    color: '#c0392b',
-    border: '1px solid #c0392b',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '13px',
-    transition: 'background-color 0.2s',
-  },
-  orderSummary: {
-    flex: '0 1 320px',
-    padding: '24px',
-    border: '1px solid #e0e0e0',
-    borderRadius: '8px',
-    backgroundColor: '#fafafa',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-  },
-  summaryTitle: {
-    fontSize: '20px',
-    fontWeight: 700,
-    marginBottom: '8px',
-    color: '#1a1a1a',
-  },
-  summaryRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    fontSize: '15px',
-    color: '#444',
-  },
-  totalRow: {
-    fontWeight: 700,
-    fontSize: '17px',
-    color: '#1a1a1a',
-    borderTop: '1px solid #e0e0e0',
-    paddingTop: '12px',
-    marginTop: '4px',
-  },
-  checkoutButton: {
-    padding: '14px',
-    backgroundColor: '#1a1a1a',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    fontWeight: 600,
-    marginTop: '8px',
-    transition: 'background-color 0.2s',
-  },
-  continueShoppingButton: {
-    padding: '12px',
-    backgroundColor: 'transparent',
-    color: '#1a1a1a',
-    border: '1px solid #1a1a1a',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '15px',
-    transition: 'background-color 0.2s',
-  },
+// ── CartPage ──────────────────────────────────────────────────────────────────
+
+export const CartPage: React.FC = () => {
+  const queryClient = useQueryClient();
+
+  // ── Data fetching ─────────────────────────────────────────────────────────
+
+  const {
+    data: cart,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['cart'],
+    queryFn: getCart,
+  });
+
+  // ── Mutations ─────────────────────────────────────────────────────────────
+
+  const { mutate: changeQty, isPending: isChangingQty, variables: changingVars } = useMutation({
+    mutationFn: ({ itemId, quantity }: { itemId: string; quantity: number }) =>
+      updateCartItem(itemId, quantity),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
+
+  const { mutate: removeItem, isPending: isRemoving, variables: removingVars } = useMutation({
+    mutationFn: (itemId: string) => removeCartItem(itemId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
+
+  // ── Event handlers ────────────────────────────────────────────────────────
+
+  const handleQuantityChange = (item: CartItem, newQty: number): void => {
+    if (newQty < 1) return;
+    changeQty({ itemId: item.id, quantity: newQty });
+  };
+
+  const handleRemove = (itemId: string): void => {
+    removeItem(itemId);
+  };
+
+  const isItemUpdating = (itemId: string): boolean =>
+    (isChangingQty && changingVars?.itemId === itemId) ||
+    (isRemoving && removingVars === itemId);
+
+  // ── Derived values ────────────────────────────────────────────────────────
+
+  const items = cart?.items ?? [];
+  const subtotal = items.reduce(
+    (sum, item) => sum + (item.unit_price ?? 0) * item.quantity,
+    0
+  );
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+
+  // ── Render states ─────────────────────────────────────────────────────────
+
+  if (isLoading) {
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900">Your Cart</h1>
+        <LoadingSpinner size="lg" label="Loading your cart…" centered />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900">Your Cart</h1>
+        <ErrorMessage
+          heading="Something went wrong, please try again"
+          detail="We couldn't load your cart. Please check your connection and try again."
+          onRetry={() => void refetch()}
+        />
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900">Your Cart</h1>
+        <EmptyState
+          icon={<span aria-hidden="true">🛒</span>}
+          heading="Your cart is empty"
+          description="Looks like you haven't added any boots yet."
+          action={
+            <Link
+              to="/products"
+              className="inline-block rounded-lg bg-gray-900 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+            >
+              Continue Shopping
+            </Link>
+          }
+        />
+      </div>
+    );
+  }
+
+  // ── Full cart view ────────────────────────────────────────────────────────
+
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+      <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900">Your Cart</h1>
+
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+        {/* Items list */}
+        <section aria-label="Cart items" className="flex-1">
+          <ul className="flex flex-col gap-4 list-none p-0 m-0">
+            {items.map((item) => (
+              <CartItemRow
+                key={item.id}
+                item={item}
+                isUpdating={isItemUpdating(item.id)}
+                onQuantityChange={handleQuantityChange}
+                onRemove={handleRemove}
+              />
+            ))}
+          </ul>
+
+          <div className="mt-6">
+            <Link
+              to="/products"
+              className="text-sm font-medium text-gray-600 underline-offset-2 hover:text-gray-900 hover:underline focus:outline-none focus:ring-2 focus:ring-gray-900 rounded"
+            >
+              ← Continue Shopping
+            </Link>
+          </div>
+        </section>
+
+        {/* Order summary */}
+        <aside
+          aria-label="Order summary"
+          className="w-full rounded-xl border border-gray-200 bg-gray-50 p-6 lg:w-80 lg:flex-shrink-0"
+        >
+          <h2 className="mb-4 text-xl font-bold text-gray-900">Order Summary</h2>
+
+          <dl className="space-y-3 text-sm">
+            <div className="flex justify-between">
+              <dt className="text-gray-600">
+                Subtotal ({totalItems} {totalItems === 1 ? 'item' : 'items'})
+              </dt>
+              <dd className="font-semibold text-gray-900" data-testid="cart-subtotal">
+                {formatPrice(subtotal)}
+              </dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-gray-600">Shipping</dt>
+              <dd className="text-gray-500">Calculated at checkout</dd>
+            </div>
+            <div className="flex justify-between border-t border-gray-200 pt-3">
+              <dt className="text-base font-bold text-gray-900">Total</dt>
+              <dd className="text-base font-bold text-gray-900">{formatPrice(subtotal)}</dd>
+            </div>
+          </dl>
+
+          <Link
+            to="/checkout"
+            className="mt-6 flex w-full items-center justify-center rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+            aria-label="Proceed to checkout"
+          >
+            Proceed to Checkout
+          </Link>
+        </aside>
+      </div>
+    </div>
+  );
 };
 
 export default CartPage;
