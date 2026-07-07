@@ -904,7 +904,7 @@ const ProductDetailPage: React.FC = () => {
           <div className="mt-8 space-y-px divide-y divide-gray-200 rounded-xl border border-gray-200">
             {product.materials && (
               <details className="group p-4">
-                <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none">
+                <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-inset rounded">
                   Materials
                   <span className="text-gray-400 group-open:rotate-180 transition-transform" aria-hidden="true">▾</span>
                 </summary>
@@ -912,7 +912,7 @@ const ProductDetailPage: React.FC = () => {
               </details>
             )}
             <details className="group p-4">
-              <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none">
+              <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-inset rounded">
                 Sizing &amp; Fit
                 <span className="text-gray-400 group-open:rotate-180 transition-transform" aria-hidden="true">▾</span>
               </summary>
@@ -930,7 +930,7 @@ const ProductDetailPage: React.FC = () => {
               </div>
             </details>
             <details className="group p-4">
-              <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none">
+              <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-inset rounded">
                 Delivery &amp; Returns
                 <span className="text-gray-400 group-open:rotate-180 transition-transform" aria-hidden="true">▾</span>
               </summary>
@@ -1039,16 +1039,22 @@ const ProductDetailPage: React.FC = () => {
               to leave a review.
             </p>
           ) : (
-            <form onSubmit={handleReviewSubmit} noValidate>
+            <form onSubmit={handleReviewSubmit} noValidate aria-label="Write a review">
               <div className="mb-4">
-                <label className="mb-2 block text-sm font-semibold text-gray-700">
-                  Your Rating
-                </label>
-                <StarRating
-                  rating={reviewRating}
-                  interactive
-                  onChange={setReviewRating}
-                />
+                {/* Group label for the star rating buttons (WCAG 1.3.1) */}
+                <p
+                  id="rating-group-label"
+                  className="mb-2 text-sm font-semibold text-gray-700"
+                >
+                  Your Rating <span className="text-red-500" aria-hidden="true">*</span>
+                </p>
+                <div role="group" aria-labelledby="rating-group-label">
+                  <StarRating
+                    rating={reviewRating}
+                    interactive
+                    onChange={setReviewRating}
+                  />
+                </div>
               </div>
 
               <div className="mb-4">
