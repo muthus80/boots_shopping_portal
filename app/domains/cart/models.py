@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import DateTime, ForeignKey, Integer, Numeric, String, func
+from sqlalchemy import DateTime, ForeignKey, Integer, Numeric, String, func, inspect as sa_inspect
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -45,6 +45,15 @@ class Cart(Base):
         cascade="all, delete-orphan",
         lazy="selectin",
     )
+
+    # Computed fields required by CartRead response schema
+    @property
+    def total(self) -> float:
+        return float(sum(i.unit_price * i.quantity for i in self.items))
+
+    @property
+    def item_count(self) -> int:
+        return sum(i.quantity for i in self.items)
 
 
 class CartItem(Base):
@@ -90,3 +99,27 @@ class CartItem(Base):
     variant: Mapped[Optional["ProductVariant"]] = relationship(  # noqa: F821
         "ProductVariant", back_populates="cart_items"
     )
+
+    # Computed fields required by CartItemRead response schema.
+    # Guard against async lazy-load by checking unloaded state first.
+    @property
+    def product_name(self) -> str:
+        try:
+            if "product" in sa_inspect(self).unloaded:
+                return ""
+        except Exception:
+            pass
+        return self.product.name if self.product else ""
+
+    @property
+    def product_image_url(self) -> Optional[str]:
+        try:
+            if "product" in sa_inspect(self).unloaded:
+                return None
+        except Exception:
+            pass
+        return self.product.image_url if self.product else None
+
+    @property
+    def subtotal(self) -> float:
+        return float(self.unit_price * self.quantity)

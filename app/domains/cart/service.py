@@ -61,31 +61,68 @@ class CartService:
         cart = await self.get_cart_by_id(cart_id)
         await self._assert_cart_access(cart, user_id=user_id, session_id=session_id)
 
-        variant = await self._get_variant(payload.variant_id)
-        if variant.stock_quantity < payload.quantity:
-            raise BadRequestError(
-                f"Insufficient stock. Available: {variant.stock_quantity}"
-            )
-
-        existing_item = await self._find_cart_item(cart_id, payload.variant_id)
-        if existing_item is not None:
-            new_qty = existing_item.quantity + payload.quantity
-            if variant.stock_quantity < new_qty:
+        if payload.variant_id is not None:
+            variant = await self._get_variant(payload.variant_id)
+            if variant.stock_quantity < payload.quantity:
                 raise BadRequestError(
                     f"Insufficient stock. Available: {variant.stock_quantity}"
                 )
-            existing_item.quantity = new_qty
+            existing_item = await self._find_cart_item(cart_id, payload.variant_id)
+            if existing_item is not None:
+                new_qty = existing_item.quantity + payload.quantity
+                if variant.stock_quantity < new_qty:
+                    raise BadRequestError(
+                        f"Insufficient stock. Available: {variant.stock_quantity}"
+                    )
+                existing_item.quantity = new_qty
+            else:
+                unit_price = float(
+                    (variant.price_modifier or 0)
+                    + (await self._get_product_price(payload.product_id))
+                )
+                item = CartItem(
+                    cart_id=cart_id,
+                    product_id=payload.product_id,
+                    variant_id=payload.variant_id,
+                    quantity=payload.quantity,
+                    unit_price=unit_price,
+                )
+                self.db.add(item)
         else:
-            item = CartItem(
-                cart_id=cart_id,
-                variant_id=payload.variant_id,
-                quantity=payload.quantity,
-                unit_price=variant.price,
-            )
-            self.db.add(item)
+            # No variant — add product directly
+            unit_price = await self._get_product_price(payload.product_id)
+            existing_item = await self._find_cart_item_by_product(cart_id, payload.product_id)
+            if existing_item is not None:
+                existing_item.quantity += payload.quantity
+            else:
+                item = CartItem(
+                    cart_id=cart_id,
+                    product_id=payload.product_id,
+                    quantity=payload.quantity,
+                    unit_price=unit_price,
+                )
+                self.db.add(item)
 
         await self.db.flush()
+        # Expire all cached ORM objects so get_cart_by_id re-fetches the
+        # items collection from the database (avoids stale identity-map).
+        self.db.expire_all()
         return await self.get_cart_by_id(cart_id)
+
+    async def add_item_to_cart(
+        self,
+        payload: AddCartItem,
+        user_id: Optional[UUID] = None,
+        session_id: Optional[str] = None,
+    ) -> Cart:
+        """Get-or-create the user's/guest's cart, then add the item to it (US-009)."""
+        cart = await self.get_or_create_cart(user_id=user_id, session_id=session_id)
+        return await self.add_item(
+            cart_id=cart.id,
+            payload=payload,
+            user_id=user_id,
+            session_id=session_id,
+        )
 
     async def update_item(
         self,
@@ -207,6 +244,28 @@ class CartService:
             )
             return result.scalar_one_or_none()
         return None
+
+    async def _get_product_price(self, product_id: UUID) -> float:
+        from app.domains.products.models import Product
+        result = await self.db.execute(
+            select(Product).where(Product.id == product_id)
+        )
+        product = result.scalar_one_or_none()
+        if product is None:
+            raise NotFoundError("Product not found")
+        return float(product.base_price)
+
+    async def _find_cart_item_by_product(
+        self, cart_id: UUID, product_id: UUID
+    ) -> Optional[CartItem]:
+        result = await self.db.execute(
+            select(CartItem).where(
+                CartItem.cart_id == cart_id,
+                CartItem.product_id == product_id,
+                CartItem.variant_id.is_(None),
+            )
+        )
+        return result.scalar_one_or_none()
 
     async def _find_cart_item(
         self, cart_id: UUID, variant_id: UUID

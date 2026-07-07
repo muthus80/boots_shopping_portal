@@ -36,6 +36,7 @@ class CartRead(BaseModel):
 
 class AddCartItem(BaseModel):
     product_id: UUID
+    variant_id: Optional[UUID] = None
     quantity: int = Field(default=1, ge=1)
 
 

@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import Optional
 from uuid import UUID
 
-from sqlalchemy import select, func, and_
+from sqlalchemy import exists, select, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.domains.products.models import Product, Review
+from app.domains.products.models import Product, ProductVariant, Review
 from app.domains.products.schemas import ProductList, ProductRead, ReviewCreate, ReviewRead
 from app.core.exceptions import NotFoundError, ConflictError
 
@@ -23,6 +23,8 @@ class ProductService:
         search: Optional[str] = None,
         min_price: Optional[float] = None,
         max_price: Optional[float] = None,
+        size: Optional[str] = None,
+        color: Optional[str] = None,
         in_stock: Optional[bool] = None,
         sort_by: Optional[str] = None,
         sort_order: str = "desc",
@@ -39,6 +41,30 @@ class ProductService:
             filters.append(
                 func.lower(Product.name).like(term)
                 | func.lower(Product.description).like(term)
+                | func.lower(Product.brand).like(term)
+            )
+
+        # Faceted size/color filtering via EXISTS on variants (US-005)
+        if size is not None:
+            filters.append(
+                exists().where(
+                    and_(
+                        ProductVariant.product_id == Product.id,
+                        func.lower(ProductVariant.size) == size.lower(),
+                        ProductVariant.is_active.is_(True),
+                    )
+                )
+            )
+
+        if color is not None:
+            filters.append(
+                exists().where(
+                    and_(
+                        ProductVariant.product_id == Product.id,
+                        func.lower(ProductVariant.color) == color.lower(),
+                        ProductVariant.is_active.is_(True),
+                    )
+                )
             )
 
         if min_price is not None:
