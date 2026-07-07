@@ -11,8 +11,10 @@ from app.core.exceptions import ConflictError, NotFoundError, UnauthorizedError
 from app.core.security import hash_password, verify_password
 from app.domains.account.models import User
 from app.domains.account.schemas import (
+    OrderHistoryResponse,
     OrderItemRead,
     OrderRead,
+    OrderSummaryRead,
     PasswordChange,
     UserCreate,
     UserRead,
@@ -82,40 +84,44 @@ class AccountService:
         user.hashed_password = hash_password(payload.new_password)
         await self.db.commit()
 
-    async def get_order_history(self, user_id: UUID) -> List[OrderRead]:
+    async def get_order_history(
+        self,
+        user_id: UUID,
+        page: int = 1,
+        per_page: int = 10,
+    ) -> OrderHistoryResponse:
+        """Return a paginated list of orders for an authenticated user (US-003).
+
+        Returns an ``OrderHistoryResponse`` with:
+        - ``orders``: list of ``OrderSummaryRead`` items for the requested page
+        - ``total``: total number of orders across all pages
+        - ``message``: human-readable string when the list is empty
+        """
+        # Total count query (no limit/offset)
+        count_result = await self.db.execute(
+            select(Order).where(Order.user_id == user_id)
+        )
+        all_orders = count_result.scalars().all()
+        total = len(all_orders)
+
+        # Paginated query
+        offset = (page - 1) * per_page
         result = await self.db.execute(
             select(Order)
             .where(Order.user_id == user_id)
-            .options(selectinload(Order.items).selectinload(OrderItem.product))
             .order_by(Order.created_at.desc())
+            .offset(offset)
+            .limit(per_page)
         )
         orders = result.scalars().all()
 
-        order_reads: List[OrderRead] = []
-        for order in orders:
-            items = [
-                OrderItemRead(
-                    id=item.id,
-                    product_id=item.product_id,
-                    product_name=item.product.name if item.product else "",
-                    quantity=item.quantity,
-                    unit_price=item.unit_price,
-                    total_price=item.unit_price * item.quantity,
-                )
-                for item in order.items
-            ]
-            order_reads.append(
-                OrderRead(
-                    id=order.id,
-                    status=order.status,
-                    total_amount=order.total_amount,
-                    created_at=order.created_at,
-                    updated_at=order.updated_at,
-                    items=items,
-                )
-            )
+        summaries = [OrderSummaryRead.model_validate(o) for o in orders]
 
-        return order_reads
+        message: Optional[str] = None
+        if total == 0:
+            message = "You have not placed any orders yet."
+
+        return OrderHistoryResponse(orders=summaries, total=total, message=message)
 
     async def deactivate_account(self, user_id: UUID) -> None:
         result = await self.db.execute(select(User).where(User.id == user_id))

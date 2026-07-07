@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
+from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field
@@ -53,10 +53,33 @@ class OrderItemRead(BaseModel):
 class OrderRead(BaseModel):
     id: UUID
     status: str
-    total_amount: Decimal
+    total_amount: Optional[Decimal] = None
     shipping_address: Optional[str] = None
     items: list[OrderItemRead] = []
     created_at: datetime
     updated_at: Optional[datetime] = None
 
     model_config = {"from_attributes": True}
+
+
+# ── T-026: Order History API (GET /api/v1/account/orders) ────────────────────
+
+
+class OrderSummaryRead(BaseModel):
+    """Lightweight order summary returned in the order history list."""
+
+    id: UUID
+    order_number: Optional[str] = None
+    status: str
+    total_amount: Optional[Decimal] = None
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class OrderHistoryResponse(BaseModel):
+    """Paginated order history response (US-003)."""
+
+    orders: List[OrderSummaryRead]
+    total: int
+    message: Optional[str] = None
