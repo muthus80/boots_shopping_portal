@@ -1,706 +1,1042 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useCallback, useMemo } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProduct } from '../api/products';
 import { addCartItem } from '../api/cart';
-import { useAuth } from '../stores/authStore';
-import { Product, ProductVariant, Review } from '../types/index';
 import { apiClient } from '../api/client';
+import { useAuth } from '../stores/authStore';
+import type { Product, ProductVariant, Review } from '../types/index';
 
-// Extended types for fields the API returns but are not yet in the base types
-interface ProductVariantExtended extends ProductVariant {
+// ── Extended types for extra fields returned by detail endpoint ───────────────
+
+interface ProductVariantFull extends ProductVariant {
+  /** Variant-level price override (returned by the detail endpoint). */
   price?: number;
 }
 
-interface ProductExtended extends Omit<Product, 'variants'> {
-  variants?: ProductVariantExtended[];
+interface ProductDetail extends Omit<Product, 'variants' | 'reviews'> {
+  variants?: ProductVariantFull[];
   reviews?: Review[];
   category?: { id: string; name: string };
+  materials?: string | null;
+  features?: string[] | null;
 }
+
+// ── API helper for reviews (uses product-scoped route) ────────────────────────
 
 interface CreateReviewPayload {
   rating: number;
   comment?: string;
 }
 
-const createReviewForProduct = async (
+async function createProductReview(
   productId: string,
   payload: CreateReviewPayload
-): Promise<Review> => {
+): Promise<Review> {
   const response = await apiClient.post<Review>(
     `/api/v1/products/${productId}/reviews`,
     payload
   );
   return response.data;
-};
+}
 
-const ProductDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { user } = useAuth();
+// ── ImageGallery ──────────────────────────────────────────────────────────────
 
-  const [product, setProduct] = useState<ProductExtended | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+interface ImageGalleryProps {
+  images: string[];
+  productName: string;
+}
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariantExtended | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
-  const [addingToCart, setAddingToCart] = useState<boolean>(false);
-  const [cartMessage, setCartMessage] = useState<string | null>(null);
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
+  const [activeIdx, setActiveIdx] = useState<number>(0);
 
-  const [reviewRating, setReviewRating] = useState<number>(5);
-  const [reviewComment, setReviewComment] = useState<string>('');
-  const [submittingReview, setSubmittingReview] = useState<boolean>(false);
-  const [reviewError, setReviewError] = useState<string | null>(null);
-  const [reviewSuccess, setReviewSuccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-    const fetchProduct = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getProduct(id) as ProductExtended;
-        setProduct(data);
-        if (data.variants && data.variants.length > 0) {
-          setSelectedVariant(data.variants[0]);
-        }
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : 'Failed to load product.';
-        setError(msg);
-      } finally {
-        setLoading(false);
+  const handleThumbnailKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>, idx: number) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setActiveIdx(idx);
       }
-    };
-    fetchProduct();
-  }, [id]);
+    },
+    []
+  );
 
-  const handleVariantSelect = (variant: ProductVariantExtended) => {
-    setSelectedVariant(variant);
-    setQuantity(1);
-    setCartMessage(null);
-  };
-
-  const handleAddToCart = async () => {
-    if (!selectedVariant) {
-      setCartMessage('Please select a variant.');
-      return;
-    }
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-    setAddingToCart(true);
-    setCartMessage(null);
-    try {
-      await addCartItem(selectedVariant.id, quantity);
-      setCartMessage('Item added to cart!');
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Failed to add item to cart.';
-      setCartMessage(msg);
-    } finally {
-      setAddingToCart(false);
-    }
-  };
-
-  const handleReviewSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-    if (!id) return;
-    setSubmittingReview(true);
-    setReviewError(null);
-    setReviewSuccess(null);
-    try {
-      await createReviewForProduct(id, { rating: reviewRating, comment: reviewComment });
-      setReviewSuccess('Review submitted successfully!');
-      setReviewRating(5);
-      setReviewComment('');
-      const updated = await getProduct(id) as ProductExtended;
-      setProduct(updated);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Failed to submit review.';
-      setReviewError(msg);
-    } finally {
-      setSubmittingReview(false);
-    }
-  };
-
-  if (loading) {
+  if (images.length === 0) {
     return (
-      <div style={styles.container}>
-        <p style={styles.loadingText}>Loading product...</p>
+      <div className="flex h-80 w-full items-center justify-center rounded-2xl bg-gray-100 text-6xl sm:h-96 lg:h-[480px]">
+        <span role="img" aria-label="No image available">👢</span>
       </div>
     );
   }
-
-  if (error || !product) {
-    return (
-      <div style={styles.container}>
-        <p style={styles.errorText}>{error || 'Product not found.'}</p>
-        <button style={styles.backButton} onClick={() => navigate(-1)}>
-          Go Back
-        </button>
-      </div>
-    );
-  }
-
-  const reviews = product.reviews ?? [];
-  const averageRating =
-    reviews.length > 0
-      ? (
-          reviews.reduce((sum: number, r: Review) => sum + r.rating, 0) /
-          reviews.length
-        ).toFixed(1)
-      : null;
-
-  const displayPrice = selectedVariant?.price != null
-    ? Number(selectedVariant.price)
-    : Number(product.base_price);
 
   return (
-    <div style={styles.container}>
-      <button style={styles.backButton} onClick={() => navigate(-1)}>
-        ← Back
-      </button>
-
-      <div style={styles.productSection}>
-        <div style={styles.imageContainer}>
-          {product.image_url ? (
-            <img src={product.image_url} alt={product.name} style={styles.productImage} />
-          ) : (
-            <div style={styles.imagePlaceholder}>No Image</div>
-          )}
-        </div>
-
-        <div style={styles.detailsContainer}>
-          <h1 style={styles.productName}>{product.name}</h1>
-          {product.category && (
-            <p style={styles.category}>{product.category.name}</p>
-          )}
-          <p style={styles.description}>{product.description}</p>
-
-          {averageRating && (
-            <p style={styles.rating}>
-              ⭐ {averageRating} ({reviews.length} review
-              {reviews.length !== 1 ? 's' : ''})
-            </p>
-          )}
-
-          <div style={styles.priceRow}>
-            <span style={styles.price}>
-              ${displayPrice.toFixed(2)}
-            </span>
-            {selectedVariant && selectedVariant.stock_quantity <= 0 && (
-              <span style={styles.outOfStock}>Out of Stock</span>
-            )}
-            {selectedVariant && selectedVariant.stock_quantity > 0 && (
-              <span style={styles.inStock}>In Stock ({selectedVariant.stock_quantity} left)</span>
-            )}
-          </div>
-
-          {product.variants && product.variants.length > 0 && (
-            <div style={styles.variantSection}>
-              <h3 style={styles.variantTitle}>Select Variant</h3>
-              <div style={styles.variantGrid}>
-                {product.variants.map((variant: ProductVariantExtended) => (
-                  <button
-                    key={variant.id}
-                    style={{
-                      ...styles.variantButton,
-                      ...(selectedVariant?.id === variant.id ? styles.variantButtonSelected : {}),
-                      ...(variant.stock_quantity <= 0 ? styles.variantButtonDisabled : {}),
-                    }}
-                    onClick={() => handleVariantSelect(variant)}
-                    disabled={variant.stock_quantity <= 0}
-                  >
-                    <span style={styles.variantSize}>{variant.size}</span>
-                    {variant.color && (
-                      <span style={styles.variantColor}>{variant.color}</span>
-                    )}
-                    {variant.price != null && (
-                      <span style={styles.variantPrice}>${Number(variant.price).toFixed(2)}</span>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div style={styles.quantityRow}>
-            <label style={styles.quantityLabel}>Quantity:</label>
-            <button
-              style={styles.qtyBtn}
-              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              disabled={quantity <= 1}
-            >
-              −
-            </button>
-            <span style={styles.quantityValue}>{quantity}</span>
-            <button
-              style={styles.qtyBtn}
-              onClick={() =>
-                setQuantity((q) =>
-                  selectedVariant ? Math.min(selectedVariant.stock_quantity, q + 1) : q + 1
-                )
-              }
-              disabled={
-                selectedVariant ? quantity >= selectedVariant.stock_quantity : false
-              }
-            >
-              +
-            </button>
-          </div>
-
-          <button
-            style={{
-              ...styles.addToCartButton,
-              ...(addingToCart || (selectedVariant && selectedVariant.stock_quantity <= 0)
-                ? styles.addToCartButtonDisabled
-                : {}),
-            }}
-            onClick={handleAddToCart}
-            disabled={addingToCart || (selectedVariant ? selectedVariant.stock_quantity <= 0 : false)}
-          >
-            {addingToCart ? 'Adding...' : 'Add to Cart'}
-          </button>
-
-          {cartMessage && (
-            <p
-              style={
-                cartMessage.includes('added')
-                  ? styles.successMessage
-                  : styles.errorMessage
-              }
-            >
-              {cartMessage}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div style={styles.reviewsSection}>
-        <h2 style={styles.reviewsTitle}>Customer Reviews</h2>
-
-        {reviews.length > 0 ? (
-          <div style={styles.reviewsList}>
-            {reviews.map((review: Review) => (
-              <div key={review.id} style={styles.reviewCard}>
-                <div style={styles.reviewHeader}>
-                  <span style={styles.reviewRating}>
-                    {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
-                  </span>
-                  <span style={styles.reviewDate}>
-                    {new Date(review.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-                {review.body && (
-                  <p style={styles.reviewComment}>{review.body}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p style={styles.noReviews}>No reviews yet. Be the first to review!</p>
+    <div className="flex flex-col gap-4">
+      {/* Main image */}
+      <div className="relative overflow-hidden rounded-2xl bg-gray-50">
+        <img
+          src={images[activeIdx]}
+          alt={`${productName} — image ${activeIdx + 1} of ${images.length}`}
+          className="h-80 w-full object-cover sm:h-96 lg:h-[480px]"
+        />
+        {images.length > 1 && (
+          <span className="absolute bottom-3 right-3 rounded-full bg-black/50 px-2.5 py-1 text-xs font-medium text-white">
+            {activeIdx + 1} / {images.length}
+          </span>
         )}
-
-        <div style={styles.reviewFormContainer}>
-          <h3 style={styles.reviewFormTitle}>Write a Review</h3>
-          {!user && (
-            <p style={styles.loginPrompt}>
-              <button style={styles.loginLink} onClick={() => navigate('/login')}>
-                Log in
-              </button>{' '}
-              to submit a review.
-            </p>
-          )}
-          {user && (
-            <form onSubmit={handleReviewSubmit} style={styles.reviewForm}>
-              <div style={styles.formGroup}>
-                <label style={styles.formLabel}>Rating</label>
-                <div style={styles.starSelector}>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      style={{
-                        ...styles.starButton,
-                        color: star <= reviewRating ? '#f59e0b' : '#d1d5db',
-                      }}
-                      onClick={() => setReviewRating(star)}
-                    >
-                      ★
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div style={styles.formGroup}>
-                <label style={styles.formLabel}>Comment (optional)</label>
-                <textarea
-                  style={styles.textarea}
-                  value={reviewComment}
-                  onChange={(e) => setReviewComment(e.target.value)}
-                  rows={4}
-                  placeholder="Share your thoughts about this product..."
-                />
-              </div>
-              {reviewError && <p style={styles.errorMessage}>{reviewError}</p>}
-              {reviewSuccess && <p style={styles.successMessage}>{reviewSuccess}</p>}
-              <button
-                type="submit"
-                style={{
-                  ...styles.submitReviewButton,
-                  ...(submittingReview ? styles.submitReviewButtonDisabled : {}),
-                }}
-                disabled={submittingReview}
-              >
-                {submittingReview ? 'Submitting...' : 'Submit Review'}
-              </button>
-            </form>
-          )}
-        </div>
       </div>
+
+      {/* Thumbnail strip */}
+      {images.length > 1 && (
+        <div
+          className="flex gap-2 overflow-x-auto pb-1"
+          role="tablist"
+          aria-label="Product image thumbnails"
+        >
+          {images.map((src, idx) => (
+            <button
+              key={`${src}-${idx}`}
+              type="button"
+              role="tab"
+              aria-selected={idx === activeIdx}
+              aria-label={`View image ${idx + 1}`}
+              onClick={() => setActiveIdx(idx)}
+              onKeyDown={(e) => handleThumbnailKeyDown(e, idx)}
+              className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+                idx === activeIdx
+                  ? 'border-gray-900 opacity-100'
+                  : 'border-transparent opacity-60 hover:opacity-90'
+              }`}
+            >
+              <img
+                src={src}
+                alt=""
+                aria-hidden="true"
+                className="h-full w-full object-cover"
+              />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    maxWidth: '1100px',
-    margin: '0 auto',
-    padding: '24px 16px',
-    fontFamily: 'sans-serif',
-    color: '#111827',
-  },
-  loadingText: {
-    textAlign: 'center',
-    fontSize: '18px',
-    color: '#6b7280',
-    marginTop: '60px',
-  },
-  errorText: {
-    textAlign: 'center',
-    fontSize: '18px',
-    color: '#ef4444',
-    marginTop: '60px',
-  },
-  backButton: {
-    background: 'none',
-    border: '1px solid #d1d5db',
-    borderRadius: '6px',
-    padding: '8px 16px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    color: '#374151',
-    marginBottom: '24px',
-  },
-  productSection: {
-    display: 'flex',
-    gap: '40px',
-    flexWrap: 'wrap',
-    marginBottom: '48px',
-  },
-  imageContainer: {
-    flex: '0 0 400px',
-    maxWidth: '100%',
-  },
-  productImage: {
-    width: '100%',
-    borderRadius: '12px',
-    objectFit: 'cover',
-    maxHeight: '450px',
-  },
-  imagePlaceholder: {
-    width: '100%',
-    height: '350px',
-    background: '#f3f4f6',
-    borderRadius: '12px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#9ca3af',
-    fontSize: '16px',
-  },
-  detailsContainer: {
-    flex: '1 1 300px',
-  },
-  productName: {
-    fontSize: '28px',
-    fontWeight: 700,
-    marginBottom: '8px',
-  },
-  category: {
-    fontSize: '14px',
-    color: '#6b7280',
-    marginBottom: '12px',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-  },
-  description: {
-    fontSize: '16px',
-    lineHeight: '1.6',
-    color: '#374151',
-    marginBottom: '16px',
-  },
-  rating: {
-    fontSize: '16px',
-    color: '#f59e0b',
-    marginBottom: '12px',
-  },
-  priceRow: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '16px',
-    marginBottom: '20px',
-  },
-  price: {
-    fontSize: '28px',
-    fontWeight: 700,
-    color: '#111827',
-  },
-  outOfStock: {
-    fontSize: '14px',
-    color: '#ef4444',
-    fontWeight: 600,
-  },
-  inStock: {
-    fontSize: '14px',
-    color: '#10b981',
-    fontWeight: 600,
-  },
-  variantSection: {
-    marginBottom: '20px',
-  },
-  variantTitle: {
-    fontSize: '16px',
-    fontWeight: 600,
-    marginBottom: '10px',
-  },
-  variantGrid: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '10px',
-  },
-  variantButton: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '10px 14px',
-    border: '2px solid #d1d5db',
-    borderRadius: '8px',
-    background: '#fff',
-    cursor: 'pointer',
-    fontSize: '13px',
-    color: '#374151',
-    minWidth: '80px',
-    transition: 'border-color 0.15s',
-  },
-  variantButtonSelected: {
-    borderColor: '#6366f1',
-    background: '#eef2ff',
-    color: '#4338ca',
-  },
-  variantButtonDisabled: {
-    opacity: 0.4,
-    cursor: 'not-allowed',
-  },
-  variantSize: {
-    fontWeight: 700,
-    fontSize: '14px',
-  },
-  variantColor: {
-    fontSize: '12px',
-    color: '#6b7280',
-  },
-  variantPrice: {
-    fontSize: '13px',
-    fontWeight: 600,
-    marginTop: '4px',
-  },
-  quantityRow: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    marginBottom: '20px',
-  },
-  quantityLabel: {
-    fontSize: '15px',
-    fontWeight: 600,
-  },
-  qtyBtn: {
-    width: '32px',
-    height: '32px',
-    border: '1px solid #d1d5db',
-    borderRadius: '6px',
-    background: '#f9fafb',
-    cursor: 'pointer',
-    fontSize: '18px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    lineHeight: 1,
-  },
-  quantityValue: {
-    fontSize: '16px',
-    fontWeight: 600,
-    minWidth: '24px',
-    textAlign: 'center',
-  },
-  addToCartButton: {
-    width: '100%',
-    padding: '14px',
-    background: '#6366f1',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: 700,
-    cursor: 'pointer',
-    marginBottom: '12px',
-    transition: 'background 0.15s',
-  },
-  addToCartButtonDisabled: {
-    background: '#a5b4fc',
-    cursor: 'not-allowed',
-  },
-  successMessage: {
-    color: '#10b981',
-    fontSize: '14px',
-    fontWeight: 600,
-  },
-  errorMessage: {
-    color: '#ef4444',
-    fontSize: '14px',
-    fontWeight: 600,
-  },
-  reviewsSection: {
-    borderTop: '1px solid #e5e7eb',
-    paddingTop: '40px',
-  },
-  reviewsTitle: {
-    fontSize: '22px',
-    fontWeight: 700,
-    marginBottom: '24px',
-  },
-  reviewsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-    marginBottom: '40px',
-  },
-  reviewCard: {
-    background: '#f9fafb',
-    borderRadius: '10px',
-    padding: '16px 20px',
-    border: '1px solid #e5e7eb',
-  },
-  reviewHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '8px',
-  },
-  reviewRating: {
-    color: '#f59e0b',
-    fontSize: '18px',
-    letterSpacing: '2px',
-  },
-  reviewDate: {
-    fontSize: '13px',
-    color: '#9ca3af',
-  },
-  reviewComment: {
-    fontSize: '15px',
-    color: '#374151',
-    lineHeight: '1.5',
-    margin: 0,
-  },
-  noReviews: {
-    color: '#6b7280',
-    fontSize: '15px',
-    marginBottom: '32px',
-  },
-  reviewFormContainer: {
-    background: '#f9fafb',
-    borderRadius: '12px',
-    padding: '28px',
-    border: '1px solid #e5e7eb',
-    maxWidth: '600px',
-  },
-  reviewFormTitle: {
-    fontSize: '18px',
-    fontWeight: 700,
-    marginBottom: '20px',
-  },
-  loginPrompt: {
-    fontSize: '15px',
-    color: '#374151',
-  },
-  loginLink: {
-    background: 'none',
-    border: 'none',
-    color: '#6366f1',
-    cursor: 'pointer',
-    fontSize: '15px',
-    fontWeight: 600,
-    padding: 0,
-    textDecoration: 'underline',
-  },
-  reviewForm: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  formGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px',
-  },
-  formLabel: {
-    fontSize: '14px',
-    fontWeight: 600,
-    color: '#374151',
-  },
-  starSelector: {
-    display: 'flex',
-    gap: '4px',
-  },
-  starButton: {
-    background: 'none',
-    border: 'none',
-    fontSize: '28px',
-    cursor: 'pointer',
-    padding: '0 2px',
-    lineHeight: 1,
-    transition: 'color 0.1s',
-  },
-  textarea: {
-    padding: '10px 12px',
-    border: '1px solid #d1d5db',
-    borderRadius: '8px',
-    fontSize: '14px',
-    resize: 'vertical',
-    fontFamily: 'sans-serif',
-    color: '#111827',
-    background: '#fff',
-  },
-  submitReviewButton: {
-    padding: '12px',
-    background: '#6366f1',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '15px',
-    fontWeight: 700,
-    cursor: 'pointer',
-    alignSelf: 'flex-start',
-    minWidth: '160px',
-  },
-  submitReviewButtonDisabled: {
-    background: '#a5b4fc',
-    cursor: 'not-allowed',
-  },
+// ── StarRating ────────────────────────────────────────────────────────────────
+
+interface StarRatingProps {
+  rating: number;
+  max?: number;
+  interactive?: false;
+}
+
+interface InteractiveStarRatingProps {
+  rating: number;
+  max?: number;
+  interactive: true;
+  onChange: (value: number) => void;
+}
+
+const StarRating: React.FC<StarRatingProps | InteractiveStarRatingProps> = (props) => {
+  const { rating, max = 5 } = props;
+
+  return (
+    <span className="inline-flex gap-0.5">
+      {Array.from({ length: max }, (_, i) => {
+        const filled = i < Math.round(rating);
+        if (props.interactive) {
+          return (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Rate ${i + 1} out of ${max}`}
+              onClick={() => props.onChange(i + 1)}
+              className={`text-2xl leading-none transition-colors focus:outline-none ${
+                filled ? 'text-amber-400' : 'text-gray-300 hover:text-amber-300'
+              }`}
+            >
+              ★
+            </button>
+          );
+        }
+        return (
+          <span
+            key={i}
+            aria-hidden="true"
+            className={`text-base leading-none ${filled ? 'text-amber-400' : 'text-gray-300'}`}
+          >
+            ★
+          </span>
+        );
+      })}
+    </span>
+  );
+};
+
+// ── SizePicker ────────────────────────────────────────────────────────────────
+
+interface SizePickerProps {
+  sizes: string[];
+  selectedSize: string | null;
+  availableSizes: Set<string>;
+  onSelect: (size: string) => void;
+}
+
+const SizePicker: React.FC<SizePickerProps> = ({
+  sizes,
+  selectedSize,
+  availableSizes,
+  onSelect,
+}) => (
+  <div>
+    <p className="mb-2 text-sm font-semibold text-gray-700">
+      Size{selectedSize ? <span className="ml-2 font-normal text-gray-500">— {selectedSize}</span> : null}
+    </p>
+    <div className="flex flex-wrap gap-2" role="group" aria-label="Select a size">
+      {sizes.map((size) => {
+        const available = availableSizes.has(size);
+        const selected = selectedSize === size;
+        return (
+          <button
+            key={size}
+            type="button"
+            disabled={!available}
+            aria-pressed={selected}
+            aria-label={`Size ${size}${!available ? ' — out of stock' : ''}`}
+            onClick={() => available && onSelect(size)}
+            className={`relative min-w-[3rem] rounded-md border px-3.5 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+              selected
+                ? 'border-gray-900 bg-gray-900 text-white'
+                : available
+                ? 'border-gray-300 bg-white text-gray-800 hover:border-gray-900'
+                : 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-300 line-through'
+            }`}
+          >
+            {size}
+          </button>
+        );
+      })}
+    </div>
+  </div>
+);
+
+// ── ColorPicker ───────────────────────────────────────────────────────────────
+
+const COLOR_SWATCHES: Record<string, string> = {
+  black: '#1a1a1a',
+  white: '#ffffff',
+  brown: '#7B4F2B',
+  tan: '#C5A57A',
+  navy: '#1e3a5f',
+  grey: '#9ca3af',
+  gray: '#9ca3af',
+  red: '#dc2626',
+  green: '#16a34a',
+  blue: '#2563eb',
+  beige: '#e8d5b7',
+  chestnut: '#954535',
+  cognac: '#9A4722',
+  wheat: '#F5DEB3',
+};
+
+interface ColorPickerProps {
+  colors: string[];
+  selectedColor: string | null;
+  availableColors: Set<string>;
+  onSelect: (color: string) => void;
+}
+
+const ColorPicker: React.FC<ColorPickerProps> = ({
+  colors,
+  selectedColor,
+  availableColors,
+  onSelect,
+}) => (
+  <div>
+    <p className="mb-2 text-sm font-semibold text-gray-700">
+      Color
+      {selectedColor ? (
+        <span className="ml-2 font-normal capitalize text-gray-500">— {selectedColor}</span>
+      ) : null}
+    </p>
+    <div className="flex flex-wrap gap-2" role="group" aria-label="Select a color">
+      {colors.map((color) => {
+        const available = availableColors.has(color);
+        const selected = selectedColor === color;
+        const swatch = COLOR_SWATCHES[color.toLowerCase()];
+        return (
+          <button
+            key={color}
+            type="button"
+            disabled={!available}
+            aria-pressed={selected}
+            aria-label={`Color: ${color}${!available ? ' — out of stock' : ''}`}
+            onClick={() => available && onSelect(color)}
+            className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium capitalize transition-all focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+              selected
+                ? 'border-gray-900 bg-gray-900 text-white'
+                : available
+                ? 'border-gray-300 bg-white text-gray-800 hover:border-gray-900'
+                : 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-300'
+            }`}
+          >
+            {swatch && (
+              <span
+                aria-hidden="true"
+                className="inline-block h-3.5 w-3.5 rounded-full border border-gray-300"
+                style={{ backgroundColor: swatch }}
+              />
+            )}
+            {color}
+          </button>
+        );
+      })}
+    </div>
+  </div>
+);
+
+// ── ProductDetailSkeleton ─────────────────────────────────────────────────────
+
+const ProductDetailSkeleton: React.FC = () => (
+  <div
+    className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+    aria-busy="true"
+    aria-label="Loading product details"
+  >
+    <div className="mb-6 h-5 w-24 animate-pulse rounded bg-gray-200" />
+    <div className="flex flex-col gap-10 lg:flex-row">
+      {/* Image skeleton */}
+      <div className="w-full lg:w-1/2">
+        <div className="h-80 w-full animate-pulse rounded-2xl bg-gray-200 sm:h-96 lg:h-[480px]" />
+        <div className="mt-3 flex gap-2">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-16 w-16 animate-pulse rounded-lg bg-gray-200" />
+          ))}
+        </div>
+      </div>
+      {/* Info skeleton */}
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="h-4 w-20 animate-pulse rounded bg-gray-200" />
+        <div className="h-8 w-3/4 animate-pulse rounded bg-gray-200" />
+        <div className="h-8 w-24 animate-pulse rounded bg-gray-200" />
+        <div className="mt-2 space-y-2">
+          <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
+          <div className="h-4 w-5/6 animate-pulse rounded bg-gray-200" />
+          <div className="h-4 w-4/6 animate-pulse rounded bg-gray-200" />
+        </div>
+        <div className="mt-4 h-10 w-full animate-pulse rounded-lg bg-gray-200" />
+        <div className="h-12 w-full animate-pulse rounded-lg bg-gray-200" />
+      </div>
+    </div>
+  </div>
+);
+
+// ── ReviewCard ────────────────────────────────────────────────────────────────
+
+interface ReviewCardProps {
+  review: Review;
+}
+
+const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => (
+  <article className="rounded-xl border border-gray-200 bg-white p-5">
+    <div className="mb-2 flex items-center justify-between gap-4">
+      <div className="flex items-center gap-2">
+        <StarRating rating={review.rating} />
+        {review.user?.full_name && (
+          <span className="text-sm font-medium text-gray-700">{review.user.full_name}</span>
+        )}
+      </div>
+      <time
+        className="shrink-0 text-xs text-gray-400"
+        dateTime={review.created_at}
+      >
+        {new Date(review.created_at).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })}
+      </time>
+    </div>
+    {review.title && (
+      <p className="mb-1 text-sm font-semibold text-gray-900">{review.title}</p>
+    )}
+    {review.body && (
+      <p className="text-sm leading-relaxed text-gray-600">{review.body}</p>
+    )}
+  </article>
+);
+
+// ── ProductDetailPage ─────────────────────────────────────────────────────────
+
+const ProductDetailPage: React.FC = () => {
+  const { productId } = useParams<{ productId: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  // ── Fetch product detail ─────────────────────────────────────────────────────
+
+  const {
+    data: product,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery<ProductDetail, Error>({
+    queryKey: ['product', productId],
+    queryFn: () => getProduct(productId!) as Promise<ProductDetail>,
+    enabled: !!productId,
+  });
+
+  // ── Variant selection state ──────────────────────────────────────────────────
+
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [cartSuccess, setCartSuccess] = useState<string | null>(null);
+  const [cartError, setCartError] = useState<string | null>(null);
+
+  // ── Review form state ────────────────────────────────────────────────────────
+
+  const [reviewRating, setReviewRating] = useState<number>(5);
+  const [reviewComment, setReviewComment] = useState<string>('');
+  const [reviewSubmitting, setReviewSubmitting] = useState<boolean>(false);
+  const [reviewSuccess, setReviewSuccess] = useState<string | null>(null);
+  const [reviewError, setReviewError] = useState<string | null>(null);
+
+  // ── Derived variant data ─────────────────────────────────────────────────────
+
+  const variants: ProductVariantFull[] = product?.variants ?? [];
+
+  const allSizes = useMemo<string[]>(
+    () =>
+      [...new Set(variants.map((v) => v.size).filter((s): s is string => !!s))].sort((a, b) => {
+        const na = parseFloat(a);
+        const nb = parseFloat(b);
+        if (!isNaN(na) && !isNaN(nb)) return na - nb;
+        return a.localeCompare(b);
+      }),
+    [variants]
+  );
+
+  const allColors = useMemo<string[]>(
+    () =>
+      [...new Set(variants.map((v) => v.color).filter((c): c is string => !!c))].sort((a, b) =>
+        a.localeCompare(b)
+      ),
+    [variants]
+  );
+
+  // Sizes available given selected color (or all if no color)
+  const availableSizes = useMemo<Set<string>>(
+    () =>
+      new Set(
+        variants
+          .filter((v) => v.stock_quantity > 0 && (!selectedColor || v.color === selectedColor))
+          .map((v) => v.size)
+          .filter((s): s is string => !!s)
+      ),
+    [variants, selectedColor]
+  );
+
+  // Colors available given selected size (or all if no size)
+  const availableColors = useMemo<Set<string>>(
+    () =>
+      new Set(
+        variants
+          .filter((v) => v.stock_quantity > 0 && (!selectedSize || v.size === selectedSize))
+          .map((v) => v.color)
+          .filter((c): c is string => !!c)
+      ),
+    [variants, selectedSize]
+  );
+
+  // Exact selected variant
+  const selectedVariant = useMemo<ProductVariantFull | null>(() => {
+    if (variants.length === 0) return null;
+    if (allSizes.length === 0 && allColors.length === 0) return variants[0] ?? null;
+    return (
+      variants.find((v) => {
+        const sizeMatch = !selectedSize || v.size === selectedSize;
+        const colorMatch = !selectedColor || v.color === selectedColor;
+        return sizeMatch && colorMatch;
+      }) ?? null
+    );
+  }, [variants, selectedSize, selectedColor, allSizes, allColors]);
+
+  // ── Handlers ─────────────────────────────────────────────────────────────────
+
+  const handleSizeSelect = useCallback((size: string) => {
+    setSelectedSize((prev) => (prev === size ? null : size));
+    setCartSuccess(null);
+    setCartError(null);
+    setQuantity(1);
+  }, []);
+
+  const handleColorSelect = useCallback((color: string) => {
+    setSelectedColor((prev) => (prev === color ? null : color));
+    setCartSuccess(null);
+    setCartError(null);
+    setQuantity(1);
+  }, []);
+
+  // ── Add to cart mutation ─────────────────────────────────────────────────────
+
+  const addToCartMutation = useMutation({
+    mutationFn: ({ variantId, qty }: { variantId: string; qty: number }) =>
+      addCartItem(variantId, qty),
+    onSuccess: () => {
+      setCartSuccess('Item added to cart!');
+      setCartError(null);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+    onError: (err: Error) => {
+      setCartError(err.message || 'Failed to add item to cart. Please try again.');
+      setCartSuccess(null);
+    },
+  });
+
+  const handleAddToCart = useCallback(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    if (!selectedVariant) {
+      setCartError(
+        [
+          allSizes.length > 0 && !selectedSize && 'Please select a size',
+          allColors.length > 0 && !selectedColor && 'Please select a color',
+        ]
+          .filter(Boolean)
+          .join(' and ') || 'Please select a variant.'
+      );
+      return;
+    }
+    if (selectedVariant.stock_quantity <= 0) {
+      setCartError('This variant is out of stock.');
+      return;
+    }
+    addToCartMutation.mutate({ variantId: selectedVariant.id, qty: quantity });
+  }, [
+    user,
+    navigate,
+    selectedVariant,
+    quantity,
+    allSizes,
+    allColors,
+    selectedSize,
+    selectedColor,
+    addToCartMutation,
+  ]);
+
+  // ── Review submission ────────────────────────────────────────────────────────
+
+  const handleReviewSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (!user) {
+        navigate('/login');
+        return;
+      }
+      if (!productId) return;
+
+      setReviewSubmitting(true);
+      setReviewError(null);
+      setReviewSuccess(null);
+
+      try {
+        await createProductReview(productId, { rating: reviewRating, comment: reviewComment });
+        setReviewSuccess('Thank you! Your review has been submitted.');
+        setReviewRating(5);
+        setReviewComment('');
+        queryClient.invalidateQueries({ queryKey: ['product', productId] });
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Failed to submit review.';
+        setReviewError(msg);
+      } finally {
+        setReviewSubmitting(false);
+      }
+    },
+    [user, navigate, productId, reviewRating, reviewComment, queryClient]
+  );
+
+  // ── Render: loading ───────────────────────────────────────────────────────────
+
+  if (isLoading) {
+    return <ProductDetailSkeleton />;
+  }
+
+  // ── Render: error ─────────────────────────────────────────────────────────────
+
+  if (isError || !product) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div
+          role="alert"
+          className="mx-auto max-w-md rounded-xl border border-red-200 bg-red-50 p-8 text-center"
+        >
+          <span className="mb-2 inline-block text-3xl" aria-hidden="true">⚠️</span>
+          <p className="mb-1 text-base font-semibold text-red-700">
+            Something went wrong, please try again
+          </p>
+          {error && (
+            <p className="mb-4 text-sm text-red-500">{error.message}</p>
+          )}
+          <div className="flex justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="rounded-lg border border-red-300 bg-white px-5 py-2 text-sm font-medium text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-400 transition-colors"
+            >
+              Try again
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors"
+            >
+              Go back
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Derived display values ────────────────────────────────────────────────────
+
+  const images: string[] = (() => {
+    const imgs: string[] = [];
+    if (product.images && product.images.length > 0) {
+      imgs.push(...product.images);
+    } else if (product.image_url) {
+      imgs.push(product.image_url);
+    }
+    return imgs;
+  })();
+
+  const displayPrice: number = (() => {
+    if (selectedVariant?.price != null) return Number(selectedVariant.price);
+    if (product.sale_price != null) return Number(product.sale_price);
+    return Number(product.base_price);
+  })();
+
+  const hasDiscount =
+    product.sale_price != null && product.sale_price < product.base_price;
+
+  const formattedPrice = (amount: number): string =>
+    Number(amount).toLocaleString('en-GB', { style: 'currency', currency: 'GBP' });
+
+  const stockStatus: 'in_stock' | 'out_of_stock' | 'unknown' = selectedVariant
+    ? selectedVariant.stock_quantity > 0
+      ? 'in_stock'
+      : 'out_of_stock'
+    : 'unknown';
+
+  const reviews: Review[] = product.reviews ?? [];
+  const avgRating: number | null =
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : product.average_rating ?? null;
+
+  const needsSizeSelection = allSizes.length > 0 && selectedSize === null;
+  const needsColorSelection = allColors.length > 0 && selectedColor === null;
+  const canAddToCart =
+    !addToCartMutation.isPending &&
+    stockStatus !== 'out_of_stock' &&
+    !needsSizeSelection &&
+    !needsColorSelection;
+
+  // ── Render: product detail ────────────────────────────────────────────────────
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="mb-6">
+        <ol className="flex items-center gap-2 text-sm text-gray-500">
+          <li>
+            <Link to="/" className="hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors">
+              Home
+            </Link>
+          </li>
+          <li aria-hidden="true">›</li>
+          <li>
+            <Link to="/products" className="hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors">
+              Boots
+            </Link>
+          </li>
+          {product.category && (
+            <>
+              <li aria-hidden="true">›</li>
+              <li>
+                <Link
+                  to={`/products?category=${product.category.id}`}
+                  className="hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors"
+                >
+                  {product.category.name}
+                </Link>
+              </li>
+            </>
+          )}
+          <li aria-hidden="true">›</li>
+          <li aria-current="page" className="font-medium text-gray-900 truncate max-w-[200px]">
+            {product.name}
+          </li>
+        </ol>
+      </nav>
+
+      {/* Main layout: images + info */}
+      <div className="flex flex-col gap-10 lg:flex-row">
+
+        {/* Image gallery — left column */}
+        <div className="w-full lg:sticky lg:top-24 lg:w-1/2 lg:self-start">
+          <ImageGallery images={images} productName={product.name} />
+        </div>
+
+        {/* Product info — right column */}
+        <div className="flex-1">
+
+          {/* Brand */}
+          {product.brand && (
+            <p className="mb-1 text-sm font-semibold uppercase tracking-wider text-gray-500">
+              {product.brand}
+            </p>
+          )}
+
+          {/* Product name */}
+          <h1 className="mb-3 text-3xl font-extrabold leading-tight text-gray-900">
+            {product.name}
+          </h1>
+
+          {/* Rating summary */}
+          {avgRating !== null && (
+            <div className="mb-4 flex items-center gap-2">
+              <StarRating rating={avgRating} />
+              <span className="text-sm text-gray-500">
+                {avgRating.toFixed(1)}{' '}
+                ({product.review_count > 0 ? product.review_count : reviews.length}{' '}
+                {(product.review_count === 1 || reviews.length === 1) ? 'review' : 'reviews'})
+              </span>
+            </div>
+          )}
+
+          {/* Price */}
+          <div className="mb-6 flex items-baseline gap-3">
+            <span className="text-3xl font-bold text-gray-900">
+              {formattedPrice(displayPrice)}
+            </span>
+            {hasDiscount && (
+              <span className="text-lg text-gray-400 line-through">
+                {formattedPrice(product.base_price)}
+              </span>
+            )}
+            {hasDiscount && (
+              <span className="rounded bg-red-100 px-2 py-0.5 text-sm font-semibold text-red-700">
+                SALE
+              </span>
+            )}
+          </div>
+
+          {/* Stock status */}
+          {stockStatus === 'in_stock' && (
+            <p className="mb-4 flex items-center gap-1.5 text-sm font-medium text-green-700">
+              <span className="h-2 w-2 rounded-full bg-green-500" aria-hidden="true" />
+              In stock
+              {selectedVariant && selectedVariant.stock_quantity <= 5 && (
+                <span className="font-normal text-amber-600">
+                  — only {selectedVariant.stock_quantity} left
+                </span>
+              )}
+            </p>
+          )}
+          {stockStatus === 'out_of_stock' && (
+            <p className="mb-4 flex items-center gap-1.5 text-sm font-medium text-red-600">
+              <span className="h-2 w-2 rounded-full bg-red-500" aria-hidden="true" />
+              Out of stock
+            </p>
+          )}
+
+          {/* Description */}
+          {product.description && (
+            <div className="mb-6">
+              <p className="leading-relaxed text-gray-700">{product.description}</p>
+            </div>
+          )}
+
+          {/* Feature badges */}
+          {product.features && product.features.length > 0 && (
+            <div className="mb-6 flex flex-wrap gap-2">
+              {product.features.map((feature: string) => (
+                <span
+                  key={feature}
+                  className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700"
+                >
+                  {feature}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Divider */}
+          <hr className="mb-6 border-gray-200" />
+
+          {/* Size picker */}
+          {allSizes.length > 0 && (
+            <div className="mb-5">
+              <SizePicker
+                sizes={allSizes}
+                selectedSize={selectedSize}
+                availableSizes={availableSizes}
+                onSelect={handleSizeSelect}
+              />
+            </div>
+          )}
+
+          {/* Color picker */}
+          {allColors.length > 0 && (
+            <div className="mb-5">
+              <ColorPicker
+                colors={allColors}
+                selectedColor={selectedColor}
+                availableColors={availableColors}
+                onSelect={handleColorSelect}
+              />
+            </div>
+          )}
+
+          {/* Quantity selector */}
+          {stockStatus !== 'out_of_stock' && (
+            <div className="mb-6 flex items-center gap-3">
+              <label htmlFor="pdp-quantity" className="text-sm font-semibold text-gray-700">
+                Qty
+              </label>
+              <div className="flex items-center rounded-lg border border-gray-300">
+                <button
+                  type="button"
+                  aria-label="Decrease quantity"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  disabled={quantity <= 1}
+                  className="flex h-10 w-10 items-center justify-center rounded-l-lg text-lg text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-900"
+                >
+                  −
+                </button>
+                <span
+                  id="pdp-quantity"
+                  role="spinbutton"
+                  aria-valuenow={quantity}
+                  aria-valuemin={1}
+                  aria-valuemax={selectedVariant?.stock_quantity ?? 99}
+                  className="w-10 text-center text-sm font-semibold text-gray-900"
+                >
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Increase quantity"
+                  onClick={() =>
+                    setQuantity((q) =>
+                      selectedVariant
+                        ? Math.min(selectedVariant.stock_quantity, q + 1)
+                        : q + 1
+                    )
+                  }
+                  disabled={
+                    selectedVariant ? quantity >= selectedVariant.stock_quantity : false
+                  }
+                  className="flex h-10 w-10 items-center justify-center rounded-r-lg text-lg text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-900"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Add to cart button */}
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={!canAddToCart && stockStatus !== 'unknown'}
+            aria-label="Add to cart"
+            className={`w-full rounded-xl py-4 text-base font-bold transition-all focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 ${
+              stockStatus === 'out_of_stock'
+                ? 'cursor-not-allowed bg-gray-200 text-gray-400'
+                : addToCartMutation.isPending
+                ? 'cursor-wait bg-gray-700 text-white opacity-75'
+                : 'bg-gray-900 text-white hover:bg-gray-700 active:scale-[0.98]'
+            }`}
+          >
+            {stockStatus === 'out_of_stock'
+              ? 'Out of Stock'
+              : addToCartMutation.isPending
+              ? 'Adding to cart…'
+              : 'Add to Cart'}
+          </button>
+
+          {/* Selection hint */}
+          {(needsSizeSelection || needsColorSelection) && !cartError && (
+            <p className="mt-2 text-center text-sm text-amber-600" role="status">
+              {[
+                needsSizeSelection && 'Please select a size',
+                needsColorSelection && 'Please select a color',
+              ]
+                .filter(Boolean)
+                .join(' and ')}
+            </p>
+          )}
+
+          {/* Cart feedback */}
+          {cartSuccess && (
+            <p className="mt-3 text-center text-sm font-medium text-green-700" role="status">
+              ✓ {cartSuccess}
+            </p>
+          )}
+          {cartError && (
+            <p className="mt-3 text-center text-sm font-medium text-red-600" role="alert">
+              {cartError}
+            </p>
+          )}
+
+          {/* Product details accordion */}
+          <div className="mt-8 space-y-px divide-y divide-gray-200 rounded-xl border border-gray-200">
+            {product.materials && (
+              <details className="group p-4">
+                <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none">
+                  Materials
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform" aria-hidden="true">▾</span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-gray-600">{product.materials}</p>
+              </details>
+            )}
+            <details className="group p-4">
+              <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none">
+                Sizing &amp; Fit
+                <span className="text-gray-400 group-open:rotate-180 transition-transform" aria-hidden="true">▾</span>
+              </summary>
+              <div className="mt-3 space-y-2 text-sm text-gray-600">
+                {allSizes.length > 0 ? (
+                  <>
+                    <p>Available sizes: {allSizes.join(', ')}</p>
+                    <p className="text-gray-500">
+                      We recommend sizing up half a size for wider feet. All sizes are UK sizing.
+                    </p>
+                  </>
+                ) : (
+                  <p>Please contact us for sizing information.</p>
+                )}
+              </div>
+            </details>
+            <details className="group p-4">
+              <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 focus:outline-none">
+                Delivery &amp; Returns
+                <span className="text-gray-400 group-open:rotate-180 transition-transform" aria-hidden="true">▾</span>
+              </summary>
+              <div className="mt-3 space-y-1 text-sm text-gray-600">
+                <p>Free standard delivery on orders over £50.</p>
+                <p>Express delivery available at checkout.</p>
+                <p>Free returns within 30 days of purchase.</p>
+              </div>
+            </details>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Reviews section */}
+      <section
+        aria-labelledby="reviews-heading"
+        className="mt-16 border-t border-gray-200 pt-12"
+      >
+        <h2
+          id="reviews-heading"
+          className="mb-8 text-2xl font-extrabold text-gray-900"
+        >
+          Customer Reviews
+          {reviews.length > 0 && (
+            <span className="ml-2 text-lg font-normal text-gray-400">
+              ({reviews.length})
+            </span>
+          )}
+        </h2>
+
+        {reviews.length > 0 ? (
+          <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))}
+          </div>
+        ) : (
+          <p className="mb-10 text-gray-500">
+            No reviews yet — be the first to share your thoughts!
+          </p>
+        )}
+
+        {/* Write-a-review form */}
+        <div className="max-w-lg rounded-xl border border-gray-200 bg-gray-50 p-6">
+          <h3 className="mb-5 text-lg font-bold text-gray-900">Write a Review</h3>
+
+          {!user ? (
+            <p className="text-sm text-gray-600">
+              <Link
+                to="/login"
+                className="font-semibold text-gray-900 underline hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded"
+              >
+                Sign in
+              </Link>{' '}
+              to leave a review.
+            </p>
+          ) : (
+            <form onSubmit={handleReviewSubmit} noValidate>
+              <div className="mb-4">
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  Your Rating
+                </label>
+                <StarRating
+                  rating={reviewRating}
+                  interactive
+                  onChange={setReviewRating}
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="review-comment"
+                  className="mb-2 block text-sm font-semibold text-gray-700"
+                >
+                  Comment <span className="font-normal text-gray-400">(optional)</span>
+                </label>
+                <textarea
+                  id="review-comment"
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  rows={4}
+                  placeholder="What did you think of these boots?"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 resize-y"
+                />
+              </div>
+
+              {reviewSuccess && (
+                <p className="mb-3 text-sm font-medium text-green-700" role="status">
+                  ✓ {reviewSuccess}
+                </p>
+              )}
+              {reviewError && (
+                <p className="mb-3 text-sm font-medium text-red-600" role="alert">
+                  {reviewError}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={reviewSubmitting}
+                className="rounded-lg bg-gray-900 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700 disabled:cursor-wait disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-gray-900"
+              >
+                {reviewSubmitting ? 'Submitting…' : 'Submit Review'}
+              </button>
+            </form>
+          )}
+        </div>
+      </section>
+    </div>
+  );
 };
 
 export { ProductDetailPage };
