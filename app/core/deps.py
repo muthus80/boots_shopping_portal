@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from typing import Optional
 
 import stripe
@@ -46,7 +47,16 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    result = await db.execute(select(User).where(User.id == subject))
+    try:
+        subject_uuid = uuid.UUID(subject)
+    except (ValueError, AttributeError):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token payload",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    result = await db.execute(select(User).where(User.id == subject_uuid))
     user: Optional[User] = result.scalars().first()
 
     if user is None:
@@ -88,7 +98,12 @@ async def optional_current_user(
     if subject is None:
         return None
 
-    result = await db.execute(select(User).where(User.id == subject))
+    try:
+        subject_uuid = uuid.UUID(subject)
+    except (ValueError, AttributeError):
+        return None
+
+    result = await db.execute(select(User).where(User.id == subject_uuid))
     user: Optional[User] = result.scalars().first()
 
     if user is None or not user.is_active:

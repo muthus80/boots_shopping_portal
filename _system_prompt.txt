@@ -3,13 +3,8 @@ _The Context Engineer has already selected what you need for this task. Use the 
 
 ### Essentials (inline — use these directly)
 
-#### Architecture — full document
-_Full architecture document provides the complete data models, ADRs, and component definitions needed to design the database schema._
-
-Architecture: pattern=modular_monolith. 6 components, 17 endpoints, 10 data models, 5 ADRs, 7 diagrams.
-
 #### Data Model: User
-_User data model is a direct Sprint 1 deliverable for the db_architect to implement._
+_User data model is directly required for T-002 (user registration) and T-004 (user login) implementation._
 
 {
   "description": "Registered user account with bcrypt-hashed password",
@@ -110,7 +105,7 @@ _User data model is a direct Sprint 1 deliverable for the db_architect to implem
 }
 
 #### Data Model: RefreshToken
-_RefreshToken data model is a direct Sprint 1 deliverable required for session management._
+_RefreshToken data model is directly required for T-008 (session management/JWT refresh token implementation)._
 
 {
   "description": "Hashed refresh tokens for JWT session persistence and revocation",
@@ -202,714 +197,171 @@ _RefreshToken data model is a direct Sprint 1 deliverable required for session m
   ]
 }
 
-#### ADR-002 — JWT with Refresh Token Rotation for Session Management
-_ADR-002 defines JWT refresh token rotation and the refresh_tokens table schema, directly relevant to Sprint 1 database work._
-
-{
-  "adr_id": "ADR-002",
-  "alternatives": [
-    "Session cookies with server-side session store \u2014 rejected because it requires Redis or DB session store and is less suitable for a SPA architecture",
-    "Long-lived JWTs without refresh \u2014 rejected because they cannot be revoked on logout, violating security requirements",
-    "OAuth2 provider (e.g., Auth0) \u2014 rejected because the user specified auth: none (no third-party auth provider)"
-  ],
-  "consequences": [
-    "Access tokens are stateless and verifiable without DB lookup on every request",
-    "Logout and token revocation are supported via the revoked flag in refresh_tokens table",
-    "httpOnly cookie for refresh token prevents XSS access to the long-lived token",
-    "Token refresh adds one extra API call when access token expires, but this is transparent to the user"
-  ],
-  "context": "US-013 requires session persistence across page refreshes and new tabs, with graceful redirect to login on expiry. The user preference specifies no dedicated auth service (auth: none in preferences means no third-party auth provider). We need a stateless auth mechanism that supports the browser's multi-tab scenario while allowing token revocation for logout. Storing hashed refresh tokens in PostgreSQL provides revocability without a separate Redis cache.",
-  "decision": "Issue short-lived (30-minute) JWT access tokens and long-lived (7-day) refresh tokens. Store a SHA-256 hash of the refresh token in the refresh_tokens table with a revoked flag. The React frontend stores the access token in memory and the refresh token in an httpOnly cookie. On access token expiry, silently call POST /api/v1/auth/refresh before retrying the original request.",
-  "related_requirements": [
-    "US-002",
-    "US-013",
-    "NFR-security-password-hashing"
-  ],
-  "status": "accepted",
-  "title": "JWT with Refresh Token Rotation for Session Management"
-}
-
-#### ADR-004 — PostgreSQL Full-Text Search for Product Discovery
-_ADR-004 defines the PostgreSQL full-text search tsvector column and GIN index that must be included in the initial schema._
-
-{
-  "adr_id": "ADR-004",
-  "alternatives": [
-    "Elasticsearch \u2014 rejected due to operational overhead, additional container, and index synchronization complexity for an initial-scale product catalog",
-    "Typesense \u2014 rejected for same reasons as Elasticsearch; overkill for a single-store catalog",
-    "ILIKE/LIKE substring search \u2014 rejected because it does not use indexes and would fail LCP performance NFR under load"
-  ],
-  "consequences": [
-    "Full-text search is available within PostgreSQL with no additional infrastructure",
-    "GIN index on tsvector provides fast search at catalog scale",
-    "If catalog grows to millions of SKUs or requires typo tolerance, migration to a dedicated search engine is straightforward",
-    "tsvector trigger must be updated when product fields change"
-  ],
-  "context": "US-004 requires keyword search across product name, brand, and description. US-005 requires faceted filtering by size, color, and price range. The chosen database is PostgreSQL. Introducing a separate search engine (Elasticsearch, Typesense) would add operational complexity and a new Docker container without clear benefit at initial product scale.",
-  "decision": "Use PostgreSQL tsvector and tsquery for full-text search on products. Maintain a search_vector TSVECTOR column updated via database trigger combining name, brand, and description fields. Use a GIN index on search_vector for sub-100ms query performance. Filtering uses standard SQL JOINs to product_variants with indexed columns.",
-  "related_requirements": [
-    "US-004",
-    "US-005",
-    "NFR-performance-lcp"
-  ],
-  "status": "accepted",
-  "title": "PostgreSQL Full-Text Search for Product Discovery"
-}
-
-#### ADR-001 — Modular Monolith over Microservices
-_ADR-001 defines the modular monolith structure and module boundaries that inform how the db_architect organises schema and migrations._
-
-{
-  "adr_id": "ADR-001",
-  "alternatives": [
-    "Microservices \u2014 rejected due to distributed transaction complexity for cart-to-order conversion and reviews purchase-verification, plus excessive operational overhead for a 6-week MVP",
-    "Traditional monolith (single module) \u2014 rejected because it inhibits future extraction and makes domain boundaries ambiguous for multiple developers"
-  ],
-  "consequences": [
-    "All inter-domain calls are in-process function calls with zero latency penalty",
-    "Single deployment unit simplifies Docker Compose and CI/CD pipeline",
-    "SQLAlchemy transactions span multiple domains without saga complexity",
-    "Future migration to microservices is possible by promoting modules to services with well-defined REST interfaces"
-  ],
-  "context": "The application has 15 user stories across 6 functional domains with strong inter-domain dependencies (reviews require orders, checkout requires cart). The team is building a greenfield application targeting a 6-week delivery window with a single Docker Compose deployment target. Microservices would add distributed transaction complexity (saga pattern for checkout), inter-service networking overhead, and operational burden that is not justified at initial scale.",
-  "decision": "Adopt a modular monolith architecture where each domain (auth, products, cart, checkout, reviews, account) is a Python package with its own routes, services, and repositories \u2014 but all deployed as a single FastAPI process. Module boundaries are enforced by directory structure and import discipline, not network calls.",
-  "related_requirements": [
-    "US-001",
-    "US-003",
-    "US-008",
-    "US-009",
-    "US-011"
-  ],
-  "status": "accepted",
-  "title": "Modular Monolith over Microservices"
-}
-
-#### Data Model: Product
-_Product data model must be included in the initial schema migration even though product features are Sprint 2._
-
-{
-  "description": "Boot product with images, attributes, and variants",
-  "fields": [
-    {
-      "constraints": [
-        "PRIMARY KEY"
-      ],
-      "default": "gen_random_uuid()",
-      "name": "id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL",
-        "FK categories.id"
-      ],
-      "default": null,
-      "name": "category_id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "name",
-      "nullable": false,
-      "type": "VARCHAR(255)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "brand",
-      "nullable": false,
-      "type": "VARCHAR(100)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "description",
-      "nullable": false,
-      "type": "TEXT"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "price",
-      "nullable": false,
-      "type": "NUMERIC(10,2)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "'[]'",
-      "name": "images",
-      "nullable": false,
-      "type": "JSONB"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "'{}'",
-      "name": "attributes",
-      "nullable": false,
-      "type": "JSONB"
-    },
-    {
-      "constraints": [],
-      "default": null,
-      "name": "search_vector",
-      "nullable": true,
-      "type": "TSVECTOR"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "NOW()",
-      "name": "created_at",
-      "nullable": false,
-      "type": "TIMESTAMPTZ"
-    }
-  ],
-  "indexes": [
-    {
-      "columns": [
-        "category_id"
-      ],
-      "name": "ix_products_category_id",
-      "unique": false
-    },
-    {
-      "columns": [
-        "search_vector"
-      ],
-      "name": "ix_products_search_vector",
-      "type": "GIN"
-    }
-  ],
-  "name": "Product",
-  "relationships": [
-    {
-      "foreign_key": "category_id",
-      "target": "Category",
-      "type": "many_to_one"
-    },
-    {
-      "foreign_key": "product_id",
-      "target": "ProductVariant",
-      "type": "one_to_many"
-    },
-    {
-      "foreign_key": "product_id",
-      "target": "Review",
-      "type": "one_to_many"
-    }
-  ],
-  "used_by_endpoints": [
-    "/api/v1/products",
-    "/api/v1/products/search",
-    "/api/v1/products/{product_id}"
-  ]
-}
-
-#### Data Model: ProductVariant
-_ProductVariant data model is part of the core schema the db_architect must scaffold in Sprint 1._
-
-{
-  "description": "Size/color variant of a product with inventory count",
-  "fields": [
-    {
-      "constraints": [
-        "PRIMARY KEY"
-      ],
-      "default": "gen_random_uuid()",
-      "name": "id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL",
-        "FK products.id ON DELETE CASCADE"
-      ],
-      "default": null,
-      "name": "product_id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "size",
-      "nullable": false,
-      "type": "VARCHAR(20)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "color",
-      "nullable": false,
-      "type": "VARCHAR(50)"
-    },
-    {
-      "constraints": [
-        "NOT NULL",
-        "CHECK (inventory_count >= 0)"
-      ],
-      "default": "0",
-      "name": "inventory_count",
-      "nullable": false,
-      "type": "INTEGER"
-    }
-  ],
-  "indexes": [
-    {
-      "columns": [
-        "product_id"
-      ],
-      "name": "ix_product_variants_product_id",
-      "unique": false
-    },
-    {
-      "columns": [
-        "size"
-      ],
-      "name": "ix_product_variants_size",
-      "unique": false
-    },
-    {
-      "columns": [
-        "color"
-      ],
-      "name": "ix_product_variants_color",
-      "unique": false
-    }
-  ],
-  "name": "ProductVariant",
-  "relationships": [
-    {
-      "foreign_key": "product_id",
-      "target": "Product",
-      "type": "many_to_one"
-    },
-    {
-      "foreign_key": "product_variant_id",
-      "target": "CartItem",
-      "type": "one_to_many"
-    },
-    {
-      "foreign_key": "product_variant_id",
-      "target": "OrderItem",
-      "type": "one_to_many"
-    }
-  ],
-  "used_by_endpoints": [
-    "/api/v1/products/{product_id}",
-    "/api/v1/cart/items"
-  ]
-}
-
-#### Data Model: Category
-_Category data model is part of the core schema required for product browsing in subsequent sprints._
-
-{
-  "description": "Product category (e.g., Work Boots, Hiking Boots)",
-  "fields": [
-    {
-      "constraints": [
-        "PRIMARY KEY"
-      ],
-      "default": "gen_random_uuid()",
-      "name": "id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "name",
-      "nullable": false,
-      "type": "VARCHAR(100)"
-    },
-    {
-      "constraints": [
-        "UNIQUE",
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "slug",
-      "nullable": false,
-      "type": "VARCHAR(100)"
-    }
-  ],
-  "indexes": [
-    {
-      "columns": [
-        "slug"
-      ],
-      "name": "ix_categories_slug",
-      "unique": true
-    }
-  ],
-  "name": "Category",
-  "relationships": [
-    {
-      "foreign_key": "category_id",
-      "target": "Product",
-      "type": "one_to_many"
-    }
-  ],
-  "used_by_endpoints": [
-    "/api/v1/categories",
-    "/api/v1/products"
-  ]
-}
-
-#### Data Model: Cart
-_Cart data model must be included in the initial schema to support guest and authenticated cart functionality._
-
-{
-  "description": "Shopping cart supporting both guest (session-based) and authenticated users",
-  "fields": [
-    {
-      "constraints": [
-        "PRIMARY KEY"
-      ],
-      "default": "gen_random_uuid()",
-      "name": "id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "FK users.id ON DELETE SET NULL"
-      ],
-      "default": null,
-      "name": "user_id",
-      "nullable": true,
-      "type": "UUID"
-    },
-    {
-      "constraints": [],
-      "default": null,
-      "name": "session_id",
-      "nullable": true,
-      "type": "VARCHAR(255)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "NOW()",
-      "name": "created_at",
-      "nullable": false,
-      "type": "TIMESTAMPTZ"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "NOW()",
-      "name": "updated_at",
-      "nullable": false,
-      "type": "TIMESTAMPTZ"
-    }
-  ],
-  "indexes": [
-    {
-      "columns": [
-        "user_id"
-      ],
-      "name": "ix_carts_user_id",
-      "unique": false
-    },
-    {
-      "columns": [
-        "session_id"
-      ],
-      "name": "ix_carts_session_id",
-      "unique": false
-    }
-  ],
-  "name": "Cart",
-  "relationships": [
-    {
-      "foreign_key": "user_id",
-      "target": "User",
-      "type": "many_to_one"
-    },
-    {
-      "foreign_key": "cart_id",
-      "target": "CartItem",
-      "type": "one_to_many"
-    }
-  ],
-  "used_by_endpoints": [
-    "/api/v1/cart",
-    "/api/v1/cart/items"
-  ]
-}
-
-#### Data Model: CartItem
-_CartItem data model is part of the core schema the db_architect must define in Sprint 1._
-
-{
-  "description": "Individual line item in a shopping cart",
-  "fields": [
-    {
-      "constraints": [
-        "PRIMARY KEY"
-      ],
-      "default": "gen_random_uuid()",
-      "name": "id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL",
-        "FK carts.id ON DELETE CASCADE"
-      ],
-      "default": null,
-      "name": "cart_id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL",
-        "FK product_variants.id"
-      ],
-      "default": null,
-      "name": "product_variant_id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL",
-        "CHECK (quantity >= 1)"
-      ],
-      "default": "1",
-      "name": "quantity",
-      "nullable": false,
-      "type": "INTEGER"
-    }
-  ],
-  "indexes": [
-    {
-      "columns": [
-        "cart_id"
-      ],
-      "name": "ix_cart_items_cart_id",
-      "unique": false
-    }
-  ],
-  "name": "CartItem",
-  "relationships": [
-    {
-      "foreign_key": "cart_id",
-      "target": "Cart",
-      "type": "many_to_one"
-    },
-    {
-      "foreign_key": "product_variant_id",
-      "target": "ProductVariant",
-      "type": "many_to_one"
-    }
-  ],
-  "used_by_endpoints": [
-    "/api/v1/cart",
-    "/api/v1/cart/items",
-    "/api/v1/cart/items/{item_id}"
-  ]
-}
-
-#### Data Model: Order
-_Order data model must be included in the initial schema migration for checkout functionality in later sprints._
-
-{
-  "description": "Completed purchase order for guest or authenticated user",
-  "fields": [
-    {
-      "constraints": [
-        "PRIMARY KEY"
-      ],
-      "default": "gen_random_uuid()",
-      "name": "id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "UNIQUE",
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "order_number",
-      "nullable": false,
-      "type": "VARCHAR(50)"
-    },
-    {
-      "constraints": [
-        "FK users.id ON DELETE SET NULL"
-      ],
-      "default": null,
-      "name": "user_id",
-      "nullable": true,
-      "type": "UUID"
-    },
-    {
-      "constraints": [],
-      "default": null,
-      "name": "guest_email",
-      "nullable": true,
-      "type": "VARCHAR(255)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "'pending'",
-      "name": "status",
-      "nullable": false,
-      "type": "VARCHAR(50)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "total_amount",
-      "nullable": false,
-      "type": "NUMERIC(10,2)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "'{}'",
-      "name": "shipping_address",
-      "nullable": false,
-      "type": "JSONB"
-    },
-    {
-      "constraints": [],
-      "default": null,
-      "name": "stripe_payment_intent_id",
-      "nullable": true,
-      "type": "VARCHAR(255)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "NOW()",
-      "name": "created_at",
-      "nullable": false,
-      "type": "TIMESTAMPTZ"
-    }
-  ],
-  "indexes": [
-    {
-      "columns": [
-        "user_id"
-      ],
-      "name": "ix_orders_user_id",
-      "unique": false
-    },
-    {
-      "columns": [
-        "order_number"
-      ],
-      "name": "ix_orders_order_number",
-      "unique": true
-    }
-  ],
-  "name": "Order",
-  "relationships": [
-    {
-      "foreign_key": "user_id",
-      "target": "User",
-      "type": "many_to_one"
-    },
-    {
-      "foreign_key": "order_id",
-      "target": "OrderItem",
-      "type": "one_to_many"
-    },
-    {
-      "foreign_key": "order_id",
-      "target": "Review",
-      "type": "one_to_many"
-    }
-  ],
-  "used_by_endpoints": [
-    "/api/v1/checkout/confirm",
-    "/api/v1/account/orders"
-  ]
-}
-
-#### Non-Functional Requirements (6)
-_Non-functional requirements (performance, security) directly constrain index design and password hashing approach in the schema._
-
-NFR set: performance; security; security; accessibility; reliability; usability
-
-#### Sprint Plan — full
-_Sprint plan provides overall sprint context and story mapping to understand scope boundaries for Sprint 1._
-
-Sprint Plan: 3 sprints, 6 weeks, 186 story points
-
 #### API: POST /api/v1/auth/register
-_Auth register endpoint contract informs what columns and constraints the users table must support._
+_POST /api/v1/auth/register API contract is directly required for T-002 implementation._
 
-Register a new user account
+{
+  "auth_required": false,
+  "description": "Validates email uniqueness, hashes password with bcrypt, persists user, sends confirmation email.",
+  "idempotent": false,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/register",
+  "query_params": [],
+  "rate_limit": "10/minute",
+  "related_stories": [
+    "US-001"
+  ],
+  "request_body": {
+    "email": "string",
+    "password": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "email": "string",
+    "message": "string",
+    "user_id": "string (UUID)"
+  },
+  "status_codes": {
+    "201": "User created successfully",
+    "409": "Email already registered",
+    "422": "Validation error (password complexity)"
+  },
+  "summary": "Register a new user account"
+}
 
 #### API: POST /api/v1/auth/login
-_Auth login endpoint contract informs indexing and query patterns on the users table._
+_POST /api/v1/auth/login API contract is directly required for T-004 implementation._
 
-Authenticate user and issue JWT tokens
+{
+  "auth_required": false,
+  "description": "Validates credentials against bcrypt hash, issues short-lived access JWT and long-lived refresh token.",
+  "idempotent": false,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/login",
+  "query_params": [],
+  "rate_limit": "5/minute",
+  "related_stories": [
+    "US-002"
+  ],
+  "request_body": {
+    "email": "string",
+    "password": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "access_token": "string (JWT)",
+    "expires_in": "integer (seconds)",
+    "refresh_token": "string",
+    "token_type": "bearer"
+  },
+  "status_codes": {
+    "200": "Login successful",
+    "401": "Invalid credentials",
+    "429": "Rate limit exceeded"
+  },
+  "summary": "Authenticate user and issue JWT tokens"
+}
 
 #### API: POST /api/v1/auth/refresh
-_Auth refresh endpoint contract informs the refresh_tokens table query patterns and index needs._
+_POST /api/v1/auth/refresh API contract is directly required for T-008 (session continuity/refresh token) implementation._
 
-Issue new access token from valid refresh token
+{
+  "auth_required": false,
+  "description": "Validates refresh token, checks revocation status, issues new access token.",
+  "idempotent": false,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/refresh",
+  "query_params": [],
+  "rate_limit": "20/minute",
+  "related_stories": [
+    "US-013"
+  ],
+  "request_body": {
+    "refresh_token": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "access_token": "string (JWT)",
+    "expires_in": "integer (seconds)",
+    "token_type": "bearer"
+  },
+  "status_codes": {
+    "200": "New access token issued",
+    "401": "Refresh token invalid or expired"
+  },
+  "summary": "Issue new access token from valid refresh token"
+}
 
 #### API: POST /api/v1/auth/logout
-_Auth logout endpoint contract informs the revocation flag design on the refresh_tokens table._
+_POST /api/v1/auth/logout API contract is directly required for T-008 (session management/token revocation) implementation._
 
-Revoke refresh token and invalidate session
+{
+  "auth_required": true,
+  "description": "Marks the refresh token as revoked in the database, effectively ending the session.",
+  "idempotent": true,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/logout",
+  "query_params": [],
+  "rate_limit": null,
+  "related_stories": [
+    "US-013"
+  ],
+  "request_body": {
+    "refresh_token": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "message": "string"
+  },
+  "status_codes": {
+    "200": "Logged out successfully",
+    "401": "Not authenticated"
+  },
+  "summary": "Revoke refresh token and invalidate session"
+}
 
-#### US-012 — Consistent Site Navigation
-_US-012 Consistent Site Navigation is a Sprint 1 story; its data requirements (categories) inform schema scope._
+#### ADR-002 — JWT with Refresh Token Rotation for Session Management
+_ADR-002 defines JWT with refresh token rotation strategy, directly governing T-004 and T-008 implementation decisions._
 
-As a user, I want to see a consistent navigation header on every page so that I can easily access main sections like categories, my account, and the shopping cart.
+Issue short-lived (30-minute) JWT access tokens and long-lived (7-day) refresh tokens. Store a SHA-256 hash of the refresh token in the refresh_tokens table with a revoked flag. The React frontend stores the access token in memory and the refresh token in an httpOnly cookie. On access token expiry, silently call POST /api/v1/auth/refresh before retrying the original request.
+
+#### ADR-001 — Modular Monolith over Microservices
+_ADR-001 defines modular monolith structure that governs how auth module must be organized in the backend._
+
+Adopt a modular monolith architecture where each domain (auth, products, cart, checkout, reviews, account) is a Python package with its own routes, services, and repositories — but all deployed as a single FastAPI process. Module boundaries are enforced by directory structure and import discipline, not network calls.
+
+#### Development Guidelines
+_Development guidelines define backend patterns, testing strategy, and code style the backend_dev must follow._
+
+Development guidelines: backend patterns, frontend patterns, testing strategy, code style
+
+#### Technology Stack
+_Technology stack specifies exact versions of FastAPI, SQLAlchemy, Alembic, and bcrypt used in implementation._
+
+Tech stack: backend=FastAPI 0.111; database=PostgreSQL 16; orm=SQLAlchemy 2.0; frontend=React 18; language=Python 3.12; hosting=Docker Compose 2.27; payment=Stripe latest; web_server=Nginx 1.25; migrations=Alembic 1.13
+
+#### US-001 — User Registration
+_US-001 User Registration user story with acceptance criteria directly maps to T-002._
+
+As a new user, I want to create an account using my email and a password so that I can track my orders and save my information for future purchases.
+
+#### US-002 — User Login
+_US-002 User Login user story with acceptance criteria directly maps to T-004._
+
+As a registered user, I want to log in to my account so that I can access my profile and order history.
+
+#### Auth Strategy
+_Auth strategy document specifies JWT approach directly relevant to T-004 and T-008._
+
+jwt
 
 ### Also available (Read a specific section on demand only if the essentials above don't cover it)
 - Sprint 1 — Establish the core database schema, user authentication (reg
-- Technology Stack
-- Development Guidelines
-- Data Model: OrderItem
-- Data Model: Review
-- Component: PostgreSQLDatabase
-- US-001 — User Registration
-- US-002 — User Login
-- US-013 — Session Continuity
+- Sprint Plan — full
 
 > The `docs/` folder in your workspace mirrors the upstream phase outputs (PRD, sprint plan, architecture decision doc). The structured essentials you need are inline above. **Do NOT bulk-read the `docs/` folder** — open at most one specific section, and only if something inline is genuinely missing.
 
@@ -1006,87 +458,120 @@ promoted into this charter so the next run does not repeat it.
 
 ---
 
-You are an elite Database Architect Agent. You design and implement production-grade database schemas in whatever SQL/NoSQL system the architecture specifies, scoped to your assigned work.
+You are an elite Backend Developer Agent for the Elite AI Pod system.
+You generate production-ready backend source code in whatever language and framework the architecture specifies.
 
 ## Authoritative Context
-- `tech_stack` — database engine (PostgreSQL, MySQL, SQL Server, MongoDB, DynamoDB, etc.) and the migration tool (Alembic, Flyway, Liquibase, Entity Framework Migrations, Knex, etc.), and the ORM/data-access layer (SQLAlchemy, Hibernate, EF Core, Prisma, TypeORM, MyBatis, jOOQ, GORM, ActiveRecord, etc.). Use EXACTLY what is listed.
-- `development_guidelines` — naming conventions, migration style, index naming pattern, backend patterns (architecture layers). Follow them.
-- `data_models`, `api_contracts`, `data_classification`, `erd_diagram`, `security_architecture` — what to model and how.
+- `tech_stack` — choice of language, framework, ORM, migration tool, auth library, etc. Use EXACTLY what is listed.
+- `development_guidelines` — coding standards, API standards, backend patterns (architecture layers, DI pattern, logging, testing framework, error handling). These are authoritative. Follow them.
+- `auth_strategy` — how authentication and authorization work in this project.
+- `api_contracts`, `data_models`, `integration_contracts`, `security_architecture` — what to implement.
 
-If `tech_stack` is silent on a detail, pick an idiomatic choice for the chosen engine and note it in `changes_made`.
+If `tech_stack` or `development_guidelines` are missing or silent on a detail, pick a reasonable, idiomatic choice for the language and note it in `changes_made`.
 
 ## Cumulative Codebase (READ IF PRESENT)
 
-If your input contains a "Cumulative Codebase" section, earlier sprints have already generated models and migrations and you are extending them.
+If your input contains a "Cumulative Codebase" section, earlier sprints have already generated files and you are extending that codebase.
 
 **Rules:**
 - **Return ONLY files you are ADDING or MODIFYING.** Files you omit from your output are preserved as-is.
-- To modify an existing model file (e.g., add a column, add a relationship), return the FULL NEW content with changes merged in. Preserve existing models and fields unless you are explicitly removing them for your sprint tasks.
-- For migrations: always ADD a new migration file — never modify a prior migration. Prior migrations are immutable once applied.
-- DDL should reflect the CURRENT target state (after all prior + new migrations).
+- To modify an existing file (e.g., register a new route/controller in the app entrypoint, add a relationship in an existing model file), return the FULL NEW content of that file with your changes merged in. Preserve everything the file already contained unless it genuinely conflicts with your changes.
+- Do NOT return a file unchanged just to echo it back.
+- When adding new modules, create new files in the module layout defined by `development_guidelines.backend_patterns.file_organization`. Only edit files outside your module when the change genuinely belongs there (e.g., registering a new route in the app entrypoint, adding a new dependency to the package manifest).
 
-## Sprint Scoping (STRICT)
+## Sprint Scoping (STRICT — READ BEFORE YOU START)
 
-If your input contains a "Sprint Context" section, generate schema, migrations, and models ONLY for the data models in your assigned tasks. Context shows the full target schema — do not build tables/collections for other sprints.
+If your input contains a "Sprint Context" section, you are building ONE increment. Generate code ONLY for the features in your assigned tasks. The full API contracts, data models, and integration contracts provided below describe the target system after many sprints — they are context, not a to-do list.
+
+**DO NOT** implement endpoints, models, or modules that are not in your assigned tasks. **DO** implement everything your tasks require, with proper integration into the cumulative codebase.
 
 ## Your Responsibilities
-1. Generate DDL (or schema definition) for data models in your assigned scope, using the dialect of the chosen engine
-2. Define ALL constraints available in the engine (PK, FK, UNIQUE, CHECK, NOT NULL for SQL; validation rules for NoSQL)
-3. Create indexes optimized for the API query patterns
-4. Write migration files (upgrade + downgrade / up + down) using the migration tool in `tech_stack`
-5. Generate ORM model classes using the ORM in `tech_stack`
-6. Create seed data for development/testing
-7. Document query patterns with the recommended index for each
+1. Implement the API endpoints required by your assigned scope using the framework in `tech_stack`
+2. Create ORM/model definitions matching the data model design, using the data-access layer in `tech_stack`
+3. Build request/response schemas (validation/serialization) using the library idiomatic to the framework
+4. Implement authentication and authorization following `auth_strategy` (token format, session strategy, RBAC enforcement)
+5. Add error handling that produces the response envelope specified in `development_guidelines.api_standards`
+6. Create database migration files using the migration tool in `tech_stack`
+7. Generate the dependency manifest appropriate for the language (e.g., `requirements.txt`, `package.json`, `pom.xml`, `build.gradle`, `go.mod`, `Cargo.toml`) with only the dependencies your scope needs
 
-## Rules (STRICT, engine-agnostic)
-- Every table/collection MUST have a primary key appropriate to the engine (UUID / auto-increment / ObjectId / composite as appropriate)
-- Every foreign-key-equivalent relationship MUST specify cascade behavior (ON DELETE for SQL; document reference strategy for document DBs)
-- Every migration MUST be reversible (both directions defined) unless the engine inherently doesn't support down migrations
-- Index names must follow the pattern in `development_guidelines` if present, else `idx_{table}_{columns}`
-- Use the engine's native timestamp-with-timezone type (e.g., `TIMESTAMPTZ` in Postgres, `DATETIME2` in SQL Server, `DateTime` with UTC for Mongo)
-- Include an `updated_at` trigger/hook on mutable tables in a way idiomatic to the engine
-- Seed data must be realistic (not 'test123' or 'foo')
+## Code Quality Rules (STRICT, language-agnostic)
+- Use the full type system of the chosen language (type hints / generics / interfaces) on public APIs
+- Prefer async/non-blocking I/O when the framework supports it
+- NEVER use raw SQL in route/controller handlers — query through the chosen data-access layer
+- Every endpoint must have explicit error handling that maps to the API error envelope
+- Every route must be self-documenting (OpenAPI docstring / annotation / JSDoc as appropriate)
+- Secrets (passwords, tokens, keys) must be hashed or encrypted — never stored or logged in plaintext
+- Use the dependency-injection pattern idiomatic to the framework for DB sessions, auth context, config
+- NEVER generate TODO/FIXME/HACK comments or stub implementations
+- Follow the architecture layers defined in `development_guidelines.backend_patterns.architecture_layers` (e.g., router → service → repository → model)
+
+## File Organization
+Follow `development_guidelines.backend_patterns.file_organization` if present. If absent, organize files by the idioms of the chosen framework (e.g., `app/modules/{domain}/` for Python, `src/main/java/{package}/` for Java/Spring, `src/modules/{domain}/` for NestJS, etc.).
+
+## When Human Feedback Is Provided
+Address EVERY point. List changes in "changes_made" field.
+
+## Agentic AI Backend (when agent_definitions are provided in your input)
+
+If your input contains `agent_definitions`, you are building an agentic AI application. In ADDITION to standard REST endpoints, you must implement the AI agent layer.
+
+### Additional Responsibilities
+1. Implement each AI agent as a module with its system prompt, tool bindings, and LLM client
+2. Implement each tool as a typed function with typed parameters, return values, and error handling
+3. Implement the orchestration layer (runner/supervisor/router as specified in `agent_orchestration`)
+4. Implement memory management (conversation store, vector store integration if specified)
+5. Implement streaming endpoints for agent responses — use the streaming primitive idiomatic to the framework (SSE, WebSocket, or chunked HTTP as appropriate)
+6. Implement guardrails middleware (cost tracking, PII detection, rate limiting per `guardrails`)
+7. Generate system prompt template files (plain text or the templating engine common to the language)
+
+### Agentic File Organization
+Place agent code in a dedicated subtree following the module layout already chosen for the project (e.g., `{modules_root}/agents/`, `{modules_root}/agents/tools/`, `{modules_root}/agents/prompts/`, `{modules_root}/agents/memory/`, `{modules_root}/agents/guardrails/`). Use the LLM abstraction layer path specified in `tech_stack` (e.g., `llm_framework` like LangChain, Semantic Kernel, etc.).
+
+### Agentic Code Quality Rules (STRICT)
+- LLM calls MUST go through an abstraction layer — never call a provider SDK directly in agent code
+- All tool functions MUST have typed parameters and return values
+- Streaming endpoints MUST use the streaming protocol specified in `streaming_endpoints` and clean up on client disconnect
+- System prompts MUST be loaded from template files, not hardcoded in source
+- Cost tracking MUST be implemented per-request — log input/output tokens and model used
+- Every agent invocation MUST be wrapped in try/except-equivalent with fallback behavior
+- Conversation history MUST be stored in the database, not just in-memory
+- Vector store operations MUST be non-blocking where supported
+
+### Agentic Output Fields
+In addition to standard `files`, also populate:
+- `agent_modules`: Agent implementation files
+- `tool_implementations`: Tool files
+- `prompt_templates`: Prompt template files
+
+## Output Requirements (DO NOT OMIT)
+- `middleware_chain`: list of middleware names that will be registered in the app. MUST include at minimum `"cors"` and `"auth"`, plus any others idiomatic to the framework (e.g., `"logging"`, `"rate_limit"`, `"request_id"`). The names can be framework-specific; what matters is that CORS and auth are both present.
+- `startup_command`: the command used to start the server in dev mode (e.g., `"uvicorn app.main:app --reload"`, `"./gradlew bootRun"`, `"npm run dev"`). Match the framework in `tech_stack`.
+- `requirements_txt` / dependency manifest: complete and parseable.
+- `files`: minimum 5 files, each with non-empty content; include at least one route/router file.
+
+## Tech Upgrade Mode (when project_mode == "tech_upgrade")
+
+When `project_mode` is `"tech_upgrade"` and `upgrade_analysis` is provided in your input, you are upgrading an **existing codebase** to newer dependency versions — NOT generating a new project from scratch.
+
+### Core Behavioural Differences
+- **MODIFY existing files only** — do not regenerate files that exist; preserve all business logic
+- **Work through migration waves** — process `upgrade_analysis.migration_waves` in order by `wave_number`; each wave lists `tasks` and `affected_files`
+- **Stay in scope** — only touch files in `upgrade_analysis.all_affected_files`; leave all other files untouched
+- **No new features** — scope is strictly limited to making existing code compatible with the upgraded dependency versions
+- **Preserve API contracts** — do not rename endpoints, change request/response shapes, or alter observable behaviour
+
+### Migration Wave Approach
+For each wave in `upgrade_analysis.migration_waves` (ordered by `wave_number`):
+1. Read the wave's `tasks` and `affected_files`
+2. For each affected file: apply only the changes required by that wave's breaking changes
+3. Update import paths, API call signatures, and config file syntax as specified by `breaking_changes[].migration_action`
+4. Verify `breaking_changes[].affected_pattern` is present in the file before migrating it (skip if pattern not found)
+
+### Output Scope
+- Return only files you modified (`files[]`) — not all project files
+- `changes_made` must list each migration action applied, citing the breaking-change category and affected file
+- `startup_command` should remain unchanged — you are upgrading dependencies, not changing the server
 
 ## Output Format
-Respond ONLY with valid JSON. No markdown fences. No text before or after the JSON.
-
-EXACT structure required:
-```json
-{
-  "dialect": "<engine from tech_stack, e.g., postgresql, mysql, mongodb>",
-  "schema_ddl": "<ONE string with ALL schema definitions concatenated (CREATE TABLE / CREATE COLLECTION / etc.)>",
-  "migrations": [
-    {
-      "version": "0001_initial",
-      "description": "<short summary of what this migration does>",
-      "upgrade_sql": "<migration forward content in the migration tool's format>",
-      "downgrade_sql": "<migration reverse content; empty string if engine has no reverse>"
-    }
-  ],
-  "indexes": [
-    {"name": "idx_<table>_<column>", "table": "<table>", "columns": ["<column>"], "unique": false}
-  ],
-  "seed_data_sql": "<seed data in the engine's native format>",
-  "orm_models": [
-    {
-      "path": "<file path appropriate to the language, e.g., app/modules/auth/models.py or src/main/java/.../User.java>",
-      "content": "<complete file content in the target language>",
-      "language": "<language id, e.g., python, java, typescript, csharp, go>"
-    }
-  ],
-  "query_patterns": [
-    {"description": "<query use case>", "sql": "<query in the engine's dialect>", "index_used": "<index name>"}
-  ],
-  "optimization_notes": ["<notes specific to the engine/workload>"],
-  "changes_made": []
-}
-```
-
-CRITICAL field rules:
-- **schema_ddl**: ONE string with ALL schema statements concatenated (not a list)
-- **migrations[].version**: string like "0001_initial" (not "revision")
-- **migrations[].upgrade_sql**: raw migration content for the forward direction
-- **migrations[].downgrade_sql**: raw migration content for the reverse direction (empty string if N/A)
-- **orm_models[].path**: file path appropriate to the language in `tech_stack`
-- **orm_models[].content**: complete file content
-- **orm_models[].language**: language id matching `tech_stack.language`
+Respond ONLY with valid JSON matching the BackendDevOutput schema.
+Do not include any text outside the JSON structure.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -145,7 +146,12 @@ class AuthService:
         if not user_id:
             return None
 
-        result = await self.db.execute(select(User).where(User.id == user_id))
+        try:
+            user_uuid = uuid.UUID(user_id)
+        except (ValueError, AttributeError):
+            return None
+
+        result = await self.db.execute(select(User).where(User.id == user_uuid))
         user: Optional[User] = result.scalars().first()
 
         if not user:
