@@ -31,7 +31,8 @@ class ProductService:
         page: int = 1,
         page_size: int = 20,
     ) -> ProductList:
-        filters = []
+        # Always exclude inactive products from public listing (US-005, US-006)
+        filters = [Product.is_active.is_(True)]
 
         if category_id is not None:
             filters.append(Product.category_id == category_id)
