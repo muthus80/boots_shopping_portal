@@ -1,0 +1,40 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.12.13', 'Platform': 'Linux-7.0.0-1006-aws-x86_64-with-glibc2.43', 'Packages': {'pytest': '9.1.1', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1', 'asyncio': '1.4.0', 'anyio': '4.14.1'}, 'AWS_REGION': 'us-east-1'}
+rootdir: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app
+configfile: pyproject.toml
+plugins: json-report-1.5.0, metadata-3.1.1, asyncio-1.4.0, anyio-4.14.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 28 items
+
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailImages::test_images_field_is_list PASSED [  3%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailImages::test_images_contains_multiple_entries PASSED [  7%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailImages::test_images_returns_seeded_urls PASSED [ 10%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailImages::test_thumbnail_url_present PASSED [ 14%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailDescription::test_description_present PASSED [ 17%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailDescription::test_description_contains_material_info PASSED [ 21%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailDescription::test_description_contains_feature_info PASSED [ 25%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailDescription::test_description_contains_sizing_info PASSED [ 28%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailDescription::test_brand_field_present PASSED [ 32%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailDescription::test_price_field_present PASSED [ 35%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailVariants::test_variants_field_is_list PASSED [ 39%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailVariants::test_variants_contains_all_seeded_variants PASSED [ 42%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailVariants::test_variants_expose_size_for_selection PASSED [ 46%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailVariants::test_variants_expose_color_for_selection PASSED [ 50%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailVariants::test_variants_include_stock_quantity PASSED [ 53%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailVariants::test_variant_ids_are_present PASSED [ 57%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailReviews::test_reviews_field_is_list PASSED [ 60%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailReviews::test_reviews_empty_for_new_product PASSED [ 64%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailReviews::test_reviews_populated_when_present PASSED [ 67%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailNotFound::test_nonexistent_id_returns_404 PASSED [ 71%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailNotFound::test_404_body_has_detail_key PASSED [ 75%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailNotFound::test_invalid_uuid_format_returns_422 PASSED [ 78%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailSchemaCompleteness::test_all_required_fields_present PASSED [ 82%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailSchemaCompleteness::test_product_id_matches_requested_id PASSED [ 85%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailSchemaCompleteness::test_product_slug_present PASSED [ 89%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailSchemaCompleteness::test_is_active_true_for_active_product PASSED [ 92%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailSchemaCompleteness::test_review_count_matches_actual_count PASSED [ 96%]
+tests/unit/sprint_2/test_product_detail_api.py::TestProductDetailSchemaCompleteness::test_category_id_linked_correctly PASSED [100%]
+
+============================== 28 passed in 5.75s ==============================
