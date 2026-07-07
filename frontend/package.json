@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^6.7.0",
-    "@stripe/stripe-js": "^3.0.0",
+    "@stripe/stripe-js": "^9.5.0",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.3.2",
     "@tanstack/react-query": "^5.0.0",

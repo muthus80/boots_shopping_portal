@@ -13,7 +13,7 @@ PROJECT_ROOT = FIXTURES.parent.parent
 MANIFEST = PROJECT_ROOT / ".elite" / "test-credentials.json"
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
-    "postgresql://boots_shopping_app_test_app:Py_dbdheMo67t0iSja3kO0o599rEdXCi@localhost:5432/boots_shopping_app_test",
+    "postgresql://boots_shopping_app_test_app:NuxSjSLdbVatOQjmWEnlMqVaflWcB-Dc@localhost:5432/boots_shopping_app_test",
 )
 
 # Make the app importable so we can call its own hash helper.
@@ -26,13 +26,11 @@ def hash_password(plaintext: str) -> str:
     return _hash(plaintext)
 
 
-async def seed_sql(conn) -> None:
-    """Execute seed_data.sql then demo_data.sql against the connected DB."""
-    for sql_file in [FIXTURES / "seed_data.sql", FIXTURES / "demo_data.sql"]:
-        if sql_file.exists():
-            sql = sql_file.read_text()
-            await conn.execute(sql)
-            print(f"  Applied {sql_file.name}")
+async def seed_sql(conn, sql_file: Path) -> None:
+    """Execute a single SQL fixture file against the connected DB."""
+    if sql_file.exists():
+        await conn.execute(sql_file.read_text())
+        print(f"  Applied {sql_file.name}")
 
 
 async def seed_auth_entity(conn) -> None:
@@ -41,7 +39,7 @@ async def seed_auth_entity(conn) -> None:
 
     The hashed_password value is computed at seed-time from the plaintext
     stored in the manifest — it is never stored as a literal hash in SQL.
-    This is the ONLY code path that produces the auth DB row.
+    This is the ONLY code path that produces the primary auth DB row.
     """
     if not MANIFEST.exists():
         print("  No .elite/test-credentials.json found — skipping auth seed.")
@@ -75,12 +73,70 @@ async def seed_auth_entity(conn) -> None:
     print(f"  Auth entity seeded: {table}.{field}={value!r}")
 
 
+async def seed_demo_users(conn) -> None:
+    """
+    Insert demo user rows (alice, bob, carol) used by demo_data.sql FK references.
+    Passwords are hashed at seed-time — no literal hash values in SQL files.
+    """
+    demo_password = hash_password("DemoPass123!")
+    demo_users = [
+        {
+            "id": "00000000-0000-0000-0000-000000000401",
+            "email": "alice.johnson@demo.local",
+            "hashed_password": demo_password,
+            "full_name": "Alice Johnson",
+            "is_active": True,
+            "is_superuser": False,
+            "created_at": "2026-01-15 08:00:00+00",
+            "updated_at": "2026-01-15 08:00:00+00",
+        },
+        {
+            "id": "00000000-0000-0000-0000-000000000402",
+            "email": "bob.smith@demo.local",
+            "hashed_password": demo_password,
+            "full_name": "Bob Smith",
+            "is_active": True,
+            "is_superuser": False,
+            "created_at": "2026-01-16 09:30:00+00",
+            "updated_at": "2026-01-16 09:30:00+00",
+        },
+        {
+            "id": "00000000-0000-0000-0000-000000000403",
+            "email": "carol.white@demo.local",
+            "hashed_password": demo_password,
+            "full_name": "Carol White",
+            "is_active": True,
+            "is_superuser": False,
+            "created_at": "2026-01-17 10:00:00+00",
+            "updated_at": "2026-01-17 10:00:00+00",
+        },
+    ]
+    for u in demo_users:
+        await conn.execute(
+            """
+            INSERT INTO users (id, email, hashed_password, full_name, is_active, is_superuser, created_at, updated_at)
+            VALUES ($1, $2, $3, $4, $5, $6, $7::timestamptz, $8::timestamptz)
+            ON CONFLICT (email) DO UPDATE SET hashed_password = EXCLUDED.hashed_password
+            """,
+            u["id"], u["email"], u["hashed_password"], u["full_name"],
+            u["is_active"], u["is_superuser"], u["created_at"], u["updated_at"],
+        )
+    print(f"  Demo users seeded: {len(demo_users)} rows")
+
+
 async def main() -> None:
     print(f"Connecting to {DATABASE_URL!r} …")
     conn = await asyncpg.connect(DATABASE_URL)
     try:
-        await seed_sql(conn)
+        # 1. Reference/lookup data (categories) — no user FK deps.
+        await seed_sql(conn, FIXTURES / "seed_data.sql")
+        # 2. Demo users — must exist before demo_data.sql references their IDs
+        #    (carts.user_id, orders.user_id, reviews.user_id).
+        await seed_demo_users(conn)
+        # 3. Primary test-login user from the credentials manifest.
         await seed_auth_entity(conn)
+        # 4. Transactional demo rows (products, variants, carts, orders, reviews).
+        await seed_sql(conn, FIXTURES / "demo_data.sql")
     finally:
         await conn.close()
     print("Seeded successfully ✓")

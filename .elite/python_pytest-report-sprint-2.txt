@@ -1,0 +1,49 @@
+============================= test session starts ==============================
+collecting ... collected 30 items
+
+tests/integration/sprint_2/test_auth.py::TestUserRegistration::test_guest_registers_with_valid_credentials_creates_account PASSED [  3%]
+tests/integration/sprint_2/test_auth.py::TestUserRegistration::test_guest_registers_duplicate_email_returns_conflict PASSED [  6%]
+tests/integration/sprint_2/test_auth.py::TestUserRegistration::test_guest_registers_weak_password_returns_validation_error PASSED [ 10%]
+tests/integration/sprint_2/test_auth.py::TestUserLogin::test_user_logs_in_with_correct_credentials_receives_tokens PASSED [ 13%]
+tests/integration/sprint_2/test_auth.py::TestUserLogin::test_user_logs_in_with_wrong_password_receives_401 PASSED [ 16%]
+tests/integration/sprint_2/test_auth.py::TestUserLogin::test_user_logs_in_with_nonexistent_email_receives_401 PASSED [ 20%]
+tests/integration/sprint_2/test_auth.py::TestUserLogin::test_authenticated_user_can_refresh_token PASSED [ 23%]
+tests/integration/sprint_2/test_auth.py::TestUserLogin::test_authenticated_user_can_logout PASSED [ 26%]
+tests/integration/sprint_2/test_cart.py::TestAddToCart::test_guest_adds_product_to_cart_via_session PASSED [ 30%]
+tests/integration/sprint_2/test_cart.py::TestAddToCart::test_authenticated_user_adds_product_to_cart PASSED [ 33%]
+tests/integration/sprint_2/test_cart.py::TestAddToCart::test_guest_adds_product_with_variant_to_cart PASSED [ 36%]
+tests/integration/sprint_2/test_cart.py::TestViewAndEditCart::test_guest_views_cart_with_items PASSED [ 40%]
+tests/integration/sprint_2/test_cart.py::TestViewAndEditCart::test_guest_gets_empty_cart_on_new_session PASSED [ 43%]
+tests/integration/sprint_2/test_order_history.py::TestOrderHistory::test_authenticated_user_views_order_history PASSED [ 46%]
+tests/integration/sprint_2/test_order_history.py::TestOrderHistory::test_authenticated_user_has_no_orders_returns_empty_list PASSED [ 50%]
+tests/integration/sprint_2/test_order_history.py::TestOrderHistory::test_unauthenticated_user_cannot_view_order_history PASSED [ 53%]
+tests/integration/sprint_2/test_order_history.py::TestOrderHistory::test_user_cannot_see_other_users_orders PASSED [ 56%]
+tests/integration/sprint_2/test_products.py::TestProductSearch::test_guest_searches_keyword_returns_matching_products PASSED [ 60%]
+tests/integration/sprint_2/test_products.py::TestProductSearch::test_guest_searches_no_match_returns_empty_results PASSED [ 63%]
+tests/integration/sprint_2/test_products.py::TestProductSearch::test_search_requires_query_parameter PASSED [ 66%]
+tests/integration/sprint_2/test_products.py::TestProductListing::test_guest_views_product_listing_with_all_products PASSED [ 70%]
+tests/integration/sprint_2/test_products.py::TestProductListing::test_guest_filters_by_size_shows_only_matching_products PASSED [ 73%]
+tests/integration/sprint_2/test_products.py::TestProductListing::test_guest_filters_by_multiple_criteria PASSED [ 76%]
+tests/integration/sprint_2/test_products.py::TestProductListing::test_guest_views_products_without_filter_returns_all_active PASSED [ 80%]
+tests/integration/sprint_2/test_products.py::TestProductListing::test_categories_endpoint_returns_list PASSED [ 83%]
+tests/integration/sprint_2/test_products.py::TestProductDetail::test_guest_views_product_detail_page PASSED [ 86%]
+tests/integration/sprint_2/test_products.py::TestProductDetail::test_guest_gets_404_for_nonexistent_product PASSED [ 90%]
+tests/integration/sprint_2/test_products.py::TestProductReviews::test_guest_can_read_product_reviews PASSED [ 93%]
+tests/integration/sprint_2/test_products.py::TestProductReviews::test_authenticated_user_can_write_product_review PASSED [ 96%]
+tests/integration/sprint_2/test_products.py::TestProductReviews::test_unauthenticated_user_cannot_write_review PASSED [100%]
+
+=============================== warnings summary ===============================
+tests/integration/sprint_2/test_auth.py::TestUserLogin::test_authenticated_user_can_refresh_token
+tests/integration/sprint_2/test_auth.py::TestUserLogin::test_authenticated_user_can_logout
+tests/integration/sprint_2/test_cart.py::TestAddToCart::test_authenticated_user_adds_product_to_cart
+tests/integration/sprint_2/test_order_history.py::TestOrderHistory::test_authenticated_user_views_order_history
+tests/integration/sprint_2/test_order_history.py::TestOrderHistory::test_authenticated_user_has_no_orders_returns_empty_list
+tests/integration/sprint_2/test_order_history.py::TestOrderHistory::test_user_cannot_see_other_users_orders
+tests/integration/sprint_2/test_products.py::TestProductReviews::test_authenticated_user_can_write_product_review
+  /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/jose/jwt.py:311: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = timegm(datetime.utcnow().utctimetuple())
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+--------------------------------- JSON report ----------------------------------
+report saved to: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.elite/python_pytest-report-sprint-2.json
+======================= 30 passed, 7 warnings in 21.67s ========================

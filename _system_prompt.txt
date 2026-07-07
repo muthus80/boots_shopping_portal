@@ -1,3 +1,380 @@
+## Orientation — pre-selected context
+_The Context Engineer has already selected what you need for this task. Use the essentials below directly._
+
+### Essentials (inline — use these directly)
+
+#### qa_engineer output
+_AUTHORITATIVE: qa_engineer output from testing stage is the primary handoff driving this frontend_dev testing task._
+
+{
+  "agent_observations": [
+    {
+      "assigned_role": "backend_dev",
+      "failing_assertion": "form filled, Create Account clicked \u2014 got \"Not Found\" alert instead of redirect",
+      "root_cause_hypothesis": "The error-context.md shows an `alert: Not Found` appearing on the registration page directly after form fill \u2014 before button click. This is likely the API registration endpoi
+
+#### frontend_dev output
+_AUTHORITATIVE: frontend_dev output from development stage is the direct prior work that needs to be fixed/tested._
+
+{
+  "_merge_metadata": {
+    "file_conflicts": [
+      {
+        "also_by": "T-015",
+        "claimed_by": "T-013",
+        "path": "frontend/src/api/products.ts"
+      },
+      {
+        "also_by": "T-015",
+        "claimed_by": "T-011",
+        "path": "frontend/src/pages/ProductListPage.tsx"
+      },
+      {
+        "also_by": "T-023",
+        "claimed_by": "T-013",
+        "path": "frontend/sr
+
+#### integration_smoke output
+_Integration smoke test results directly inform what is passing and what needs frontend fixes._
+
+{
+  "checks_failed": [],
+  "checks_passed": [
+    "health",
+    "auth_login",
+    "protected_requires_auth",
+    "frontend_renders"
+  ],
+  "cycles": 1,
+  "error": null,
+  "fixes_applied": [],
+  "status": "passed"
+}
+
+#### ADR-002 — JWT with Refresh Token Rotation for Session Management
+_JWT/refresh token ADR is directly relevant to fixing the auth/registration issues identified by QA._
+
+{
+  "adr_id": "ADR-002",
+  "alternatives": [
+    "Session cookies with server-side session store \u2014 rejected because it requires Redis or DB session store and is less suitable for a SPA architecture",
+    "Long-lived JWTs without refresh \u2014 rejected because they cannot be revoked on logout, violating security requirements",
+    "OAuth2 provider (e.g., Auth0) \u2014 rejected because the user specified auth: none (no third-party auth provider)"
+  ],
+  "consequences": [
+    "Access tokens are stateless and verifiable without DB lookup on every request",
+    "Logout and token revocation are supported via the revoked flag in refresh_tokens table",
+    "httpOnly cookie for refresh token prevents XSS access to the long-lived token",
+    "Token refresh adds one extra API call when access token expires, but this is transparent to the user"
+  ],
+  "context": "US-013 requires session persistence across page refreshes and new tabs, with graceful redirect to login on expiry. The user preference specifies no dedicated auth service (auth: none in preferences means no third-party auth provider). We need a stateless auth mechanism that supports the browser's multi-tab scenario while allowing token revocation for logout. Storing hashed refresh tokens in PostgreSQL provides revocability without a separate Redis cache.",
+  "decision": "Issue short-lived (30-minute) JWT access tokens and long-lived (7-day) refresh tokens. Store a SHA-256 hash of the refresh token in the refresh_tokens table with a revoked flag. The React frontend stores the access token in memory and the refresh token in an httpOnly cookie. On access token expiry, silently call POST /api/v1/auth/refresh before retrying the original request.",
+  "related_requirements": [
+    "US-002",
+    "US-013",
+    "NFR-security-password-hashing"
+  ],
+  "status": "accepted",
+  "title": "JWT with Refresh Token Rotation for Session Management"
+}
+
+#### ADR-005 — React 18 SPA with React Query for Server State Management
+_ADR-005 defines the React frontend architecture (React Query, Axios, React Hook Form, Tailwind) that governs all frontend fixes._
+
+{
+  "adr_id": "ADR-005",
+  "alternatives": [
+    "Next.js \u2014 considered for SSR performance benefits but rejected because the user explicitly specified react (not next.js) and SSR adds deployment complexity beyond Docker Compose",
+    "Redux Toolkit \u2014 rejected in favour of React Query which handles server state, caching, and loading/error states more ergonomically with less boilerplate"
+  ],
+  "consequences": [
+    "React Query provides built-in loading/error/empty state management satisfying US-014 with minimal custom code",
+    "SPA routing via React Router v6 enables fast client-side navigation",
+    "No SSR means first-paint depends on CDN-cached static JS bundle; CDN delivery is required to meet LCP 2.5s NFR",
+    "Stripe Elements integrates cleanly as a React component within the checkout flow"
+  ],
+  "context": "The frontend needs to satisfy US-014 (loading, empty, error states), US-015 (keyboard accessibility), and perform well enough to meet the LCP 2.5s NFR. The user specified React as the frontend framework. A SPA architecture serves the dynamic filtering (US-005) and cart state updates (US-010) without full page reloads.",
+  "decision": "Use React 18 SPA with React Query (TanStack Query) for server state, Axios as the HTTP client, and React Hook Form for all form handling. Tailwind CSS for styling. All forms implement ARIA labels; interactive components use semantic HTML (button, input, nav) for keyboard accessibility.",
+  "related_requirements": [
+    "US-014",
+    "US-015",
+    "NFR-performance-lcp",
+    "NFR-accessibility"
+  ],
+  "status": "accepted",
+  "title": "React 18 SPA with React Query for Server State Management"
+}
+
+#### ADR-003 — Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance
+_ADR-003 Stripe PaymentIntents is directly relevant to checkout frontend fixes identified in QA._
+
+{
+  "adr_id": "ADR-003",
+  "alternatives": [
+    "Stripe Checkout (redirect) \u2014 rejected because it takes the user off-site, breaking the 5-step checkout UX requirement",
+    "Braintree \u2014 rejected because Stripe is the only provider explicitly referenced in the NFRs and user preference",
+    "Manual card collection + server-side Stripe charge \u2014 rejected because it places card data on application servers, violating PCI-DSS"
+  ],
+  "consequences": [
+    "Application servers never see raw card data \u2014 achieves PCI-DSS SAQ A compliance",
+    "PaymentIntent server-side creation ensures the amount is set by the backend, preventing client-side tampering",
+    "Two API calls required for checkout (create PaymentIntent + confirm), but both fit within the 5-step UX constraint",
+    "Stripe webhook handling should be added post-MVP for reliable payment status updates"
+  ],
+  "context": "The critical NFR requires PCI-DSS compliance ensuring no cardholder data is stored on application servers. The checkout must be completable in 5 steps or fewer (US-011). We need a payment integration that handles card data entirely within the Stripe iframe while giving the backend control over order amounts.",
+  "decision": "Use Stripe PaymentIntents API on the backend to create server-authorised payment intents with the correct order total, and Stripe Elements (CardElement React component) on the frontend for card capture. The frontend confirms the payment directly with Stripe using the client_secret; the backend then verifies payment_intent status before creating the order record.",
+  "related_requirements": [
+    "US-011",
+    "NFR-security-pci"
+  ],
+  "status": "accepted",
+  "title": "Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance"
+}
+
+#### API: POST /api/v1/auth/register
+_POST /api/v1/auth/register contract is directly relevant to the registration 'Not Found' bug identified by QA._
+
+{
+  "auth_required": false,
+  "description": "Validates email uniqueness, hashes password with bcrypt, persists user, sends confirmation email.",
+  "idempotent": false,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/register",
+  "query_params": [],
+  "rate_limit": "10/minute",
+  "related_stories": [
+    "US-001"
+  ],
+  "request_body": {
+    "email": "string",
+    "password": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "email": "string",
+    "message": "string",
+    "user_id": "string (UUID)"
+  },
+  "status_codes": {
+    "201": "User created successfully",
+    "409": "Email already registered",
+    "422": "Validation error (password complexity)"
+  },
+  "summary": "Register a new user account"
+}
+
+#### API: POST /api/v1/auth/login
+_POST /api/v1/auth/login contract needed for fixing auth flow issues._
+
+{
+  "auth_required": false,
+  "description": "Validates credentials against bcrypt hash, issues short-lived access JWT and long-lived refresh token.",
+  "idempotent": false,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/login",
+  "query_params": [],
+  "rate_limit": "5/minute",
+  "related_stories": [
+    "US-002"
+  ],
+  "request_body": {
+    "email": "string",
+    "password": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "access_token": "string (JWT)",
+    "expires_in": "integer (seconds)",
+    "refresh_token": "string",
+    "token_type": "bearer"
+  },
+  "status_codes": {
+    "200": "Login successful",
+    "401": "Invalid credentials",
+    "429": "Rate limit exceeded"
+  },
+  "summary": "Authenticate user and issue JWT tokens"
+}
+
+#### API: POST /api/v1/auth/refresh
+_POST /api/v1/auth/refresh contract needed for token refresh implementation in frontend._
+
+{
+  "auth_required": false,
+  "description": "Validates refresh token, checks revocation status, issues new access token.",
+  "idempotent": false,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/refresh",
+  "query_params": [],
+  "rate_limit": "20/minute",
+  "related_stories": [
+    "US-013"
+  ],
+  "request_body": {
+    "refresh_token": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "access_token": "string (JWT)",
+    "expires_in": "integer (seconds)",
+    "token_type": "bearer"
+  },
+  "status_codes": {
+    "200": "New access token issued",
+    "401": "Refresh token invalid or expired"
+  },
+  "summary": "Issue new access token from valid refresh token"
+}
+
+#### US-001 — User Registration
+_US-001 User Registration acceptance criteria needed to validate the fix for the registration bug._
+
+{
+  "acceptance_criteria": [
+    "Given I am on the registration page, when I enter a valid email and a password meeting complexity requirements, then my account is created.",
+    "Given my account is created, when I check my email, then I receive a confirmation message.",
+    "Given I try to register with an email that already exists, when I submit the form, then I see an error message indicating the email is already in use."
+  ],
+  "as_a": "new user",
+  "dependencies": [],
+  "epic": "User Authentication & Account Management",
+  "i_want": "to create an account using my email and a password",
+  "id": "US-001",
+  "priority": "high",
+  "so_that": "I can track my orders and save my information for future purchases.",
+  "story_points": 5,
+  "title": "User Registration"
+}
+
+#### US-002 — User Login
+_US-002 User Login acceptance criteria needed to validate auth flow fixes._
+
+{
+  "acceptance_criteria": [
+    "Given I am on the login page, when I enter my correct credentials, then I am successfully logged in and redirected to the homepage.",
+    "Given I am on the login page, when I enter incorrect credentials, then I see an error message and remain on the login page."
+  ],
+  "as_a": "registered user",
+  "dependencies": [],
+  "epic": "User Authentication & Account Management",
+  "i_want": "to log in to my account",
+  "id": "US-002",
+  "priority": "critical",
+  "so_that": "I can access my profile and order history.",
+  "story_points": 3,
+  "title": "User Login"
+}
+
+#### Page: Register
+_Register page UI spec directly relevant to fixing the registration page bug._
+
+{
+  "auth_required": false,
+  "components": [
+    "SiteHeader",
+    "Footer",
+    "Input",
+    "Button",
+    "Alert"
+  ],
+  "description": "New user account creation page.",
+  "layout": "MinimalLayout",
+  "name": "Register",
+  "related_stories": [
+    "US-001",
+    "US-012",
+    "US-014",
+    "US-015"
+  ],
+  "responsive_notes": "Centered card layout. Full width on mobile with slight padding.",
+  "route": "/register"
+}
+
+#### Page: Login
+_Login page UI spec directly relevant to auth flow fixes._
+
+{
+  "auth_required": false,
+  "components": [
+    "SiteHeader",
+    "Footer",
+    "Input",
+    "Button",
+    "Alert"
+  ],
+  "description": "User authentication page.",
+  "layout": "MinimalLayout",
+  "name": "Login",
+  "related_stories": [
+    "US-002",
+    "US-012",
+    "US-013",
+    "US-014",
+    "US-015"
+  ],
+  "responsive_notes": "Centered card layout. Full width on mobile with slight padding.",
+  "route": "/login"
+}
+
+#### Technology Stack
+_Tech stack summary provides context on versions and tools used in the frontend._
+
+Tech stack: backend=FastAPI 0.111; database=PostgreSQL 16; orm=SQLAlchemy 2.0; frontend=React 18; language=Python 3.12; hosting=Docker Compose 2.27; payment=Stripe latest; web_server=Nginx 1.25; migrations=Alembic 1.13
+
+#### Page: Checkout
+_Checkout page spec is relevant context given QA findings around checkout flow._
+
+Multi-step checkout flow including shipping, payment via Stripe Elements, and confirmation.
+
+#### API: POST /api/v1/checkout/payment-intent
+_POST /api/v1/checkout/payment-intent contract relevant to Stripe checkout frontend fixes._
+
+Create a Stripe PaymentIntent for the current cart
+
+#### API: POST /api/v1/checkout/confirm
+_POST /api/v1/checkout/confirm contract relevant to checkout flow fixes._
+
+Confirm payment, create order, send confirmation email
+
+#### US-013 — Session Continuity
+_US-013 Session Continuity is relevant to the JWT refresh token frontend implementation._
+
+As a logged-in user, I want my session to persist across page refreshes and new tabs so that I don't have to log in repeatedly.
+
+#### US-011 — Guest Checkout
+_US-011 Guest Checkout acceptance criteria relevant to checkout flow testing._
+
+As a shopper, I want to complete my purchase without creating an account so that I can check out quickly and easily.
+
+#### API: POST /api/v1/auth/logout
+_POST /api/v1/auth/logout contract needed for complete auth flow context._
+
+Revoke refresh token and invalidate session
+
+#### Non-Functional Requirements (6)
+_Non-functional requirements (performance, security, accessibility) provide acceptance criteria context for testing._
+
+NFR set: performance; security; security; accessibility; reliability; usability
+
+#### US-015 — Keyboard Accessibility
+_US-015 Keyboard Accessibility is a testing concern for the frontend_dev in testing stage._
+
+As a keyboard-only user, I want to navigate and interact with all site features using only my keyboard so that I can use the application without a mouse.
+
+#### US-014 — System Feedback States
+_US-014 System Feedback States relevant to frontend error handling fixes identified by QA._
+
+As a user, I want to see loading, empty, and error states for dynamic content so that I understand the system's status and am not left guessing.
+
+### Also available (Read a specific section on demand only if the essentials above don't cover it)
+- Development Guidelines
+- code_reviewer output
+
+> The `docs/` folder in your workspace mirrors the upstream phase outputs (PRD, sprint plan, architecture decision doc). The structured essentials you need are inline above. **Do NOT bulk-read the `docs/` folder** — open at most one specific section, and only if something inline is genuinely missing.
+
 # PROJECT INTENT (standing context — applies to every agent)
 
 The charter below states the project's high-level intent and invariants. Honour it above task-specific guidance, except where a human gate decision (approve/revise/reject) directs otherwise.

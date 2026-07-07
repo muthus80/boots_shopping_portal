@@ -81,30 +81,12 @@ INSERT INTO product_variants (id, product_id, name, sku, size, color, material, 
 ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
--- users  (demo users — no hashed_password column here; handled by seed.py)
--- Note: the test.user@demo.local login row is inserted by seed.py.
--- Additional demo users below use a stable pre-computed bcrypt hash of
--- 'DemoPass123!' so reviewers can log in with those accounts too.
+-- users  (demo users)
+-- NOTE: hashed_password is NOT emitted here as a literal hash value.
+--       All user rows (test login user + demo users alice/bob/carol) are
+--       inserted by seed.py, which calls app.core.security.hash_password()
+--       at seed-time to produce valid bcrypt hashes from known plaintexts.
 -- ---------------------------------------------------------------------------
-INSERT INTO users (id, email, hashed_password, full_name, is_active, is_superuser, created_at, updated_at) VALUES
-  ('00000000-0000-0000-0000-000000000401',
-   'alice.johnson@demo.local',
-   '$2b$12$9iB.7Xxp6./wWZVTZK0OCuu6GXIqfopX5UgXLd2mzkN/.OMCre0vm',
-   'Alice Johnson', true, false,
-   '2026-01-15 08:00:00+00', '2026-01-15 08:00:00+00'),
-
-  ('00000000-0000-0000-0000-000000000402',
-   'bob.smith@demo.local',
-   '$2b$12$9iB.7Xxp6./wWZVTZK0OCuu6GXIqfopX5UgXLd2mzkN/.OMCre0vm',
-   'Bob Smith', true, false,
-   '2026-01-16 09:30:00+00', '2026-01-16 09:30:00+00'),
-
-  ('00000000-0000-0000-0000-000000000403',
-   'carol.white@demo.local',
-   '$2b$12$9iB.7Xxp6./wWZVTZK0OCuu6GXIqfopX5UgXLd2mzkN/.OMCre0vm',
-   'Carol White', true, false,
-   '2026-01-17 10:00:00+00', '2026-01-17 10:00:00+00')
-ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- carts  (FK → users; also one guest/anonymous cart)
