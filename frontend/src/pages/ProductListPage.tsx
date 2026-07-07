@@ -5,6 +5,7 @@ import { getProducts, PaginatedProducts } from '../api/products';
 import { getCategories } from '../api/categories';
 import { ProductCard } from '../components/products/ProductCard';
 import { CategoryGrid } from '../components/products/CategoryGrid';
+import { FilterPanel } from '../components/products/FilterPanel';
 import type { Category, Product } from '../types/index';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -21,6 +22,13 @@ const ProductCardSkeleton: React.FC = () => (
   </div>
 );
 
+// ── URL helpers for multi-value params ────────────────────────────────────────
+
+/** Read all values of a repeated URL param (e.g. `?size=8&size=9` → ['8','9']). */
+function getMultiParam(params: URLSearchParams, key: string): string[] {
+  return params.getAll(key);
+}
+
 // ── ProductListPage ───────────────────────────────────────────────────────────
 
 export const ProductListPage: React.FC = () => {
@@ -34,6 +42,8 @@ export const ProductListPage: React.FC = () => {
   const categoryId = searchParams.get('category') || undefined;
   const search = searchParams.get('search') || undefined;
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const selectedSizes: string[] = getMultiParam(searchParams, 'size');
+  const selectedColors: string[] = getMultiParam(searchParams, 'color');
 
   // Fetch categories for heading resolution
   const { data: categories } = useQuery<Category[], Error>({
@@ -50,11 +60,20 @@ export const ProductListPage: React.FC = () => {
 
   // Fetch products
   const { data, isLoading, isError, error } = useQuery<PaginatedProducts, Error>({
-    queryKey: ['products', { categoryId, search, page }],
+    queryKey: ['products', { categoryId, search, page, sizes: selectedSizes, colors: selectedColors }],
     queryFn: () =>
-      getProducts({ category_id: categoryId, search, page, page_size: 12 }),
+      getProducts({
+        category_id: categoryId,
+        search,
+        page,
+        page_size: 12,
+        sizes: selectedSizes.length > 0 ? selectedSizes : undefined,
+        colors: selectedColors.length > 0 ? selectedColors : undefined,
+      }),
     placeholderData: keepPreviousData,
   });
+
+  // ── Handlers ─────────────────────────────────────────────────────────────────
 
   const handleSearchSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -81,6 +100,47 @@ export const ProductListPage: React.FC = () => {
     [searchParams, setSearchParams]
   );
 
+  const handleSizeChange = useCallback(
+    (size: string, checked: boolean) => {
+      const next = new URLSearchParams(searchParams);
+      // Remove all existing 'size' values then rebuild
+      next.delete('size');
+      const current = getMultiParam(searchParams, 'size');
+      const updated = checked
+        ? [...current, size]
+        : current.filter((s) => s !== size);
+      updated.forEach((s) => next.append('size', s));
+      next.set('page', '1');
+      setSearchParams(next);
+    },
+    [searchParams, setSearchParams]
+  );
+
+  const handleColorChange = useCallback(
+    (color: string, checked: boolean) => {
+      const next = new URLSearchParams(searchParams);
+      next.delete('color');
+      const current = getMultiParam(searchParams, 'color');
+      const updated = checked
+        ? [...current, color]
+        : current.filter((c) => c !== color);
+      updated.forEach((c) => next.append('color', c));
+      next.set('page', '1');
+      setSearchParams(next);
+    },
+    [searchParams, setSearchParams]
+  );
+
+  const handleClearAllFilters = useCallback(() => {
+    const next = new URLSearchParams(searchParams);
+    next.delete('size');
+    next.delete('color');
+    next.set('page', '1');
+    setSearchParams(next);
+  }, [searchParams, setSearchParams]);
+
+  // ── Derived state ─────────────────────────────────────────────────────────────
+
   const products: Product[] = data?.items ?? [];
   const totalPages: number = data?.total_pages ?? 1;
   const totalCount: number = data?.total ?? 0;
@@ -94,6 +154,9 @@ export const ProductListPage: React.FC = () => {
     : search
     ? `Search results for "${search}"`
     : 'All Boots';
+
+  // Show filter panel when browsing a category or a search (not the "all" default homepage)
+  const showFilterPanel = !!(categoryId || search || selectedSizes.length > 0 || selectedColors.length > 0);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -156,133 +219,166 @@ export const ProductListPage: React.FC = () => {
         </div>
       )}
 
-      {/* Results count */}
-      {(search || categoryId) && !isLoading && (
-        <p className="mb-4 text-sm text-gray-500">
-          {totalCount > 0
-            ? `${totalCount} result${totalCount !== 1 ? 's' : ''}`
-            : 'No results found for your search'}
-        </p>
-      )}
+      {/* Main content: filter sidebar + product grid */}
+      <div className={showFilterPanel ? 'flex gap-8 items-start' : undefined}>
 
-      {/* Loading state — skeleton grid */}
-      {isLoading && (
-        <div
-          className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4"
-          aria-busy="true"
-          aria-label="Loading products"
-        >
-          {Array.from({ length: 8 }).map((_, i) => (
-            <ProductCardSkeleton key={i} />
-          ))}
+        {/* Filter panel — sidebar */}
+        {showFilterPanel && (
+          <div className="hidden w-60 shrink-0 lg:block">
+            <FilterPanel
+              selectedSizes={selectedSizes}
+              selectedColors={selectedColors}
+              onSizeChange={handleSizeChange}
+              onColorChange={handleColorChange}
+              onClearAll={handleClearAllFilters}
+            />
+          </div>
+        )}
+
+        {/* Right column: results + grid + pagination */}
+        <div className="min-w-0 flex-1">
+          {/* Results count */}
+          {(search || categoryId || selectedSizes.length > 0 || selectedColors.length > 0) && !isLoading && (
+            <p className="mb-4 text-sm text-gray-500">
+              {totalCount > 0
+                ? `${totalCount} result${totalCount !== 1 ? 's' : ''}`
+                : 'No results found for your search'}
+            </p>
+          )}
+
+          {/* Mobile filter panel (inline, above grid) */}
+          {showFilterPanel && (
+            <div className="mb-6 lg:hidden">
+              <FilterPanel
+                selectedSizes={selectedSizes}
+                selectedColors={selectedColors}
+                onSizeChange={handleSizeChange}
+                onColorChange={handleColorChange}
+                onClearAll={handleClearAllFilters}
+              />
+            </div>
+          )}
+
+          {/* Loading state — skeleton grid */}
+          {isLoading && (
+            <div
+              className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4"
+              aria-busy="true"
+              aria-label="Loading products"
+            >
+              {Array.from({ length: 8 }).map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
+            </div>
+          )}
+
+          {/* Error state */}
+          {isError && (
+            <div
+              role="alert"
+              className="rounded-xl border border-red-200 bg-red-50 p-8 text-center"
+            >
+              <p className="mb-1 text-base font-semibold text-red-700">
+                Something went wrong, please try again
+              </p>
+              <p className="text-sm text-red-500">
+                {error instanceof Error ? error.message : 'An unexpected error occurred.'}
+              </p>
+            </div>
+          )}
+
+          {/* Empty state */}
+          {!isLoading && !isError && products.length === 0 && (search || categoryId || selectedSizes.length > 0 || selectedColors.length > 0) && (
+            <div className="py-16 text-center">
+              <span className="text-5xl" aria-hidden="true">👢</span>
+              <p className="mt-4 text-lg font-semibold text-gray-700">
+                {search ? 'No results found for your search' : 'No products found'}
+              </p>
+              <p className="mt-1 text-sm text-gray-500">
+                Try adjusting your filters or browse a different category.
+              </p>
+            </div>
+          )}
+
+          {/* Product grid */}
+          {!isLoading && !isError && products.length > 0 && (
+            <div
+              className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4"
+              aria-label="Product grid"
+            >
+              {products.map((product: Product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+
+          {/* Pagination */}
+          {!isLoading && !isError && totalPages > 1 && (
+            <nav
+              aria-label="Product pagination"
+              className="mt-12 flex items-center justify-center gap-2"
+            >
+              <button
+                onClick={() => handlePageChange(page - 1)}
+                disabled={page <= 1}
+                aria-label="Previous page"
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-900"
+              >
+                Previous
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter(
+                  (p) =>
+                    p === 1 ||
+                    p === totalPages ||
+                    (p >= page - 2 && p <= page + 2)
+                )
+                .reduce<(number | 'ellipsis')[]>((acc, p, idx, arr) => {
+                  if (idx > 0 && p - (arr[idx - 1] as number) > 1) {
+                    acc.push('ellipsis');
+                  }
+                  acc.push(p);
+                  return acc;
+                }, [])
+                .map((item, idx) =>
+                  item === 'ellipsis' ? (
+                    <span
+                      key={`ellipsis-${idx}`}
+                      className="px-1 text-sm text-gray-400"
+                      aria-hidden="true"
+                    >
+                      &hellip;
+                    </span>
+                  ) : (
+                    <button
+                      key={item}
+                      onClick={() => handlePageChange(item as number)}
+                      aria-label={`Page ${item}`}
+                      aria-current={item === page ? 'page' : undefined}
+                      className={`rounded-lg border px-3.5 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+                        item === page
+                          ? 'border-gray-900 bg-gray-900 text-white'
+                          : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
+
+              <button
+                onClick={() => handlePageChange(page + 1)}
+                disabled={page >= totalPages}
+                aria-label="Next page"
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-900"
+              >
+                Next
+              </button>
+            </nav>
+          )}
         </div>
-      )}
-
-      {/* Error state */}
-      {isError && (
-        <div
-          role="alert"
-          className="rounded-xl border border-red-200 bg-red-50 p-8 text-center"
-        >
-          <p className="mb-1 text-base font-semibold text-red-700">
-            Something went wrong, please try again
-          </p>
-          <p className="text-sm text-red-500">
-            {error instanceof Error ? error.message : 'An unexpected error occurred.'}
-          </p>
-        </div>
-      )}
-
-      {/* Empty state */}
-      {!isLoading && !isError && products.length === 0 && (search || categoryId) && (
-        <div className="py-16 text-center">
-          <span className="text-5xl" aria-hidden="true">👢</span>
-          <p className="mt-4 text-lg font-semibold text-gray-700">
-            {search ? 'No results found for your search' : 'No products found'}
-          </p>
-          <p className="mt-1 text-sm text-gray-500">
-            Try adjusting your search or browse a different category.
-          </p>
-        </div>
-      )}
-
-      {/* Product grid */}
-      {!isLoading && !isError && products.length > 0 && (
-        <div
-          className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4"
-          aria-label="Product grid"
-        >
-          {products.map((product: Product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      )}
-
-      {/* Pagination */}
-      {!isLoading && !isError && totalPages > 1 && (
-        <nav
-          aria-label="Product pagination"
-          className="mt-12 flex items-center justify-center gap-2"
-        >
-          <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page <= 1}
-            aria-label="Previous page"
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-900"
-          >
-            Previous
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => i + 1)
-            .filter(
-              (p) =>
-                p === 1 ||
-                p === totalPages ||
-                (p >= page - 2 && p <= page + 2)
-            )
-            .reduce<(number | 'ellipsis')[]>((acc, p, idx, arr) => {
-              if (idx > 0 && p - (arr[idx - 1] as number) > 1) {
-                acc.push('ellipsis');
-              }
-              acc.push(p);
-              return acc;
-            }, [])
-            .map((item, idx) =>
-              item === 'ellipsis' ? (
-                <span
-                  key={`ellipsis-${idx}`}
-                  className="px-1 text-sm text-gray-400"
-                  aria-hidden="true"
-                >
-                  &hellip;
-                </span>
-              ) : (
-                <button
-                  key={item}
-                  onClick={() => handlePageChange(item as number)}
-                  aria-label={`Page ${item}`}
-                  aria-current={item === page ? 'page' : undefined}
-                  className={`rounded-lg border px-3.5 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 ${
-                    item === page
-                      ? 'border-gray-900 bg-gray-900 text-white'
-                      : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  {item}
-                </button>
-              )
-            )}
-
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page >= totalPages}
-            aria-label="Next page"
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-900"
-          >
-            Next
-          </button>
-        </nav>
-      )}
+      </div>
     </div>
   );
 };

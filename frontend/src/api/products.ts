@@ -8,6 +8,10 @@ export interface GetProductsParams {
   page_size?: number;
   sort_by?: string;
   sort_order?: 'asc' | 'desc';
+  /** Filter by one or more sizes (e.g. ['8', '9']). Serialised as repeated `size` params. */
+  sizes?: string[];
+  /** Filter by one or more colors (e.g. ['black', 'brown']). Serialised as repeated `color` params. */
+  colors?: string[];
 }
 
 export interface PaginatedProducts {
@@ -32,7 +36,27 @@ export interface CreateReviewPayload {
 }
 
 export async function getProducts(params?: GetProductsParams): Promise<PaginatedProducts> {
-  const response = await apiClient.get<PaginatedProducts>('/api/v1/products', { params });
+  // Axios serialises arrays as `key[0]=v0&key[1]=v1` by default, but the
+  // backend expects repeated params: `size=8&size=9`.  We build URLSearchParams
+  // manually for the array fields and pass the rest normally.
+  const { sizes, colors, ...rest } = params ?? {};
+
+  const urlParams = new URLSearchParams();
+
+  // Append scalar params
+  Object.entries(rest).forEach(([k, v]) => {
+    if (v !== undefined && v !== null) {
+      urlParams.append(k, String(v));
+    }
+  });
+
+  // Append repeated params
+  sizes?.forEach((s) => urlParams.append('size', s));
+  colors?.forEach((c) => urlParams.append('color', c));
+
+  const response = await apiClient.get<PaginatedProducts>(
+    `/api/v1/products?${urlParams.toString()}`
+  );
   return response.data;
 }
 
