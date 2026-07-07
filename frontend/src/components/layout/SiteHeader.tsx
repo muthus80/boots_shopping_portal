@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../stores/authStore';
 import { getCategories } from '../../api/categories';
+import { useCartCount } from '../../hooks/useCartCount';
 import type { Category } from '../../types/index';
 
 // ── Mobile-menu toggle icon ──────────────────────────────────────────────────
@@ -251,6 +252,7 @@ const AccountActions: React.FC<AccountActionsProps> = ({ onLinkClick }) => {
 
 export const SiteHeader: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const cartCount = useCartCount();
 
   const closeMobileMenu = (): void => setMobileMenuOpen(false);
 
@@ -291,10 +293,19 @@ export const SiteHeader: React.FC = () => {
             {/* Cart */}
             <Link
               to="/cart"
-              aria-label="Shopping cart"
-              className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors"
+              aria-label={cartCount > 0 ? `Shopping cart, ${cartCount} item${cartCount === 1 ? '' : 's'}` : 'Shopping cart'}
+              className="relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors"
             >
               <CartIcon />
+              {cartCount > 0 && (
+                <span
+                  aria-hidden="true"
+                  data-testid="cart-badge"
+                  className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-900 text-[10px] font-bold leading-none text-white"
+                >
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
               <span className="hidden lg:inline">Cart</span>
             </Link>
 
