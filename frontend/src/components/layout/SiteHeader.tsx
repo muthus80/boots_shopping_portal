@@ -97,7 +97,7 @@ const SearchBar: React.FC = () => {
     e.preventDefault();
     const trimmed = query.trim();
     if (trimmed) {
-      navigate(`/products?search=${encodeURIComponent(trimmed)}`);
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
       setQuery('');
     }
   };

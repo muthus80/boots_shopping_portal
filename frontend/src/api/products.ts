@@ -18,6 +18,12 @@ export interface PaginatedProducts {
   total_pages: number;
 }
 
+export interface SearchProductsParams {
+  q: string;
+  page?: number;
+  page_size?: number;
+}
+
 export interface CreateReviewPayload {
   product_id: string;
   rating: number;
@@ -32,6 +38,11 @@ export async function getProducts(params?: GetProductsParams): Promise<Paginated
 
 export async function getProduct(productId: string): Promise<Product> {
   const response = await apiClient.get<Product>(`/api/v1/products/${productId}`);
+  return response.data;
+}
+
+export async function searchProducts(params: SearchProductsParams): Promise<PaginatedProducts> {
+  const response = await apiClient.get<PaginatedProducts>('/api/v1/products/search', { params });
   return response.data;
 }
 
