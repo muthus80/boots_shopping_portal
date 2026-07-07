@@ -24,7 +24,7 @@ class CartItemRead(BaseModel):
 
 class CartRead(BaseModel):
     id: UUID
-    user_id: UUID
+    user_id: Optional[UUID] = None
     items: list[CartItemRead] = Field(default_factory=list)
     total: float
     item_count: int

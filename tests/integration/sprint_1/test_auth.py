@@ -4,6 +4,7 @@ Each test method covers one caller path and asserts DB state, not just HTTP code
 """
 from __future__ import annotations
 
+import asyncio
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
@@ -184,6 +185,8 @@ class TestUserLogin:
         )
         assert login_resp.status_code == 200
         original_refresh = login_resp.json()["refresh_token"]
+        
+        await asyncio.sleep(1)   # distinct iat → distinct access token        
 
         refresh_resp = await async_client.post(
             "/api/v1/auth/refresh",
