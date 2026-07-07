@@ -123,6 +123,21 @@ class AccountService:
 
         return OrderHistoryResponse(orders=summaries, total=total, message=message)
 
+    async def get_order(self, user_id: UUID, order_id: str) -> Optional["Order"]:
+        """Return a single order belonging to the authenticated user."""
+        try:
+            from uuid import UUID as _UUID
+            order_uuid = _UUID(order_id)
+        except (ValueError, AttributeError):
+            return None
+
+        result = await self.db.execute(
+            select(Order)
+            .options(selectinload(Order.items))
+            .where(Order.id == order_uuid, Order.user_id == user_id)
+        )
+        return result.scalar_one_or_none()
+
     async def deactivate_account(self, user_id: UUID) -> None:
         result = await self.db.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
