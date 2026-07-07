@@ -1,446 +1,913 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+/**
+ * CheckoutPage — T-030 / US-011
+ *
+ * 5-step-or-fewer guest checkout flow (ADR-003 / NFR-usability):
+ *   Step 1 — Identity     (guest email OR "you're signed in" banner)
+ *   Step 2 — Shipping     (react-hook-form validated address form)
+ *   Step 3 — Payment      (Stripe Elements — card data never on our servers)
+ *   Done   — Confirmation (order summary)
+ *
+ * Authenticated users skip Step 1 automatically.
+ *
+ * PCI compliance: the Stripe CardElement handles raw card data inside an
+ * iframe; only the resulting payment_intent_id ever reaches our backend.
+ *
+ * Route: /checkout  (NOT protected — allows guest access per US-011)
+ */
+
+import React, { useState, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import {
   Elements,
   CardElement,
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
-import { loadStripe, StripeCardElementOptions } from '@stripe/stripe-js';
-import { createPaymentIntent, confirmOrder } from '../api/checkout';
+import { loadStripe } from '@stripe/stripe-js';
+import type { StripeCardElementOptions } from '@stripe/stripe-js';
+import { useQuery } from '@tanstack/react-query';
 import { getCart } from '../api/cart';
+import {
+  createPaymentIntent,
+  confirmOrder,
+} from '../api/checkout';
+import type { ConfirmOrderResponse, ShippingAddress } from '../api/checkout';
 import { useAuth } from '../stores/authStore';
-import { Cart, Order } from '../types/index';
+import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { ErrorMessage } from '../components/common/ErrorMessage';
+
+// ── Stripe init ───────────────────────────────────────────────────────────────
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
 
 const CARD_ELEMENT_OPTIONS: StripeCardElementOptions = {
   style: {
     base: {
-      color: '#32325d',
-      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+      color: '#111827',
+      fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif',
       fontSmoothing: 'antialiased',
       fontSize: '16px',
-      '::placeholder': {
-        color: '#aab7c4',
-      },
+      '::placeholder': { color: '#9ca3af' },
     },
-    invalid: {
-      color: '#fa755a',
-      iconColor: '#fa755a',
-    },
+    invalid: { color: '#dc2626', iconColor: '#dc2626' },
   },
 };
 
-interface ShippingAddress {
-  full_name: string;
-  address_line1: string;
-  address_line2: string;
+// ── Step tracker ──────────────────────────────────────────────────────────────
+
+type CheckoutStep = 'identity' | 'shipping' | 'payment' | 'confirmation';
+
+// ── Form types ────────────────────────────────────────────────────────────────
+
+interface IdentityFormValues {
+  guest_email: string;
+}
+
+interface ShippingFormValues {
+  shipping_name: string;
+  line1: string;
   city: string;
   state: string;
   postal_code: string;
   country: string;
 }
 
-interface CheckoutFormProps {
-  cart: Cart;
-  onOrderConfirmed: (order: Order) => void;
+// ── StepIndicator ─────────────────────────────────────────────────────────────
+
+interface StepIndicatorProps {
+  current: CheckoutStep;
+  isGuest: boolean;
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ cart, onOrderConfirmed }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const { user } = useAuth();
+const STEP_LABELS: { key: CheckoutStep; label: string }[] = [
+  { key: 'identity', label: 'Identity' },
+  { key: 'shipping', label: 'Shipping' },
+  { key: 'payment', label: 'Payment' },
+  { key: 'confirmation', label: 'Confirmation' },
+];
 
-  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
-    full_name: '',
-    address_line1: '',
-    address_line2: '',
-    city: '',
-    state: '',
-    postal_code: '',
-    country: 'US',
-  });
+const STEP_ORDER: CheckoutStep[] = ['identity', 'shipping', 'payment', 'confirmation'];
 
-  const [clientSecret, setClientSecret] = useState<string>('');
-  const [paymentIntentId, setPaymentIntentId] = useState<string>('');
-  const [isLoadingIntent, setIsLoadingIntent] = useState<boolean>(false);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [intentError, setIntentError] = useState<string | null>(null);
+const StepIndicator: React.FC<StepIndicatorProps> = ({ current, isGuest }) => {
+  const visibleSteps = isGuest
+    ? STEP_LABELS
+    : STEP_LABELS.filter((s) => s.key !== 'identity');
 
-  const totalAmount = cart.items.reduce((sum, item) => {
-    return sum + item.quantity * item.unit_price;
-  }, 0);
+  const currentIdx = STEP_ORDER.indexOf(current);
 
-  useEffect(() => {
-    const fetchPaymentIntent = async () => {
-      setIsLoadingIntent(true);
-      setIntentError(null);
-      try {
-        const data = await createPaymentIntent({ cart_id: cart.id });
-        setClientSecret(data.client_secret);
-        setPaymentIntentId(data.payment_intent_id);
-      } catch (err: any) {
-        setIntentError(err?.message || 'Failed to initialize payment. Please try again.');
-      } finally {
-        setIsLoadingIntent(false);
-      }
-    };
+  return (
+    <nav aria-label="Checkout progress" className="mb-8">
+      <ol className="flex items-center justify-center gap-0">
+        {visibleSteps.map((step, i) => {
+          const stepIdx = STEP_ORDER.indexOf(step.key);
+          const isActive = step.key === current;
+          const isCompleted = stepIdx < currentIdx;
 
-    if (cart && cart.items.length > 0) {
-      fetchPaymentIntent();
-    }
-  }, [cart]);
+          return (
+            <li key={step.key} className="flex items-center">
+              {i > 0 && (
+                <div
+                  className={`h-0.5 w-8 sm:w-16 ${isCompleted ? 'bg-gray-900' : 'bg-gray-200'}`}
+                  aria-hidden="true"
+                />
+              )}
+              <div className="flex flex-col items-center gap-1">
+                <span
+                  aria-current={isActive ? 'step' : undefined}
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-gray-900 text-white'
+                      : isCompleted
+                      ? 'bg-gray-900 text-white'
+                      : 'bg-gray-200 text-gray-500'
+                  }`}
+                >
+                  {isCompleted ? '✓' : i + 1}
+                </span>
+                <span
+                  className={`hidden sm:block text-xs font-medium ${
+                    isActive ? 'text-gray-900' : 'text-gray-400'
+                  }`}
+                >
+                  {step.label}
+                </span>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+};
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setShippingAddress((prev) => ({ ...prev, [name]: value }));
+// ── IdentityStep ──────────────────────────────────────────────────────────────
+
+interface IdentityStepProps {
+  onSubmit: (email: string) => void;
+  onSignIn: () => void;
+}
+
+const IdentityStep: React.FC<IdentityStepProps> = ({ onSubmit, onSignIn }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IdentityFormValues>({ mode: 'onBlur' });
+
+  const handleFormSubmit = (data: IdentityFormValues) => {
+    onSubmit(data.guest_email.trim());
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  return (
+    <section aria-labelledby="identity-heading">
+      <h2
+        id="identity-heading"
+        className="mb-2 text-xl font-bold text-gray-900"
+      >
+        How would you like to check out?
+      </h2>
+      <p className="mb-6 text-sm text-gray-500">
+        Sign in for a faster experience, or continue as a guest.
+      </p>
 
-    if (!stripe || !elements) {
-      return;
-    }
+      {/* Sign-in option */}
+      <div className="mb-4 rounded-xl border border-gray-200 bg-gray-50 p-5">
+        <p className="mb-3 text-sm font-semibold text-gray-900">
+          Already have an account?
+        </p>
+        <button
+          type="button"
+          onClick={onSignIn}
+          className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+        >
+          Sign In
+        </button>
+      </div>
 
-    if (!clientSecret) {
-      setError('Payment not initialized. Please refresh and try again.');
-      return;
-    }
+      {/* Guest option */}
+      <div className="rounded-xl border border-gray-200 p-5">
+        <p className="mb-3 text-sm font-semibold text-gray-900">
+          Continue as guest
+        </p>
+        <form
+          onSubmit={handleSubmit(handleFormSubmit)}
+          noValidate
+          aria-label="Guest checkout identity form"
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="guest_email"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
+              Email address <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id="guest_email"
+              type="email"
+              autoComplete="email"
+              aria-required="true"
+              aria-describedby={errors.guest_email ? 'guest-email-error' : undefined}
+              className={`w-full rounded-lg border px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+                errors.guest_email
+                  ? 'border-red-400 focus:border-red-400'
+                  : 'border-gray-300 focus:border-gray-900'
+              }`}
+              placeholder="you@example.com"
+              {...register('guest_email', {
+                required: 'Email address is required.',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Please enter a valid email address.',
+                },
+              })}
+            />
+            {errors.guest_email && (
+              <p
+                id="guest-email-error"
+                role="alert"
+                className="mt-1 text-xs text-red-600"
+              >
+                {errors.guest_email.message}
+              </p>
+            )}
+          </div>
 
-    setIsProcessing(true);
-    setError(null);
+          <p className="mb-4 text-xs text-gray-500">
+            Your order confirmation will be sent to this address.
+          </p>
+
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+          >
+            Continue as Guest
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+};
+
+// ── ShippingStep ──────────────────────────────────────────────────────────────
+
+interface ShippingStepProps {
+  onSubmit: (values: ShippingFormValues) => void;
+  onBack?: () => void;
+  defaultValues?: Partial<ShippingFormValues>;
+}
+
+const ShippingStep: React.FC<ShippingStepProps> = ({
+  onSubmit,
+  onBack,
+  defaultValues,
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ShippingFormValues>({
+    mode: 'onBlur',
+    defaultValues: { country: 'US', ...defaultValues },
+  });
+
+  return (
+    <section aria-labelledby="shipping-heading">
+      <h2
+        id="shipping-heading"
+        className="mb-6 text-xl font-bold text-gray-900"
+      >
+        Shipping address
+      </h2>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        aria-label="Shipping address form"
+      >
+        {/* Full name */}
+        <div className="mb-4">
+          <label
+            htmlFor="shipping_name"
+            className="mb-1.5 block text-sm font-medium text-gray-700"
+          >
+            Full name <span aria-hidden="true">*</span>
+          </label>
+          <input
+            id="shipping_name"
+            type="text"
+            autoComplete="name"
+            aria-required="true"
+            aria-describedby={errors.shipping_name ? 'shipping-name-error' : undefined}
+            placeholder="Jane Smith"
+            className={`w-full rounded-lg border px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+              errors.shipping_name
+                ? 'border-red-400 focus:border-red-400'
+                : 'border-gray-300 focus:border-gray-900'
+            }`}
+            {...register('shipping_name', {
+              required: 'Full name is required.',
+              minLength: { value: 2, message: 'Name must be at least 2 characters.' },
+            })}
+          />
+          {errors.shipping_name && (
+            <p id="shipping-name-error" role="alert" className="mt-1 text-xs text-red-600">
+              {errors.shipping_name.message}
+            </p>
+          )}
+        </div>
+
+        {/* Address line 1 */}
+        <div className="mb-4">
+          <label
+            htmlFor="line1"
+            className="mb-1.5 block text-sm font-medium text-gray-700"
+          >
+            Address <span aria-hidden="true">*</span>
+          </label>
+          <input
+            id="line1"
+            type="text"
+            autoComplete="street-address"
+            aria-required="true"
+            aria-describedby={errors.line1 ? 'line1-error' : undefined}
+            placeholder="123 Main St"
+            className={`w-full rounded-lg border px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+              errors.line1
+                ? 'border-red-400 focus:border-red-400'
+                : 'border-gray-300 focus:border-gray-900'
+            }`}
+            {...register('line1', { required: 'Street address is required.' })}
+          />
+          {errors.line1 && (
+            <p id="line1-error" role="alert" className="mt-1 text-xs text-red-600">
+              {errors.line1.message}
+            </p>
+          )}
+        </div>
+
+        {/* City + State row */}
+        <div className="mb-4 grid grid-cols-2 gap-4">
+          <div>
+            <label
+              htmlFor="city"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
+              City <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id="city"
+              type="text"
+              autoComplete="address-level2"
+              aria-required="true"
+              aria-describedby={errors.city ? 'city-error' : undefined}
+              placeholder="New York"
+              className={`w-full rounded-lg border px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+                errors.city
+                  ? 'border-red-400 focus:border-red-400'
+                  : 'border-gray-300 focus:border-gray-900'
+              }`}
+              {...register('city', { required: 'City is required.' })}
+            />
+            {errors.city && (
+              <p id="city-error" role="alert" className="mt-1 text-xs text-red-600">
+                {errors.city.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="state"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
+              State / Region <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id="state"
+              type="text"
+              autoComplete="address-level1"
+              aria-required="true"
+              aria-describedby={errors.state ? 'state-error' : undefined}
+              placeholder="NY"
+              className={`w-full rounded-lg border px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+                errors.state
+                  ? 'border-red-400 focus:border-red-400'
+                  : 'border-gray-300 focus:border-gray-900'
+              }`}
+              {...register('state', { required: 'State or region is required.' })}
+            />
+            {errors.state && (
+              <p id="state-error" role="alert" className="mt-1 text-xs text-red-600">
+                {errors.state.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Postal code + Country row */}
+        <div className="mb-6 grid grid-cols-2 gap-4">
+          <div>
+            <label
+              htmlFor="postal_code"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
+              Postal code <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id="postal_code"
+              type="text"
+              autoComplete="postal-code"
+              aria-required="true"
+              aria-describedby={errors.postal_code ? 'postal-code-error' : undefined}
+              placeholder="10001"
+              className={`w-full rounded-lg border px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 ${
+                errors.postal_code
+                  ? 'border-red-400 focus:border-red-400'
+                  : 'border-gray-300 focus:border-gray-900'
+              }`}
+              {...register('postal_code', { required: 'Postal code is required.' })}
+            />
+            {errors.postal_code && (
+              <p id="postal-code-error" role="alert" className="mt-1 text-xs text-red-600">
+                {errors.postal_code.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="country"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
+              Country <span aria-hidden="true">*</span>
+            </label>
+            <select
+              id="country"
+              autoComplete="country"
+              aria-required="true"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900"
+              {...register('country', { required: 'Country is required.' })}
+            >
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="GB">United Kingdom</option>
+              <option value="AU">Australia</option>
+              <option value="DE">Germany</option>
+              <option value="FR">France</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900"
+            >
+              ← Back
+            </button>
+          )}
+          <button
+            type="submit"
+            className="flex-1 rounded-lg bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 sm:flex-none sm:min-w-[10rem]"
+          >
+            Continue to Payment →
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+};
+
+// ── PaymentStep (inner — needs Stripe context) ────────────────────────────────
+
+interface PaymentStepInnerProps {
+  guestEmail: string | null;
+  shipping: ShippingFormValues;
+  onBack: () => void;
+  onConfirmed: (order: ConfirmOrderResponse) => void;
+}
+
+const PaymentStepInner: React.FC<PaymentStepInnerProps> = ({
+  guestEmail,
+  shipping,
+  onBack,
+  onConfirmed,
+}) => {
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const [isCreatingIntent, setIsCreatingIntent] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [intentError, setIntentError] = useState<string | null>(null);
+
+  const handlePay = useCallback(async () => {
+    if (!stripe || !elements) return;
 
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
-      setError('Card element not found.');
-      setIsProcessing(false);
+      setPaymentError('Card input not found. Please refresh and try again.');
       return;
     }
 
-    const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement,
-        billing_details: {
-          name: shippingAddress.full_name,
-          email: user?.email,
+    setIsCreatingIntent(true);
+    setPaymentError(null);
+    setIntentError(null);
+
+    let clientSecret: string;
+    let paymentIntentId: string;
+
+    // Step A — create payment intent server-side
+    try {
+      const shippingAddress: ShippingAddress = {
+        line1: shipping.line1,
+        city: shipping.city,
+        state: shipping.state,
+        postal_code: shipping.postal_code,
+        country: shipping.country,
+      };
+
+      const intentPayload = {
+        shipping_name: shipping.shipping_name,
+        shipping_address: shippingAddress,
+        ...(guestEmail ? { guest_email: guestEmail } : {}),
+      };
+
+      const intentData = await createPaymentIntent(intentPayload);
+      clientSecret = intentData.client_secret;
+      paymentIntentId = intentData.payment_intent_id;
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : 'Failed to initialise payment. Please try again.';
+      setIntentError(msg);
+      setIsCreatingIntent(false);
+      return;
+    }
+
+    setIsCreatingIntent(false);
+    setIsProcessing(true);
+
+    // Step B — confirm card payment directly with Stripe
+    const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
+      clientSecret,
+      {
+        payment_method: {
+          card: cardElement,
+          billing_details: { name: shipping.shipping_name },
         },
-      },
-    });
+      }
+    );
 
     if (stripeError) {
-      setError(stripeError.message || 'Payment failed. Please try again.');
+      setPaymentError(stripeError.message ?? 'Payment failed. Please try again.');
       setIsProcessing(false);
       return;
     }
 
-    if (paymentIntent && paymentIntent.status === 'succeeded') {
-      try {
-        const order = await confirmOrder({
-          payment_intent_id: paymentIntentId,
-          cart_id: cart.id,
-          shipping_address: shippingAddress,
-        });
-        onOrderConfirmed(order);
-      } catch (err: any) {
-        setError(err?.message || 'Order confirmation failed. Please contact support.');
-      }
-    } else {
-      setError('Payment was not completed. Please try again.');
+    if (paymentIntent?.status !== 'succeeded') {
+      setPaymentError('Payment was not completed. Please try again.');
+      setIsProcessing(false);
+      return;
     }
 
-    setIsProcessing(false);
-  };
+    // Step C — confirm order server-side using only the payment_intent_id
+    try {
+      const order = await confirmOrder({ payment_intent_id: paymentIntentId });
+      onConfirmed(order);
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : 'Order confirmation failed. Please contact support.';
+      setPaymentError(msg);
+    } finally {
+      setIsProcessing(false);
+    }
+  }, [stripe, elements, guestEmail, shipping, onConfirmed]);
 
-  const isFormValid =
-    shippingAddress.full_name.trim() !== '' &&
-    shippingAddress.address_line1.trim() !== '' &&
-    shippingAddress.city.trim() !== '' &&
-    shippingAddress.state.trim() !== '' &&
-    shippingAddress.postal_code.trim() !== '' &&
-    shippingAddress.country.trim() !== '';
+  const isBusy = isCreatingIntent || isProcessing;
 
   return (
-    <form onSubmit={handleSubmit} className="checkout-form">
-      <div className="checkout-section">
-        <h2>Shipping Address</h2>
-        <div className="form-group">
-          <label htmlFor="full_name">Full Name *</label>
-          <input
-            id="full_name"
-            name="full_name"
-            type="text"
-            value={shippingAddress.full_name}
-            onChange={handleAddressChange}
-            required
-            placeholder="John Doe"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="address_line1">Address Line 1 *</label>
-          <input
-            id="address_line1"
-            name="address_line1"
-            type="text"
-            value={shippingAddress.address_line1}
-            onChange={handleAddressChange}
-            required
-            placeholder="123 Main St"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="address_line2">Address Line 2</label>
-          <input
-            id="address_line2"
-            name="address_line2"
-            type="text"
-            value={shippingAddress.address_line2}
-            onChange={handleAddressChange}
-            placeholder="Apt 4B"
-          />
-        </div>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="city">City *</label>
-            <input
-              id="city"
-              name="city"
-              type="text"
-              value={shippingAddress.city}
-              onChange={handleAddressChange}
-              required
-              placeholder="New York"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="state">State *</label>
-            <input
-              id="state"
-              name="state"
-              type="text"
-              value={shippingAddress.state}
-              onChange={handleAddressChange}
-              required
-              placeholder="NY"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="postal_code">Postal Code *</label>
-            <input
-              id="postal_code"
-              name="postal_code"
-              type="text"
-              value={shippingAddress.postal_code}
-              onChange={handleAddressChange}
-              required
-              placeholder="10001"
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="country">Country *</label>
-          <select
-            id="country"
-            name="country"
-            value={shippingAddress.country}
-            onChange={handleAddressChange}
-            required
-          >
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="GB">United Kingdom</option>
-            <option value="AU">Australia</option>
-            <option value="DE">Germany</option>
-            <option value="FR">France</option>
-          </select>
+    <section aria-labelledby="payment-heading">
+      <h2
+        id="payment-heading"
+        className="mb-2 text-xl font-bold text-gray-900"
+      >
+        Payment
+      </h2>
+      <p className="mb-6 text-sm text-gray-500">
+        Your card details are handled securely by Stripe. We never see your full card number.
+      </p>
+
+      {/* Shipping summary */}
+      <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+        <p className="font-semibold text-gray-900">{shipping.shipping_name}</p>
+        <p>{shipping.line1}</p>
+        <p>
+          {shipping.city}, {shipping.state} {shipping.postal_code}
+        </p>
+        <p>{shipping.country}</p>
+        {guestEmail && <p className="mt-1 text-gray-500">{guestEmail}</p>}
+      </div>
+
+      {/* Card element */}
+      <div className="mb-6">
+        <label className="mb-1.5 block text-sm font-medium text-gray-700">
+          Card details
+        </label>
+        <div
+          className="rounded-lg border border-gray-300 bg-white p-3 focus-within:border-gray-900 focus-within:ring-2 focus-within:ring-gray-900"
+          aria-label="Card details input"
+        >
+          <CardElement options={CARD_ELEMENT_OPTIONS} />
         </div>
       </div>
 
-      <div className="checkout-section">
-        <h2>Order Summary</h2>
-        <div className="order-items">
-          {cart.items.map((item) => (
-            <div key={item.id} className="order-item">
-              <span className="item-name">
-                {item.product?.name ?? 'Product'} — {item.variant?.size ?? ''}{' '}
-                {item.variant?.color ?? ''}
-              </span>
-              <span className="item-qty">x{item.quantity}</span>
-              <span className="item-price">
-                ${(item.quantity * item.unit_price).toFixed(2)}
-              </span>
-            </div>
-          ))}
+      {/* Errors */}
+      {intentError && (
+        <div role="alert" className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {intentError}
         </div>
-        <div className="order-total">
-          <strong>Total: ${totalAmount.toFixed(2)}</strong>
-        </div>
-      </div>
-
-      <div className="checkout-section">
-        <h2>Payment Details</h2>
-        {intentError && (
-          <div className="error-message" role="alert">
-            {intentError}
-          </div>
-        )}
-        {isLoadingIntent ? (
-          <div className="loading-message">Initializing payment...</div>
-        ) : (
-          <div className="card-element-wrapper">
-            <CardElement options={CARD_ELEMENT_OPTIONS} />
-          </div>
-        )}
-      </div>
-
-      {error && (
-        <div className="error-message" role="alert">
-          {error}
+      )}
+      {paymentError && (
+        <div role="alert" className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {paymentError}
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={!stripe || isProcessing || isLoadingIntent || !clientSecret || !isFormValid}
-        className="submit-button"
-      >
-        {isProcessing ? 'Processing...' : `Pay $${totalAmount.toFixed(2)}`}
-      </button>
-    </form>
+      {/* Actions */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={isBusy}
+          className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-gray-900"
+        >
+          ← Back
+        </button>
+        <button
+          type="button"
+          onClick={handlePay}
+          disabled={!stripe || isBusy}
+          aria-busy={isBusy}
+          className="flex-1 rounded-lg bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 sm:flex-none sm:min-w-[10rem]"
+        >
+          {isBusy ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" aria-hidden="true" />
+              {isCreatingIntent ? 'Preparing…' : 'Processing…'}
+            </span>
+          ) : (
+            'Pay Now'
+          )}
+        </button>
+      </div>
+    </section>
   );
 };
+
+// ── OrderConfirmation ─────────────────────────────────────────────────────────
 
 interface OrderConfirmationProps {
-  order: Order;
-  onContinueShopping: () => void;
+  order: ConfirmOrderResponse;
 }
 
-const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ order, onContinueShopping }) => {
+const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ order }) => {
+  const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(amount);
+
   return (
-    <div className="order-confirmation">
-      <div className="confirmation-icon">✓</div>
-      <h2>Order Confirmed!</h2>
-      <p>Thank you for your purchase. Your order has been placed successfully.</p>
-      <div className="order-details">
-        <p>
-          <strong>Order ID:</strong> {order.id}
-        </p>
-        <p>
-          <strong>Status:</strong> {order.status}
-        </p>
-        <p>
-          <strong>Total:</strong> ${parseFloat(String(order.total_amount)).toFixed(2)}
-        </p>
+    <section
+      aria-labelledby="confirmation-heading"
+      className="text-center"
+    >
+      <div
+        className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100"
+        aria-hidden="true"
+      >
+        <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
       </div>
-      <div className="order-items-summary">
-        <h3>Items Ordered</h3>
-        {order.items.map((item) => (
-          <div key={item.id} className="confirmation-item">
-            <span>Variant ID: {item.variant_id}</span>
-            <span>Qty: {item.quantity}</span>
-            <span>${parseFloat(String(item.unit_price)).toFixed(2)} each</span>
+
+      <h2
+        id="confirmation-heading"
+        className="mb-2 text-2xl font-bold text-gray-900"
+      >
+        Order Confirmed!
+      </h2>
+      <p className="mb-1 text-sm text-gray-600">
+        Thank you for your order. A confirmation email is on its way.
+      </p>
+      <p className="mb-6 text-sm font-semibold text-gray-700">
+        Order #{order.order_number}
+      </p>
+
+      {/* Items */}
+      {order.items.length > 0 && (
+        <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-left">
+          <h3 className="mb-3 text-sm font-bold text-gray-900">Items ordered</h3>
+          <ul className="space-y-2">
+            {order.items.map((item, i) => (
+              <li
+                key={i}
+                className="flex items-center justify-between text-sm text-gray-700"
+              >
+                <span>
+                  {item.product_name}
+                  {item.size && <span className="ml-1 text-gray-500">/ {item.size}</span>}
+                  {item.color && <span className="ml-1 text-gray-500">/ {item.color}</span>}
+                  <span className="ml-2 text-gray-400">×{item.quantity}</span>
+                </span>
+                <span className="font-medium">
+                  {formatCurrency(item.unit_price * item.quantity)}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-3 flex justify-between border-t border-gray-200 pt-3 text-sm font-bold text-gray-900">
+            <span>Total</span>
+            <span>{formatCurrency(order.total_amount)}</span>
           </div>
-        ))}
+        </div>
+      )}
+
+      {/* Shipping address */}
+      <div className="mb-8 rounded-xl border border-gray-200 bg-gray-50 p-4 text-left text-sm text-gray-700">
+        <h3 className="mb-1.5 text-sm font-bold text-gray-900">Shipping to</h3>
+        <p>{order.shipping_address.line1}</p>
+        <p>
+          {order.shipping_address.city}, {order.shipping_address.state}{' '}
+          {order.shipping_address.postal_code}
+        </p>
       </div>
-      <button onClick={onContinueShopping} className="continue-button">
+
+      <Link
+        to="/products"
+        className="inline-block rounded-lg bg-gray-900 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+      >
         Continue Shopping
-      </button>
-    </div>
+      </Link>
+    </section>
   );
 };
+
+// ── CheckoutPage ──────────────────────────────────────────────────────────────
 
 export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
-  const [cart, setCart] = useState<Cart | null>(null);
-  const [isLoadingCart, setIsLoadingCart] = useState<boolean>(true);
-  const [cartError, setCartError] = useState<string | null>(null);
-  const [confirmedOrder, setConfirmedOrder] = useState<Order | null>(null);
+  // Determine initial step — authenticated users skip identity
+  const initialStep: CheckoutStep = isAuthenticated ? 'shipping' : 'identity';
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/login', { replace: true });
-      return;
-    }
+  const [step, setStep] = useState<CheckoutStep>(initialStep);
+  const [guestEmail, setGuestEmail] = useState<string | null>(null);
+  const [shippingValues, setShippingValues] = useState<ShippingFormValues | null>(null);
+  const [confirmedOrder, setConfirmedOrder] = useState<ConfirmOrderResponse | null>(null);
 
-    const fetchCart = async () => {
-      setIsLoadingCart(true);
-      setCartError(null);
-      try {
-        const cartData = await getCart();
-        setCart(cartData);
-      } catch (err: any) {
-        setCartError(err?.message || 'Failed to load cart. Please try again.');
-      } finally {
-        setIsLoadingCart(false);
-      }
-    };
+  // Fetch cart to validate it is non-empty
+  const { data: cart, isLoading: cartLoading, isError: cartError, refetch } = useQuery({
+    queryKey: ['cart'],
+    queryFn: getCart,
+  });
 
-    fetchCart();
-  }, [user, navigate]);
+  // ── Event handlers ────────────────────────────────────────────────────────
 
-  const handleOrderConfirmed = (order: Order) => {
+  const handleIdentitySubmit = useCallback((email: string) => {
+    setGuestEmail(email);
+    setStep('shipping');
+  }, []);
+
+  const handleSignIn = useCallback(() => {
+    navigate('/login', { state: { returnTo: '/checkout' } });
+  }, [navigate]);
+
+  const handleShippingSubmit = useCallback((values: ShippingFormValues) => {
+    setShippingValues(values);
+    setStep('payment');
+  }, []);
+
+  const handleShippingBack = useCallback(() => {
+    setStep(isAuthenticated ? 'identity' : 'identity');
+  }, [isAuthenticated]);
+
+  const handleAuthenticatedShippingBack = useCallback(() => {
+    // Authenticated users have no identity step — go back to cart
+    navigate('/cart');
+  }, [navigate]);
+
+  const handlePaymentBack = useCallback(() => {
+    setStep('shipping');
+  }, []);
+
+  const handleOrderConfirmed = useCallback((order: ConfirmOrderResponse) => {
     setConfirmedOrder(order);
-  };
+    setStep('confirmation');
+  }, []);
 
-  const handleContinueShopping = () => {
-    navigate('/products');
-  };
+  // ── Derived values ────────────────────────────────────────────────────────
 
-  if (!user) {
-    return null;
-  }
+  const isGuest = !isAuthenticated;
+  // Pass guest_email only for unauthenticated users — authenticated requests
+  // are identified by the JWT bearer token, so no guest_email is needed.
+  const effectiveEmail = isAuthenticated ? null : guestEmail;
 
-  if (isLoadingCart) {
+  // ── Loading / error / empty states ───────────────────────────────────────
+
+  if (cartLoading) {
     return (
-      <div className="checkout-page">
-        <div className="loading-container">
-          <p>Loading your cart...</p>
-        </div>
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:px-8">
+        <LoadingSpinner size="lg" label="Loading your cart…" centered />
       </div>
     );
   }
 
   if (cartError) {
     return (
-      <div className="checkout-page">
-        <div className="error-container">
-          <p>{cartError}</p>
-          <button onClick={() => navigate('/cart')} className="back-button">
-            Back to Cart
-          </button>
-        </div>
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:px-8">
+        <ErrorMessage
+          heading="Could not load your cart"
+          detail="Please check your connection and try again."
+          onRetry={() => void refetch()}
+        />
       </div>
     );
   }
 
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="checkout-page">
-        <div className="empty-cart-container">
-          <h2>Your cart is empty</h2>
-          <p>Add some items to your cart before checking out.</p>
-          <button onClick={() => navigate('/products')} className="shop-button">
-            Shop Now
-          </button>
-        </div>
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6 lg:px-8">
+        <span className="mb-4 inline-block text-5xl" aria-hidden="true">🛒</span>
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">Your cart is empty</h1>
+        <p className="mb-8 text-sm text-gray-500">
+          Add some boots to your cart before checking out.
+        </p>
+        <Link
+          to="/products"
+          className="inline-block rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+        >
+          Browse Boots
+        </Link>
       </div>
     );
   }
 
+  // ── Main checkout layout ──────────────────────────────────────────────────
+
   return (
-    <div className="checkout-page">
-      <div className="checkout-container">
-        <h1>Checkout</h1>
-        {confirmedOrder ? (
-          <OrderConfirmation order={confirmedOrder} onContinueShopping={handleContinueShopping} />
-        ) : (
+    <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6 lg:px-8">
+      <h1 className="mb-6 text-3xl font-bold tracking-tight text-gray-900">Checkout</h1>
+
+      {step !== 'confirmation' && (
+        <StepIndicator current={step} isGuest={isGuest} />
+      )}
+
+      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        {/* ── Identity step ──────────────────────────────────────────────── */}
+        {step === 'identity' && (
+          <IdentityStep
+            onSubmit={handleIdentitySubmit}
+            onSignIn={handleSignIn}
+          />
+        )}
+
+        {/* ── Auth banner (instead of identity step for signed-in users) ─── */}
+        {step === 'shipping' && isAuthenticated && (
+          <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+            <strong>Signed in as {user?.email}.</strong>{' '}
+            Your order history will be saved to your account.
+          </div>
+        )}
+
+        {/* ── Shipping step ──────────────────────────────────────────────── */}
+        {step === 'shipping' && (
+          <ShippingStep
+            onSubmit={handleShippingSubmit}
+            onBack={isAuthenticated ? handleAuthenticatedShippingBack : handleShippingBack}
+            defaultValues={shippingValues ?? undefined}
+          />
+        )}
+
+        {/* ── Payment step ───────────────────────────────────────────────── */}
+        {step === 'payment' && shippingValues && (
           <Elements stripe={stripePromise}>
-            <CheckoutForm cart={cart} onOrderConfirmed={handleOrderConfirmed} />
+            <PaymentStepInner
+              guestEmail={effectiveEmail}
+              shipping={shippingValues}
+              onBack={handlePaymentBack}
+              onConfirmed={handleOrderConfirmed}
+            />
           </Elements>
+        )}
+
+        {/* ── Confirmation ────────────────────────────────────────────────── */}
+        {step === 'confirmation' && confirmedOrder && (
+          <OrderConfirmation order={confirmedOrder} />
         )}
       </div>
     </div>

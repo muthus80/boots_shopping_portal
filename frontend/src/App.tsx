@@ -54,11 +54,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/cart" element={<CartPage />} />
           <Route
             path="/checkout"
-            element={
-              <ProtectedRoute>
-                <CheckoutPage />
-              </ProtectedRoute>
-            }
+            element={<CheckoutPage />}
           />
           <Route
             path="/orders"
