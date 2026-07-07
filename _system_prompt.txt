@@ -4,22 +4,22 @@ _The Context Engineer has already selected what you need for this task. Use the 
 ### Essentials (inline — use these directly)
 
 #### qa_engineer output
-_AUTHORITATIVE: qa_engineer output from testing stage is the primary handoff driving this db_architect run._
+_AUTHORITATIVE: qa_engineer output from testing stage is the primary handoff driving db_architect's work in this stage._
 
 {
   "agent_observations": [
     {
       "assigned_role": "backend_dev",
-      "failing_assertion": "AttributeError: 'User' object has no attribute 'execute'",
-      "root_cause_hypothesis": "In `app/domains/account/router.py` the `/orders` endpoint uses `db: AsyncSession = Depends(require_member)`. `require_member` is a dependency that returns a `User`, not an `AsyncSession`. So `AccountService(db
+      "failing_assertion": "pydantic_core.ValidationError: 1 validation error for ProductRead \u2014 price: Field required",
+      "root_cause_hypothesis": "The `Product` ORM model uses `base_price` as its column name but `ProductRead` schema declares a `price: float` field. There is no `@validator`, `@computed_field`, or `mod
 
 #### Architecture — full document
-_Architecture overview provides high-level context on data models, components, and ADRs relevant to db decisions._
+_Architecture document provides overall data model and component context informing schema decisions._
 
 Architecture: pattern=modular_monolith. 6 components, 17 endpoints, 10 data models, 5 ADRs, 7 diagrams.
 
 #### ADR-004 — PostgreSQL Full-Text Search for Product Discovery
-_ADR-004 defines the PostgreSQL full-text search strategy (tsvector, GIN index, trigger) that db_architect must implement correctly._
+_ADR-004 defines the PostgreSQL full-text search strategy (tsvector, GIN index, trigger) directly relevant to db_architect's schema work._
 
 {
   "adr_id": "ADR-004",
@@ -45,14 +45,275 @@ _ADR-004 defines the PostgreSQL full-text search strategy (tsvector, GIN index, 
   "title": "PostgreSQL Full-Text Search for Product Discovery"
 }
 
-#### ADR-003 — Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance
-_ADR-003 defines Stripe PaymentIntents flow which affects order/payment schema design._
+#### ADR-002 — JWT with Refresh Token Rotation for Session Management
+_ADR-002 defines the refresh_tokens table structure and JWT session management schema requirements._
 
-Related requirements: US-011, NFR-security-pci
+{
+  "adr_id": "ADR-002",
+  "alternatives": [
+    "Session cookies with server-side session store \u2014 rejected because it requires Redis or DB session store and is less suitable for a SPA architecture",
+    "Long-lived JWTs without refresh \u2014 rejected because they cannot be revoked on logout, violating security requirements",
+    "OAuth2 provider (e.g., Auth0) \u2014 rejected because the user specified auth: none (no third-party auth provider)"
+  ],
+  "consequences": [
+    "Access tokens are stateless and verifiable without DB lookup on every request",
+    "Logout and token revocation are supported via the revoked flag in refresh_tokens table",
+    "httpOnly cookie for refresh token prevents XSS access to the long-lived token",
+    "Token refresh adds one extra API call when access token expires, but this is transparent to the user"
+  ],
+  "context": "US-013 requires session persistence across page refreshes and new tabs, with graceful redirect to login on expiry. The user preference specifies no dedicated auth service (auth: none in preferences means no third-party auth provider). We need a stateless auth mechanism that supports the browser's multi-tab scenario while allowing token revocation for logout. Storing hashed refresh tokens in PostgreSQL provides revocability without a separate Redis cache.",
+  "decision": "Issue short-lived (30-minute) JWT access tokens and long-lived (7-day) refresh tokens. Store a SHA-256 hash of the refresh token in the refresh_tokens table with a revoked flag. The React frontend stores the access token in memory and the refresh token in an httpOnly cookie. On access token expiry, silently call POST /api/v1/auth/refresh before retrying the original request.",
+  "related_requirements": [
+    "US-002",
+    "US-013",
+    "NFR-security-password-hashing"
+  ],
+  "status": "accepted",
+  "title": "JWT with Refresh Token Rotation for Session Management"
+}
+
+#### Data Model: Product
+_Product data model is central to the qa_engineer-identified price/base_price field mismatch that db_architect must resolve._
+
+{
+  "description": "Boot product with images, attributes, and variants",
+  "fields": [
+    {
+      "constraints": [
+        "PRIMARY KEY"
+      ],
+      "default": "gen_random_uuid()",
+      "name": "id",
+      "nullable": false,
+      "type": "UUID"
+    },
+    {
+      "constraints": [
+        "NOT NULL",
+        "FK categories.id"
+      ],
+      "default": null,
+      "name": "category_id",
+      "nullable": false,
+      "type": "UUID"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "name",
+      "nullable": false,
+      "type": "VARCHAR(255)"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "brand",
+      "nullable": false,
+      "type": "VARCHAR(100)"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "description",
+      "nullable": false,
+      "type": "TEXT"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "price",
+      "nullable": false,
+      "type": "NUMERIC(10,2)"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": "'[]'",
+      "name": "images",
+      "nullable": false,
+      "type": "JSONB"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": "'{}'",
+      "name": "attributes",
+      "nullable": false,
+      "type": "JSONB"
+    },
+    {
+      "constraints": [],
+      "default": null,
+      "name": "search_vector",
+      "nullable": true,
+      "type": "TSVECTOR"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": "NOW()",
+      "name": "created_at",
+      "nullable": false,
+      "type": "TIMESTAMPTZ"
+    }
+  ],
+  "indexes": [
+    {
+      "columns": [
+        "category_id"
+      ],
+      "name": "ix_products_category_id",
+      "unique": false
+    },
+    {
+      "columns": [
+        "search_vector"
+      ],
+      "name": "ix_products_search_vector",
+      "type": "GIN"
+    }
+  ],
+  "name": "Product",
+  "relationships": [
+    {
+      "foreign_key": "category_id",
+      "target": "Category",
+      "type": "many_to_one"
+    },
+    {
+      "foreign_key": "product_id",
+      "target": "ProductVariant",
+      "type": "one_to_many"
+    },
+    {
+      "foreign_key": "product_id",
+      "target": "Review",
+      "type": "one_to_many"
+    }
+  ],
+  "used_by_endpoints": [
+    "/api/v1/products",
+    "/api/v1/products/search",
+    "/api/v1/products/{product_id}"
+  ]
+}
+
+#### Data Model: ProductVariant
+_ProductVariant data model is directly related to product schema and inventory management._
+
+Size/color variant of a product with inventory count
+
+#### Data Model: User
+_User data model defines the users table schema that db_architect must maintain._
+
+Registered user account with bcrypt-hashed password
+
+#### Data Model: RefreshToken
+_RefreshToken data model defines the refresh_tokens table structure referenced in ADR-002._
+
+Hashed refresh tokens for JWT session persistence and revocation
+
+#### Data Model: Order
+_Order data model defines the orders table schema needed for checkout and order history features._
+
+Completed purchase order for guest or authenticated user
+
+#### Data Model: OrderItem
+_OrderItem data model defines the order_items table schema._
+
+Individual line item in an order with captured unit price
+
+#### Data Model: Cart
+_Cart data model defines the carts table schema supporting guest and authenticated users._
+
+Shopping cart supporting both guest (session-based) and authenticated users
+
+#### Data Model: CartItem
+_CartItem data model defines the cart_items table schema._
+
+Individual line item in a shopping cart
+
+#### Data Model: Review
+_Review data model defines the reviews table schema including purchase-verification linkage._
+
+Purchase-verified product review linking product, user, and verifying order
+
+#### Data Model: Category
+_Category data model defines the categories table schema._
+
+{
+  "description": "Product category (e.g., Work Boots, Hiking Boots)",
+  "fields": [
+    {
+      "constraints": [
+        "PRIMARY KEY"
+      ],
+      "default": "gen_random_uuid()",
+      "name": "id",
+      "nullable": false,
+      "type": "UUID"
+    },
+    {
+      "constraints": [
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "name",
+      "nullable": false,
+      "type": "VARCHAR(100)"
+    },
+    {
+      "constraints": [
+        "UNIQUE",
+        "NOT NULL"
+      ],
+      "default": null,
+      "name": "slug",
+      "nullable": false,
+      "type": "VARCHAR(100)"
+    }
+  ],
+  "indexes": [
+    {
+      "columns": [
+        "slug"
+      ],
+      "name": "ix_categories_slug",
+      "unique": true
+    }
+  ],
+  "name": "Category",
+  "relationships": [
+    {
+      "foreign_key": "category_id",
+      "target": "Product",
+      "type": "one_to_many"
+    }
+  ],
+  "used_by_endpoints": [
+    "/api/v1/categories",
+    "/api/v1/products"
+  ]
+}
+
+#### Development Guidelines
+_Development guidelines provide backend patterns and testing strategy relevant to db_architect's test file generation._
+
+Development guidelines: backend patterns, frontend patterns, testing strategy, code style
 
 ### Also available (Read a specific section on demand only if the essentials above don't cover it)
 - db_architect output
-- code_reviewer output
 
 > The `docs/` folder in your workspace mirrors the upstream phase outputs (PRD, sprint plan, architecture decision doc). The structured essentials you need are inline above. **Do NOT bulk-read the `docs/` folder** — open at most one specific section, and only if something inline is genuinely missing.
 

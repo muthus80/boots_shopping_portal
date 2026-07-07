@@ -339,6 +339,25 @@ class TestProductModel:
         assert prod.is_featured is False
         assert prod.review_count == 0
 
+    @pytest.mark.asyncio
+    async def test_product_price_alias(self, db: AsyncSession):
+        """Product.price is a read/write alias for Product.base_price (QA-fix)."""
+        cat = _category()
+        db.add(cat)
+        await db.flush()
+
+        prod = _product(cat.id, base_price=Decimal("149.99"))
+        db.add(prod)
+        await db.flush()
+        await db.refresh(prod)
+
+        # .price should equal .base_price
+        assert prod.price == prod.base_price == Decimal("149.99")
+
+        # setter: updating via .price must reflect in .base_price
+        prod.price = Decimal("99.00")
+        assert prod.base_price == Decimal("99.00")
+
 
 class TestProductVariantModel:
     @pytest.mark.asyncio

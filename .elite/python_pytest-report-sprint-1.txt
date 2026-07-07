@@ -1,11 +1,11 @@
 ============================= test session starts ==============================
 collecting ... collected 32 items
 
-tests/integration/sprint_1/test_account.py::TestOrderHistory::test_authenticated_user_sees_their_orders FAILED [  3%]
-tests/integration/sprint_1/test_account.py::TestOrderHistory::test_order_history_shows_expected_fields FAILED [  6%]
-tests/integration/sprint_1/test_account.py::TestOrderHistory::test_order_history_empty_for_new_user FAILED [  9%]
+tests/integration/sprint_1/test_account.py::TestOrderHistory::test_authenticated_user_sees_their_orders PASSED [  3%]
+tests/integration/sprint_1/test_account.py::TestOrderHistory::test_order_history_shows_expected_fields PASSED [  6%]
+tests/integration/sprint_1/test_account.py::TestOrderHistory::test_order_history_empty_for_new_user PASSED [  9%]
 tests/integration/sprint_1/test_account.py::TestOrderHistory::test_order_history_requires_authentication PASSED [ 12%]
-tests/integration/sprint_1/test_account.py::TestOrderHistory::test_user_only_sees_own_orders FAILED [ 15%]
+tests/integration/sprint_1/test_account.py::TestOrderHistory::test_user_only_sees_own_orders PASSED [ 15%]
 tests/integration/sprint_1/test_auth.py::TestUserRegistration::test_user_registers_with_valid_credentials PASSED [ 18%]
 tests/integration/sprint_1/test_auth.py::TestUserRegistration::test_user_registers_minimum_password_length PASSED [ 21%]
 tests/integration/sprint_1/test_auth.py::TestUserRegistration::test_register_duplicate_email_returns_409 PASSED [ 25%]
@@ -35,1426 +35,16 @@ tests/integration/sprint_1/test_products.py::TestProductReviews::test_unauthenti
 tests/integration/sprint_1/test_products.py::TestProductReviews::test_user_cannot_review_same_product_twice FAILED [100%]
 
 =================================== FAILURES ===================================
-__________ TestOrderHistory.test_authenticated_user_sees_their_orders __________
-  + Exception Group Traceback (most recent call last):
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
-  |     yield
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 190, in __call__
-  |     async with anyio.create_task_group() as task_group:
-  |                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
-  |     raise BaseExceptionGroup(
-  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-  +-+---------------- 1 ----------------
-    | Traceback (most recent call last):
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 361, in from_call
-    |     result: TResult | None = func()
-    |                              ^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 250, in <lambda>
-    |     lambda: runtest_hook(item=item, **kwds),
-    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512, in __call__
-    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120, in _hookexec
-    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 167, in _multicall
-    |     raise exception
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/logging.py", line 865, in pytest_runtest_call
-    |     yield
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 53, in run_old_style_hookwrapper
-    |     return result.get_result()
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_result.py", line 103, in get_result
-    |     raise exc.with_traceback(tb)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 38, in run_old_style_hookwrapper
-    |     res = yield
-    |           ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/capture.py", line 900, in pytest_runtest_call
-    |     return (yield)
-    |             ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/skipping.py", line 268, in pytest_runtest_call
-    |     return (yield)
-    |             ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121, in _multicall
-    |     res = hook_impl.function(*args)
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 184, in pytest_runtest_call
-    |     item.runtest()
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py", line 569, in runtest
-    |     super().runtest()
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/python.py", line 1707, in runtest
-    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512, in __call__
-    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120, in _hookexec
-    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 167, in _multicall
-    |     raise exception
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 53, in run_old_style_hookwrapper
-    |     return result.get_result()
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_result.py", line 103, in get_result
-    |     raise exc.with_traceback(tb)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 38, in run_old_style_hookwrapper
-    |     res = yield
-    |           ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121, in _multicall
-    |     res = hook_impl.function(*args)
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/python.py", line 167, in pytest_pyfunc_call
-    |     result = testfunction(**testargs)
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py", line 905, in inner
-    |     runner.run(coro, context=context)
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/asyncio/runners.py", line 118, in run
-    |     return self._loop.run_until_complete(task)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
-    |     return future.result()
-    |            ^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/integration/sprint_1/test_account.py", line 36, in test_authenticated_user_sees_their_orders
-    |     response = await async_client.get(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1801, in get
-    |     return await self.request(
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1574, in request
-    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1661, in send
-    |     response = await self._send_handling_auth(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1689, in _send_handling_auth
-    |     response = await self._send_handling_redirects(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1726, in _send_handling_redirects
-    |     response = await self._send_single_request(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1763, in _send_single_request
-    |     response = await transport.handle_async_request(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py", line 164, in handle_async_request
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    |     await super().__call__(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    |     await self.app(scope, receive, _send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
-    |     with collapse_excgroups():
-    |          ^^^^^^^^^^^^^^^^^^^^
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
-    |     self.gen.throw(value)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
-    |     response = await self.dispatch_func(request, call_next)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/core/middleware.py", line 30, in dispatch
-    |     response: Response = await call_next(request)
-    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
-    |     raise app_exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
-    |     await self.app(scope, receive_or_disconnect, send_no_error)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
-    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
-    |     await route.handle(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
-    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
-    |     response = await func(request)
-    |                ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
-    |     raw_response = await run_endpoint_function(
-    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
-    |     return await dependant.call(**values)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/router.py", line 60, in get_order_history
-    |     orders = await service.get_order_history(current_user.id)
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/service.py", line 86, in get_order_history
-    |     result = await self.db.execute(
-    |                    ^^^^^^^^^^^^^^^
-    | AttributeError: 'User' object has no attribute 'execute'
-    +------------------------------------
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/integration/sprint_1/test_account.py", line 36, in test_authenticated_user_sees_their_orders
-    response = await async_client.get(
-               ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1801, in get
-    return await self.request(
-           ^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1574, in request
-    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1661, in send
-    response = await self._send_handling_auth(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1689, in _send_handling_auth
-    response = await self._send_handling_redirects(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1726, in _send_handling_redirects
-    response = await self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1763, in _send_single_request
-    response = await transport.handle_async_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py", line 164, in handle_async_request
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    await super().__call__(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    await self.app(scope, receive, _send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
-    with collapse_excgroups():
-         ^^^^^^^^^^^^^^^^^^^^
-  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
-    self.gen.throw(value)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
-    response = await self.dispatch_func(request, call_next)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/core/middleware.py", line 30, in dispatch
-    response: Response = await call_next(request)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
-    raise app_exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
-    await self.app(scope, receive_or_disconnect, send_no_error)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
-    await route.handle(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
-    raw_response = await run_endpoint_function(
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
-    return await dependant.call(**values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/router.py", line 60, in get_order_history
-    orders = await service.get_order_history(current_user.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/service.py", line 86, in get_order_history
-    result = await self.db.execute(
-                   ^^^^^^^^^^^^^^^
-AttributeError: 'User' object has no attribute 'execute'
-
-During handling of the above exception, another exception occurred:
-tests/integration/sprint_1/test_account.py:36: in test_authenticated_user_sees_their_orders
-    response = await async_client.get(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1801: in get
-    return await self.request(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1574: in request
-    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1661: in send
-    response = await self._send_handling_auth(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1689: in _send_handling_auth
-    response = await self._send_handling_redirects(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1726: in _send_handling_redirects
-    response = await self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1763: in _send_single_request
-    response = await transport.handle_async_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py:164: in handle_async_request
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py:1054: in __call__
-    await super().__call__(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py:123: in __call__
-    await self.middleware_stack(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py:186: in __call__
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py:164: in __call__
-    await self.app(scope, receive, _send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:189: in __call__
-    with collapse_excgroups():
-         ^^^^^^^^^^^^^^^^^^^^
-/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py:158: in __exit__
-    self.gen.throw(value)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py:93: in collapse_excgroups
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:191: in __call__
-    response = await self.dispatch_func(request, call_next)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/core/middleware.py:30: in dispatch
-    response: Response = await call_next(request)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:165: in call_next
-    raise app_exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:151: in coro
-    await self.app(scope, receive_or_disconnect, send_no_error)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py:85: in __call__
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:65: in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-    await app(scope, receive, sender)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:756: in __call__
-    await self.middleware_stack(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:776: in app
-    await route.handle(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:297: in handle
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:77: in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-    await app(scope, receive, sender)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:72: in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:278: in app
-    raw_response = await run_endpoint_function(
-.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:191: in run_endpoint_function
-    return await dependant.call(**values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/domains/account/router.py:60: in get_order_history
-    orders = await service.get_order_history(current_user.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/domains/account/service.py:86: in get_order_history
-    result = await self.db.execute(
-                   ^^^^^^^^^^^^^^^
-E   AttributeError: 'User' object has no attribute 'execute'
----------------------------- Captured stdout setup -----------------------------
-{"request_id": "92d744d5-c9f2-453e-a2d5-fe24381208b0", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:36.109752Z"}
-{"request_id": "92d744d5-c9f2-453e-a2d5-fe24381208b0", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:36.457126Z"}
-HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
------------------------------- Captured log setup ------------------------------
-INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
------------------------------ Captured stdout call -----------------------------
-{"request_id": "4c1b116f-de61-48d1-be2d-cc1727922cc1", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:36.499358Z"}
-__________ TestOrderHistory.test_order_history_shows_expected_fields ___________
-  + Exception Group Traceback (most recent call last):
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
-  |     yield
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 190, in __call__
-  |     async with anyio.create_task_group() as task_group:
-  |                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
-  |     raise BaseExceptionGroup(
-  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-  +-+---------------- 1 ----------------
-    | Traceback (most recent call last):
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 361, in from_call
-    |     result: TResult | None = func()
-    |                              ^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 250, in <lambda>
-    |     lambda: runtest_hook(item=item, **kwds),
-    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512, in __call__
-    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120, in _hookexec
-    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 167, in _multicall
-    |     raise exception
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/logging.py", line 865, in pytest_runtest_call
-    |     yield
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 53, in run_old_style_hookwrapper
-    |     return result.get_result()
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_result.py", line 103, in get_result
-    |     raise exc.with_traceback(tb)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 38, in run_old_style_hookwrapper
-    |     res = yield
-    |           ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/capture.py", line 900, in pytest_runtest_call
-    |     return (yield)
-    |             ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/skipping.py", line 268, in pytest_runtest_call
-    |     return (yield)
-    |             ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121, in _multicall
-    |     res = hook_impl.function(*args)
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 184, in pytest_runtest_call
-    |     item.runtest()
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py", line 569, in runtest
-    |     super().runtest()
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/python.py", line 1707, in runtest
-    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512, in __call__
-    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120, in _hookexec
-    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 167, in _multicall
-    |     raise exception
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 53, in run_old_style_hookwrapper
-    |     return result.get_result()
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_result.py", line 103, in get_result
-    |     raise exc.with_traceback(tb)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 38, in run_old_style_hookwrapper
-    |     res = yield
-    |           ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121, in _multicall
-    |     res = hook_impl.function(*args)
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/python.py", line 167, in pytest_pyfunc_call
-    |     result = testfunction(**testargs)
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py", line 905, in inner
-    |     runner.run(coro, context=context)
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/asyncio/runners.py", line 118, in run
-    |     return self._loop.run_until_complete(task)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
-    |     return future.result()
-    |            ^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/integration/sprint_1/test_account.py", line 62, in test_order_history_shows_expected_fields
-    |     response = await async_client.get(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1801, in get
-    |     return await self.request(
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1574, in request
-    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1661, in send
-    |     response = await self._send_handling_auth(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1689, in _send_handling_auth
-    |     response = await self._send_handling_redirects(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1726, in _send_handling_redirects
-    |     response = await self._send_single_request(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1763, in _send_single_request
-    |     response = await transport.handle_async_request(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py", line 164, in handle_async_request
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    |     await super().__call__(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    |     await self.app(scope, receive, _send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
-    |     with collapse_excgroups():
-    |          ^^^^^^^^^^^^^^^^^^^^
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
-    |     self.gen.throw(value)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
-    |     response = await self.dispatch_func(request, call_next)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/core/middleware.py", line 30, in dispatch
-    |     response: Response = await call_next(request)
-    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
-    |     raise app_exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
-    |     await self.app(scope, receive_or_disconnect, send_no_error)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
-    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
-    |     await route.handle(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
-    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
-    |     response = await func(request)
-    |                ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
-    |     raw_response = await run_endpoint_function(
-    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
-    |     return await dependant.call(**values)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/router.py", line 60, in get_order_history
-    |     orders = await service.get_order_history(current_user.id)
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/service.py", line 86, in get_order_history
-    |     result = await self.db.execute(
-    |                    ^^^^^^^^^^^^^^^
-    | AttributeError: 'User' object has no attribute 'execute'
-    +------------------------------------
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/integration/sprint_1/test_account.py", line 62, in test_order_history_shows_expected_fields
-    response = await async_client.get(
-               ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1801, in get
-    return await self.request(
-           ^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1574, in request
-    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1661, in send
-    response = await self._send_handling_auth(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1689, in _send_handling_auth
-    response = await self._send_handling_redirects(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1726, in _send_handling_redirects
-    response = await self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1763, in _send_single_request
-    response = await transport.handle_async_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py", line 164, in handle_async_request
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    await super().__call__(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    await self.app(scope, receive, _send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
-    with collapse_excgroups():
-         ^^^^^^^^^^^^^^^^^^^^
-  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
-    self.gen.throw(value)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
-    response = await self.dispatch_func(request, call_next)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/core/middleware.py", line 30, in dispatch
-    response: Response = await call_next(request)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
-    raise app_exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
-    await self.app(scope, receive_or_disconnect, send_no_error)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
-    await route.handle(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
-    raw_response = await run_endpoint_function(
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
-    return await dependant.call(**values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/router.py", line 60, in get_order_history
-    orders = await service.get_order_history(current_user.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/service.py", line 86, in get_order_history
-    result = await self.db.execute(
-                   ^^^^^^^^^^^^^^^
-AttributeError: 'User' object has no attribute 'execute'
-
-During handling of the above exception, another exception occurred:
-tests/integration/sprint_1/test_account.py:62: in test_order_history_shows_expected_fields
-    response = await async_client.get(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1801: in get
-    return await self.request(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1574: in request
-    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1661: in send
-    response = await self._send_handling_auth(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1689: in _send_handling_auth
-    response = await self._send_handling_redirects(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1726: in _send_handling_redirects
-    response = await self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1763: in _send_single_request
-    response = await transport.handle_async_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py:164: in handle_async_request
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py:1054: in __call__
-    await super().__call__(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py:123: in __call__
-    await self.middleware_stack(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py:186: in __call__
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py:164: in __call__
-    await self.app(scope, receive, _send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:189: in __call__
-    with collapse_excgroups():
-         ^^^^^^^^^^^^^^^^^^^^
-/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py:158: in __exit__
-    self.gen.throw(value)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py:93: in collapse_excgroups
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:191: in __call__
-    response = await self.dispatch_func(request, call_next)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/core/middleware.py:30: in dispatch
-    response: Response = await call_next(request)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:165: in call_next
-    raise app_exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:151: in coro
-    await self.app(scope, receive_or_disconnect, send_no_error)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py:85: in __call__
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:65: in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-    await app(scope, receive, sender)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:756: in __call__
-    await self.middleware_stack(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:776: in app
-    await route.handle(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:297: in handle
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:77: in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-    await app(scope, receive, sender)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:72: in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:278: in app
-    raw_response = await run_endpoint_function(
-.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:191: in run_endpoint_function
-    return await dependant.call(**values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/domains/account/router.py:60: in get_order_history
-    orders = await service.get_order_history(current_user.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/domains/account/service.py:86: in get_order_history
-    result = await self.db.execute(
-                   ^^^^^^^^^^^^^^^
-E   AttributeError: 'User' object has no attribute 'execute'
----------------------------- Captured stdout setup -----------------------------
-{"request_id": "ce9d0e6e-a32c-4dd8-ab7c-0ff058408699", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:37.583027Z"}
-{"request_id": "ce9d0e6e-a32c-4dd8-ab7c-0ff058408699", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:37.923250Z"}
-HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
------------------------------- Captured log setup ------------------------------
-INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
------------------------------ Captured stdout call -----------------------------
-{"request_id": "71384ff4-219b-4b8a-a19e-73e7c5f95a3e", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:37.958681Z"}
-____________ TestOrderHistory.test_order_history_empty_for_new_user ____________
-  + Exception Group Traceback (most recent call last):
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
-  |     yield
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 190, in __call__
-  |     async with anyio.create_task_group() as task_group:
-  |                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
-  |     raise BaseExceptionGroup(
-  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-  +-+---------------- 1 ----------------
-    | Traceback (most recent call last):
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 361, in from_call
-    |     result: TResult | None = func()
-    |                              ^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 250, in <lambda>
-    |     lambda: runtest_hook(item=item, **kwds),
-    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512, in __call__
-    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120, in _hookexec
-    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 167, in _multicall
-    |     raise exception
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/logging.py", line 865, in pytest_runtest_call
-    |     yield
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 53, in run_old_style_hookwrapper
-    |     return result.get_result()
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_result.py", line 103, in get_result
-    |     raise exc.with_traceback(tb)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 38, in run_old_style_hookwrapper
-    |     res = yield
-    |           ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/capture.py", line 900, in pytest_runtest_call
-    |     return (yield)
-    |             ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/skipping.py", line 268, in pytest_runtest_call
-    |     return (yield)
-    |             ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121, in _multicall
-    |     res = hook_impl.function(*args)
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 184, in pytest_runtest_call
-    |     item.runtest()
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py", line 569, in runtest
-    |     super().runtest()
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/python.py", line 1707, in runtest
-    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512, in __call__
-    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120, in _hookexec
-    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 167, in _multicall
-    |     raise exception
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 53, in run_old_style_hookwrapper
-    |     return result.get_result()
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_result.py", line 103, in get_result
-    |     raise exc.with_traceback(tb)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 38, in run_old_style_hookwrapper
-    |     res = yield
-    |           ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121, in _multicall
-    |     res = hook_impl.function(*args)
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/python.py", line 167, in pytest_pyfunc_call
-    |     result = testfunction(**testargs)
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py", line 905, in inner
-    |     runner.run(coro, context=context)
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/asyncio/runners.py", line 118, in run
-    |     return self._loop.run_until_complete(task)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
-    |     return future.result()
-    |            ^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/integration/sprint_1/test_account.py", line 88, in test_order_history_empty_for_new_user
-    |     response = await async_client.get(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1801, in get
-    |     return await self.request(
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1574, in request
-    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1661, in send
-    |     response = await self._send_handling_auth(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1689, in _send_handling_auth
-    |     response = await self._send_handling_redirects(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1726, in _send_handling_redirects
-    |     response = await self._send_single_request(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1763, in _send_single_request
-    |     response = await transport.handle_async_request(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py", line 164, in handle_async_request
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    |     await super().__call__(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    |     await self.app(scope, receive, _send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
-    |     with collapse_excgroups():
-    |          ^^^^^^^^^^^^^^^^^^^^
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
-    |     self.gen.throw(value)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
-    |     response = await self.dispatch_func(request, call_next)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/core/middleware.py", line 30, in dispatch
-    |     response: Response = await call_next(request)
-    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
-    |     raise app_exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
-    |     await self.app(scope, receive_or_disconnect, send_no_error)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
-    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
-    |     await route.handle(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
-    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
-    |     response = await func(request)
-    |                ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
-    |     raw_response = await run_endpoint_function(
-    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
-    |     return await dependant.call(**values)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/router.py", line 60, in get_order_history
-    |     orders = await service.get_order_history(current_user.id)
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/service.py", line 86, in get_order_history
-    |     result = await self.db.execute(
-    |                    ^^^^^^^^^^^^^^^
-    | AttributeError: 'User' object has no attribute 'execute'
-    +------------------------------------
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/integration/sprint_1/test_account.py", line 88, in test_order_history_empty_for_new_user
-    response = await async_client.get(
-               ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1801, in get
-    return await self.request(
-           ^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1574, in request
-    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1661, in send
-    response = await self._send_handling_auth(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1689, in _send_handling_auth
-    response = await self._send_handling_redirects(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1726, in _send_handling_redirects
-    response = await self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1763, in _send_single_request
-    response = await transport.handle_async_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py", line 164, in handle_async_request
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    await super().__call__(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    await self.app(scope, receive, _send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
-    with collapse_excgroups():
-         ^^^^^^^^^^^^^^^^^^^^
-  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
-    self.gen.throw(value)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
-    response = await self.dispatch_func(request, call_next)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/core/middleware.py", line 30, in dispatch
-    response: Response = await call_next(request)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
-    raise app_exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
-    await self.app(scope, receive_or_disconnect, send_no_error)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
-    await route.handle(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
-    raw_response = await run_endpoint_function(
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
-    return await dependant.call(**values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/router.py", line 60, in get_order_history
-    orders = await service.get_order_history(current_user.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/service.py", line 86, in get_order_history
-    result = await self.db.execute(
-                   ^^^^^^^^^^^^^^^
-AttributeError: 'User' object has no attribute 'execute'
-
-During handling of the above exception, another exception occurred:
-tests/integration/sprint_1/test_account.py:88: in test_order_history_empty_for_new_user
-    response = await async_client.get(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1801: in get
-    return await self.request(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1574: in request
-    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1661: in send
-    response = await self._send_handling_auth(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1689: in _send_handling_auth
-    response = await self._send_handling_redirects(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1726: in _send_handling_redirects
-    response = await self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1763: in _send_single_request
-    response = await transport.handle_async_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py:164: in handle_async_request
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py:1054: in __call__
-    await super().__call__(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py:123: in __call__
-    await self.middleware_stack(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py:186: in __call__
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py:164: in __call__
-    await self.app(scope, receive, _send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:189: in __call__
-    with collapse_excgroups():
-         ^^^^^^^^^^^^^^^^^^^^
-/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py:158: in __exit__
-    self.gen.throw(value)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py:93: in collapse_excgroups
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:191: in __call__
-    response = await self.dispatch_func(request, call_next)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/core/middleware.py:30: in dispatch
-    response: Response = await call_next(request)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:165: in call_next
-    raise app_exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:151: in coro
-    await self.app(scope, receive_or_disconnect, send_no_error)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py:85: in __call__
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:65: in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-    await app(scope, receive, sender)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:756: in __call__
-    await self.middleware_stack(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:776: in app
-    await route.handle(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:297: in handle
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:77: in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-    await app(scope, receive, sender)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:72: in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:278: in app
-    raw_response = await run_endpoint_function(
-.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:191: in run_endpoint_function
-    return await dependant.call(**values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/domains/account/router.py:60: in get_order_history
-    orders = await service.get_order_history(current_user.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/domains/account/service.py:86: in get_order_history
-    result = await self.db.execute(
-                   ^^^^^^^^^^^^^^^
-E   AttributeError: 'User' object has no attribute 'execute'
------------------------------ Captured stdout call -----------------------------
-{"request_id": "78f472f9-f94b-43b7-a67c-c8f9cdec0d88", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:38.944649Z"}
-{"request_id": "78f472f9-f94b-43b7-a67c-c8f9cdec0d88", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:39.284600Z"}
-HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "02aa7c39-f3df-4a21-8178-488d9e2e83bb", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:39.285776Z"}
------------------------------- Captured log call -------------------------------
-INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-_______________ TestOrderHistory.test_user_only_sees_own_orders ________________
-  + Exception Group Traceback (most recent call last):
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
-  |     yield
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 190, in __call__
-  |     async with anyio.create_task_group() as task_group:
-  |                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
-  |     raise BaseExceptionGroup(
-  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-  +-+---------------- 1 ----------------
-    | Traceback (most recent call last):
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 361, in from_call
-    |     result: TResult | None = func()
-    |                              ^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 250, in <lambda>
-    |     lambda: runtest_hook(item=item, **kwds),
-    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512, in __call__
-    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120, in _hookexec
-    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 167, in _multicall
-    |     raise exception
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/logging.py", line 865, in pytest_runtest_call
-    |     yield
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 53, in run_old_style_hookwrapper
-    |     return result.get_result()
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_result.py", line 103, in get_result
-    |     raise exc.with_traceback(tb)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 38, in run_old_style_hookwrapper
-    |     res = yield
-    |           ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/capture.py", line 900, in pytest_runtest_call
-    |     return (yield)
-    |             ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/skipping.py", line 268, in pytest_runtest_call
-    |     return (yield)
-    |             ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121, in _multicall
-    |     res = hook_impl.function(*args)
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/runner.py", line 184, in pytest_runtest_call
-    |     item.runtest()
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py", line 569, in runtest
-    |     super().runtest()
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/python.py", line 1707, in runtest
-    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512, in __call__
-    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120, in _hookexec
-    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 167, in _multicall
-    |     raise exception
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 139, in _multicall
-    |     teardown.throw(exception)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 53, in run_old_style_hookwrapper
-    |     return result.get_result()
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_result.py", line 103, in get_result
-    |     raise exc.with_traceback(tb)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 38, in run_old_style_hookwrapper
-    |     res = yield
-    |           ^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121, in _multicall
-    |     res = hook_impl.function(*args)
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/_pytest/python.py", line 167, in pytest_pyfunc_call
-    |     result = testfunction(**testargs)
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py", line 905, in inner
-    |     runner.run(coro, context=context)
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/asyncio/runners.py", line 118, in run
-    |     return self._loop.run_until_complete(task)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
-    |     return future.result()
-    |            ^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/integration/sprint_1/test_account.py", line 133, in test_user_only_sees_own_orders
-    |     response = await async_client.get(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1801, in get
-    |     return await self.request(
-    |            ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1574, in request
-    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1661, in send
-    |     response = await self._send_handling_auth(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1689, in _send_handling_auth
-    |     response = await self._send_handling_redirects(
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1726, in _send_handling_redirects
-    |     response = await self._send_single_request(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1763, in _send_single_request
-    |     response = await transport.handle_async_request(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py", line 164, in handle_async_request
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    |     await super().__call__(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    |     await self.app(scope, receive, _send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
-    |     with collapse_excgroups():
-    |          ^^^^^^^^^^^^^^^^^^^^
-    |   File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
-    |     self.gen.throw(value)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
-    |     response = await self.dispatch_func(request, call_next)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/core/middleware.py", line 30, in dispatch
-    |     response: Response = await call_next(request)
-    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
-    |     raise app_exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
-    |     await self.app(scope, receive_or_disconnect, send_no_error)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
-    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
-    |     await route.handle(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
-    |     await self.app(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
-    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    |     raise exc
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
-    |     response = await func(request)
-    |                ^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
-    |     raw_response = await run_endpoint_function(
-    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
-    |     return await dependant.call(**values)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/router.py", line 60, in get_order_history
-    |     orders = await service.get_order_history(current_user.id)
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/service.py", line 86, in get_order_history
-    |     result = await self.db.execute(
-    |                    ^^^^^^^^^^^^^^^
-    | AttributeError: 'User' object has no attribute 'execute'
-    +------------------------------------
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/integration/sprint_1/test_account.py", line 133, in test_user_only_sees_own_orders
-    response = await async_client.get(
-               ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1801, in get
-    return await self.request(
-           ^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1574, in request
-    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1661, in send
-    response = await self._send_handling_auth(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1689, in _send_handling_auth
-    response = await self._send_handling_redirects(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1726, in _send_handling_redirects
-    response = await self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py", line 1763, in _send_single_request
-    response = await transport.handle_async_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py", line 164, in handle_async_request
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    await super().__call__(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    await self.app(scope, receive, _send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
-    with collapse_excgroups():
-         ^^^^^^^^^^^^^^^^^^^^
-  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
-    self.gen.throw(value)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
-    response = await self.dispatch_func(request, call_next)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/core/middleware.py", line 30, in dispatch
-    response: Response = await call_next(request)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
-    raise app_exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
-    await self.app(scope, receive_or_disconnect, send_no_error)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
-    await route.handle(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
-    await self.app(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
-    raw_response = await run_endpoint_function(
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
-    return await dependant.call(**values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/router.py", line 60, in get_order_history
-    orders = await service.get_order_history(current_user.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/app/domains/account/service.py", line 86, in get_order_history
-    result = await self.db.execute(
-                   ^^^^^^^^^^^^^^^
-AttributeError: 'User' object has no attribute 'execute'
-
-During handling of the above exception, another exception occurred:
-tests/integration/sprint_1/test_account.py:133: in test_user_only_sees_own_orders
-    response = await async_client.get(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1801: in get
-    return await self.request(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1574: in request
-    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1661: in send
-    response = await self._send_handling_auth(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1689: in _send_handling_auth
-    response = await self._send_handling_redirects(
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1726: in _send_handling_redirects
-    response = await self._send_single_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_client.py:1763: in _send_single_request
-    response = await transport.handle_async_request(request)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/httpx/_transports/asgi.py:164: in handle_async_request
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/fastapi/applications.py:1054: in __call__
-    await super().__call__(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/applications.py:123: in __call__
-    await self.middleware_stack(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py:186: in __call__
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/errors.py:164: in __call__
-    await self.app(scope, receive, _send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:189: in __call__
-    with collapse_excgroups():
-         ^^^^^^^^^^^^^^^^^^^^
-/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py:158: in __exit__
-    self.gen.throw(value)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py:93: in collapse_excgroups
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:191: in __call__
-    response = await self.dispatch_func(request, call_next)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/core/middleware.py:30: in dispatch
-    response: Response = await call_next(request)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:165: in call_next
-    raise app_exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/base.py:151: in coro
-    await self.app(scope, receive_or_disconnect, send_no_error)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/cors.py:85: in __call__
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:65: in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-    await app(scope, receive, sender)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:756: in __call__
-    await self.middleware_stack(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:776: in app
-    await route.handle(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:297: in handle
-    await self.app(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:77: in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
-    raise exc
-.sandbox/venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-    await app(scope, receive, sender)
-.sandbox/venv/lib/python3.12/site-packages/starlette/routing.py:72: in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:278: in app
-    raw_response = await run_endpoint_function(
-.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:191: in run_endpoint_function
-    return await dependant.call(**values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/domains/account/router.py:60: in get_order_history
-    orders = await service.get_order_history(current_user.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-app/domains/account/service.py:86: in get_order_history
-    result = await self.db.execute(
-                   ^^^^^^^^^^^^^^^
-E   AttributeError: 'User' object has no attribute 'execute'
------------------------------ Captured stdout call -----------------------------
-{"request_id": "94a90fc0-89a1-40e7-a42c-a2191c08205b", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:41.041349Z"}
-{"request_id": "94a90fc0-89a1-40e7-a42c-a2191c08205b", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:41.382329Z"}
-HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "bf686781-a802-460c-907b-c6b02bb5a003", "method": "GET", "path": "/api/v1/account/orders", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:41.383507Z"}
------------------------------- Captured log call -------------------------------
-INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ______ TestUserLogin.test_token_refresh_issues_new_tokens_and_revokes_old ______
 tests/integration/sprint_1/test_auth.py:194: in test_token_refresh_issues_new_tokens_and_revokes_old
     assert new_data["access_token"] != login_resp.json()["access_token"]
-E   AssertionError: assert 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZTBhZTExMS1jMzVkLTQzOTEtYTkzZi0xMmFlYTc5MjhjMTgiLCJpYXQiOjE3ODM0MTg1MDksImV4cCI6MTc4MzQyMDMwOSwidHlwZSI6ImFjY2VzcyJ9.yfNLAuXDOarpf86GB_e0sCO9bJA3yHN2-H-IQ-qs_rA' != 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZTBhZTExMS1jMzVkLTQzOTEtYTkzZi0xMmFlYTc5MjhjMTgiLCJpYXQiOjE3ODM0MTg1MDksImV4cCI6MTc4MzQyMDMwOSwidHlwZSI6ImFjY2VzcyJ9.yfNLAuXDOarpf86GB_e0sCO9bJA3yHN2-H-IQ-qs_rA'
+E   AssertionError: assert 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZmY2MWM2Zi04NTUxLTRhZTktYWYyMy03Mzg5YzNkMzZiNDIiLCJpYXQiOjE3ODM0MjYwNjYsImV4cCI6MTc4MzQyNzg2NiwidHlwZSI6ImFjY2VzcyJ9.gU-6kq04S9OCENg3zlvdDhx6wmuGlawGYCEVFxqMHFI' != 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZmY2MWM2Zi04NTUxLTRhZTktYWYyMy03Mzg5YzNkMzZiNDIiLCJpYXQiOjE3ODM0MjYwNjYsImV4cCI6MTc4MzQyNzg2NiwidHlwZSI6ImFjY2VzcyJ9.gU-6kq04S9OCENg3zlvdDhx6wmuGlawGYCEVFxqMHFI'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "609bc811-de2c-42da-a46c-d37997c54a81", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:49.014842Z"}
-{"request_id": "609bc811-de2c-42da-a46c-d37997c54a81", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:49.354938Z"}
+{"request_id": "a4be38e9-1133-4f7d-a250-f3d7fa5c643c", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:46.378579Z"}
+{"request_id": "a4be38e9-1133-4f7d-a250-f3d7fa5c643c", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T12:07:46.718969Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
-{"request_id": "49436825-ed0e-4b24-83d3-bf20aa244d99", "method": "POST", "path": "/api/v1/auth/refresh", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:49.356176Z"}
-{"request_id": "49436825-ed0e-4b24-83d3-bf20aa244d99", "method": "POST", "path": "/api/v1/auth/refresh", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:49.367568Z"}
+{"request_id": "2719af0b-d858-4bc2-b3bd-1d46266e0051", "method": "POST", "path": "/api/v1/auth/refresh", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:46.720174Z"}
+{"request_id": "2719af0b-d858-4bc2-b3bd-1d46266e0051", "method": "POST", "path": "/api/v1/auth/refresh", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T12:07:46.731689Z"}
 HTTP Request: POST http://test/api/v1/auth/refresh "HTTP/1.1 200 OK"
 ------------------------------ Captured log call -------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
@@ -1628,8 +218,8 @@ ____________ TestCartManagement.test_anonymous_user_gets_empty_cart ____________
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 3 validation errors:
     |   {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b227026b800>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b227026b800>}
     | 
     +------------------------------------
 
@@ -1714,8 +304,8 @@ Traceback (most recent call last):
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 3 validation errors:
   {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b227026b800>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b227026b800>}
 
 
 During handling of the above exception, another exception occurred:
@@ -1793,10 +383,10 @@ app/core/middleware.py:30: in dispatch
     raise ResponseValidationError(
 E   fastapi.exceptions.ResponseValidationError: 3 validation errors:
 E     {'type': 'uuid_type', 'loc': ('response', 'user_id'), 'msg': 'UUID input should be a string, bytes or UUID object', 'input': None}
-E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
-E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906f49b0>}
+E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b227026b800>}
+E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b227026b800>}
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "ab061196-b229-4ad9-8b4c-e76f3758f7d0", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:50.915400Z"}
+{"request_id": "8de25229-5497-42db-91b5-6fb2d76bd80e", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:48.357493Z"}
 __ TestCartManagement.test_authenticated_user_cart_is_associated_with_account __
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -1965,8 +555,8 @@ __ TestCartManagement.test_authenticated_user_cart_is_associated_with_account __
     |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 2 validation errors:
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b22702bb6e0>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b22702bb6e0>}
     | 
     +------------------------------------
 
@@ -2050,8 +640,8 @@ Traceback (most recent call last):
   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 2 validation errors:
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b22702bb6e0>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b22702bb6e0>}
 
 
 During handling of the above exception, another exception occurred:
@@ -2127,16 +717,16 @@ app/core/middleware.py:30: in dispatch
 .sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:155: in serialize_response
     raise ResponseValidationError(
 E   fastapi.exceptions.ResponseValidationError: 2 validation errors:
-E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
-E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f906e1040>}
+E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b22702bb6e0>}
+E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b22702bb6e0>}
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "64e6f21e-399b-484a-bbc1-ab1c5999915f", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:51.911907Z"}
-{"request_id": "64e6f21e-399b-484a-bbc1-ab1c5999915f", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:52.251676Z"}
+{"request_id": "144efe7f-e74f-4f54-969a-a4a8f020eed0", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:49.376461Z"}
+{"request_id": "144efe7f-e74f-4f54-969a-a4a8f020eed0", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T12:07:49.716948Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "5be7496c-074d-4cfd-9450-19c23022ab7a", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:52.253704Z"}
+{"request_id": "9e448af6-c2b0-479d-9f55-f9fc2e4bd6cd", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:49.719103Z"}
 ____ TestCartManagement.test_cart_shows_items_with_price_quantity_subtotal _____
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -2305,10 +895,10 @@ ____ TestCartManagement.test_cart_shows_items_with_price_quantity_subtotal _____
     |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     |     raise ResponseValidationError(
     | fastapi.exceptions.ResponseValidationError: 4 validation errors:
-    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
-    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
-    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
-    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
+    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b227026b7a0>}
+    |   {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b227026b7a0>}
+    |   {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b226b813260>}
+    |   {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b226b813260>}
     | 
     +------------------------------------
 
@@ -2392,10 +982,10 @@ Traceback (most recent call last):
   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py", line 155, in serialize_response
     raise ResponseValidationError(
 fastapi.exceptions.ResponseValidationError: 4 validation errors:
-  {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
-  {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
-  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
-  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
+  {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b227026b7a0>}
+  {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b227026b7a0>}
+  {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b226b813260>}
+  {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b226b813260>}
 
 
 During handling of the above exception, another exception occurred:
@@ -2471,18 +1061,18 @@ app/core/middleware.py:30: in dispatch
 .sandbox/venv/lib/python3.12/site-packages/fastapi/routing.py:155: in serialize_response
     raise ResponseValidationError(
 E   fastapi.exceptions.ResponseValidationError: 4 validation errors:
-E     {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
-E     {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x745f91b55370>}
-E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
-E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x745f905b1850>}
+E     {'type': 'missing', 'loc': ('response', 'items', 0, 'product_name'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b227026b7a0>}
+E     {'type': 'missing', 'loc': ('response', 'items', 0, 'subtotal'), 'msg': 'Field required', 'input': <app.domains.cart.models.CartItem object at 0x7b227026b7a0>}
+E     {'type': 'missing', 'loc': ('response', 'total'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b226b813260>}
+E     {'type': 'missing', 'loc': ('response', 'item_count'), 'msg': 'Field required', 'input': <app.domains.cart.models.Cart object at 0x7b226b813260>}
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "8ccdc7c5-6654-4fef-b384-36e36eab093a", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:53.270380Z"}
-{"request_id": "8ccdc7c5-6654-4fef-b384-36e36eab093a", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:01:53.610627Z"}
+{"request_id": "c29537f4-e746-414f-8dea-e0d11120c6be", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:50.716892Z"}
+{"request_id": "c29537f4-e746-414f-8dea-e0d11120c6be", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T12:07:51.057663Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "cc202908-f8fe-438b-bef6-9ef8fdac5291", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:53.641065Z"}
+{"request_id": "1c3f843c-b8a6-406c-9e5a-516c2e1f57f8", "method": "GET", "path": "/api/v1/cart", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:51.204912Z"}
 __________ TestSearchAndFilter.test_search_returns_matching_products ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -2828,7 +1418,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "2e9efb9d-895a-4185-a879-9743e8d8a0d4", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:55.630733Z"}
+{"request_id": "e4de207e-a0eb-4d61-a50f-9fe10eec444e", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:53.215769Z"}
 ___________ TestSearchAndFilter.test_search_no_results_returns_empty ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3174,7 +1764,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "1be15ed5-20fa-4290-b823-1a4857ed95fe", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:56.301641Z"}
+{"request_id": "e1724bc1-5e3e-4bac-b33b-dd45149da8b3", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:53.932354Z"}
 _____ TestSearchAndFilter.test_filter_by_category_returns_correct_products _____
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3520,7 +2110,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "30274d77-51b8-4df0-921c-bd47bad076c8", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:57.001949Z"}
+{"request_id": "db90e23b-9247-4568-8015-25a952582a95", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:54.646871Z"}
 _____ TestSearchAndFilter.test_product_listing_page_shows_required_fields ______
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -3867,7 +2457,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "a8f7c623-a12e-4380-8323-09b88470aeb2", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:57.830330Z"}
+{"request_id": "fd943887-a36c-4998-bbd6-261441b149ea", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:55.331895Z"}
 ____________ TestSearchAndFilter.test_products_paginated_correctly _____________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -4214,7 +2804,7 @@ app/domains/products/service.py:72: in list_products
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   TypeError: attribute name must be string, not 'NoneType'
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "b066f5c3-01c4-4257-a48b-60fe1c27548c", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:58.517289Z"}
+{"request_id": "3402b76f-c4a4-4779-8737-8567a9116a22", "method": "GET", "path": "/api/v1/products", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:56.002005Z"}
 ________ TestProductDetail.test_product_detail_returns_full_information ________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -4394,7 +2984,7 @@ ________ TestProductDetail.test_product_detail_returns_full_information ________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bd6d4c0>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226bd7bf80>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -4489,7 +3079,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bd6d4c0>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226bd7bf80>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
@@ -4574,10 +3164,10 @@ app/domains/products/service.py:109: in get_product
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E   price
-E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bd6d4c0>, input_type=Product]
+E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226bd7bf80>, input_type=Product]
 E       For further information visit https://errors.pydantic.dev/2.7/v/missing
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "0260a074-07fd-4773-b5c2-51878b085171", "method": "GET", "path": "/api/v1/products/3726cb12-8329-441d-99b6-a4069755ba90", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:01:59.212693Z"}
+{"request_id": "624da448-9e69-4434-b61e-28331364fdde", "method": "GET", "path": "/api/v1/products/c59f4f36-3f6d-45ca-872c-115f613c259f", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:56.681230Z"}
 ____________ TestProductReviews.test_guest_can_read_product_reviews ____________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -4757,7 +3347,7 @@ ____________ TestProductReviews.test_guest_can_read_product_reviews ____________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bc32780>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226bd15eb0>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -4852,7 +3442,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bc32780>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226bd15eb0>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
@@ -4937,10 +3527,10 @@ app/domains/products/service.py:109: in get_product
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E   price
-E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f8bc32780>, input_type=Product]
+E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226bd15eb0>, input_type=Product]
 E       For further information visit https://errors.pydantic.dev/2.7/v/missing
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "b98a0a4e-5ac9-42b6-9c92-300034ba3cec", "method": "GET", "path": "/api/v1/products/349bb590-5dff-4c57-a358-c07d9db257bc/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:00.684276Z"}
+{"request_id": "4f1720ac-41b3-492a-b8dd-a9df7b6a808b", "method": "GET", "path": "/api/v1/products/451e9759-8294-433a-bbe9-b60925ea1828/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:58.265471Z"}
 __________ TestProductReviews.test_authenticated_user_submits_review ___________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -5120,7 +3710,7 @@ __________ TestProductReviews.test_authenticated_user_submits_review ___________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f902ce150>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226beb7950>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -5215,7 +3805,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f902ce150>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226beb7950>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
@@ -5299,16 +3889,16 @@ app/domains/products/service.py:109: in get_product
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E   price
-E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f902ce150>, input_type=Product]
+E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226beb7950>, input_type=Product]
 E       For further information visit https://errors.pydantic.dev/2.7/v/missing
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "c2b8bf29-6ef9-42ac-aa4a-5fea57b44259", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:01.730386Z"}
-{"request_id": "c2b8bf29-6ef9-42ac-aa4a-5fea57b44259", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:02:02.071344Z"}
+{"request_id": "edbab406-8734-4293-b537-85fbc4760781", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:59.301352Z"}
+{"request_id": "edbab406-8734-4293-b537-85fbc4760781", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T12:07:59.641709Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "cb081796-bc84-4232-ad72-809fcf4cd8eb", "method": "POST", "path": "/api/v1/products/34db7505-536b-455d-8845-dd254eb6fe5c/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:02.073753Z"}
+{"request_id": "f5c21855-91aa-40f7-b656-a0101b4fc7c0", "method": "POST", "path": "/api/v1/products/89fdc32a-911a-4f35-934e-a1951ff73476/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:07:59.643804Z"}
 ________ TestProductReviews.test_user_cannot_review_same_product_twice _________
   + Exception Group Traceback (most recent call last):
   |   File "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
@@ -5488,7 +4078,7 @@ ________ TestProductReviews.test_user_cannot_review_same_product_twice _________
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     | pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
     | price
-    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f903f54c0>, input_type=Product]
+    |   Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226b9b5e80>, input_type=Product]
     |     For further information visit https://errors.pydantic.dev/2.7/v/missing
     +------------------------------------
 
@@ -5583,7 +4173,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 price
-  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f903f54c0>, input_type=Product]
+  Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226b9b5e80>, input_type=Product]
     For further information visit https://errors.pydantic.dev/2.7/v/missing
 
 During handling of the above exception, another exception occurred:
@@ -5667,16 +4257,16 @@ app/domains/products/service.py:109: in get_product
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   pydantic_core._pydantic_core.ValidationError: 1 validation error for ProductRead
 E   price
-E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x745f903f54c0>, input_type=Product]
+E     Field required [type=missing, input_value=<app.domains.products.mod...bject at 0x7b226b9b5e80>, input_type=Product]
 E       For further information visit https://errors.pydantic.dev/2.7/v/missing
 ---------------------------- Captured stdout setup -----------------------------
-{"request_id": "47acd0db-87f1-45d5-950b-5dfeaca221ee", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:03.689419Z"}
-{"request_id": "47acd0db-87f1-45d5-950b-5dfeaca221ee", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T10:02:04.031098Z"}
+{"request_id": "8ba01ec1-061a-4101-a33f-2ea0c9a125c4", "method": "POST", "path": "/api/v1/auth/login", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:08:01.112062Z"}
+{"request_id": "8ba01ec1-061a-4101-a33f-2ea0c9a125c4", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200, "event": "request_finished", "level": "info", "timestamp": "2026-07-07T12:08:01.452404Z"}
 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ------------------------------ Captured log setup ------------------------------
 INFO     httpx:_client.py:1773 HTTP Request: POST http://test/api/v1/auth/login "HTTP/1.1 200 OK"
 ----------------------------- Captured stdout call -----------------------------
-{"request_id": "895259ef-e4eb-42e1-8372-8b2a55402e11", "method": "POST", "path": "/api/v1/products/8e4c3080-d64e-4d02-83e3-9d3ef19eb997/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T10:02:04.033262Z"}
+{"request_id": "ed847dc5-9218-434a-b368-7fd4a7134f9c", "method": "POST", "path": "/api/v1/products/1c7046e6-80f7-4e03-9b78-84825a104323/reviews", "event": "request_started", "level": "info", "timestamp": "2026-07-07T12:08:01.454499Z"}
 =============================== warnings summary ===============================
 tests/integration/sprint_1/test_account.py: 4 warnings
 tests/integration/sprint_1/test_auth.py: 2 warnings
@@ -5689,10 +4279,6 @@ tests/integration/sprint_1/test_products.py: 2 warnings
 --------------------------------- JSON report ----------------------------------
 report saved to: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.elite/python_pytest-report-sprint-1.json
 =========================== short test summary info ============================
-FAILED tests/integration/sprint_1/test_account.py::TestOrderHistory::test_authenticated_user_sees_their_orders
-FAILED tests/integration/sprint_1/test_account.py::TestOrderHistory::test_order_history_shows_expected_fields
-FAILED tests/integration/sprint_1/test_account.py::TestOrderHistory::test_order_history_empty_for_new_user
-FAILED tests/integration/sprint_1/test_account.py::TestOrderHistory::test_user_only_sees_own_orders
 FAILED tests/integration/sprint_1/test_auth.py::TestUserLogin::test_token_refresh_issues_new_tokens_and_revokes_old
 FAILED tests/integration/sprint_1/test_cart.py::TestCartManagement::test_anonymous_user_gets_empty_cart
 FAILED tests/integration/sprint_1/test_cart.py::TestCartManagement::test_authenticated_user_cart_is_associated_with_account
@@ -5706,4 +4292,4 @@ FAILED tests/integration/sprint_1/test_products.py::TestProductDetail::test_prod
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_guest_can_read_product_reviews
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_authenticated_user_submits_review
 FAILED tests/integration/sprint_1/test_products.py::TestProductReviews::test_user_cannot_review_same_product_twice
-================= 17 failed, 15 passed, 10 warnings in 29.38s ==================
+================= 13 failed, 19 passed, 10 warnings in 28.12s ==================

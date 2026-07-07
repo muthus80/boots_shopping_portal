@@ -78,6 +78,20 @@ class Product(Base):
         nullable=False,
     )
 
+    # ---------------------------------------------------------------------------
+    # Compat alias: architecture data model calls this field "price".
+    # The physical column is "base_price" (migration 0001 is immutable), so we
+    # expose a Python property so that Pydantic schema `price: float` and any
+    # service/repository code using `.price` work without needing a new migration.
+    # ---------------------------------------------------------------------------
+    @property
+    def price(self):  # type: ignore[override]
+        return self.base_price
+
+    @price.setter
+    def price(self, value) -> None:  # type: ignore[override]
+        self.base_price = value
+
     # Relationships
     category = relationship("Category", back_populates="products")
     variants: List["ProductVariant"] = relationship(
