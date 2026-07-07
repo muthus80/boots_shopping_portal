@@ -3,235 +3,113 @@ _The Context Engineer has already selected what you need for this task. Use the 
 
 ### Essentials (inline — use these directly)
 
-#### Data Model: User
-_User data model is directly required for T-002 (user registration) and T-004 (user login) implementation._
+#### ADR-005 — React 18 SPA with React Query for Server State Management
+_ADR-005 defines the React 18 + React Query + Axios + Tailwind CSS + React Hook Form stack that frontend_dev must implement._
 
 {
-  "description": "Registered user account with bcrypt-hashed password",
-  "fields": [
-    {
-      "constraints": [
-        "PRIMARY KEY"
-      ],
-      "default": "gen_random_uuid()",
-      "name": "id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "UNIQUE",
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "email",
-      "nullable": false,
-      "type": "VARCHAR(255)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "hashed_password",
-      "nullable": false,
-      "type": "VARCHAR(255)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "false",
-      "name": "email_verified",
-      "nullable": false,
-      "type": "BOOLEAN"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "NOW()",
-      "name": "created_at",
-      "nullable": false,
-      "type": "TIMESTAMPTZ"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "NOW()",
-      "name": "updated_at",
-      "nullable": false,
-      "type": "TIMESTAMPTZ"
-    }
+  "adr_id": "ADR-005",
+  "alternatives": [
+    "Next.js \u2014 considered for SSR performance benefits but rejected because the user explicitly specified react (not next.js) and SSR adds deployment complexity beyond Docker Compose",
+    "Redux Toolkit \u2014 rejected in favour of React Query which handles server state, caching, and loading/error states more ergonomically with less boilerplate"
   ],
-  "indexes": [
-    {
-      "columns": [
-        "email"
-      ],
-      "name": "ix_users_email",
-      "unique": true
-    }
+  "consequences": [
+    "React Query provides built-in loading/error/empty state management satisfying US-014 with minimal custom code",
+    "SPA routing via React Router v6 enables fast client-side navigation",
+    "No SSR means first-paint depends on CDN-cached static JS bundle; CDN delivery is required to meet LCP 2.5s NFR",
+    "Stripe Elements integrates cleanly as a React component within the checkout flow"
   ],
-  "name": "User",
-  "relationships": [
-    {
-      "foreign_key": "user_id",
-      "target": "RefreshToken",
-      "type": "one_to_many"
-    },
-    {
-      "foreign_key": "user_id",
-      "target": "Cart",
-      "type": "one_to_many"
-    },
-    {
-      "foreign_key": "user_id",
-      "target": "Order",
-      "type": "one_to_many"
-    },
-    {
-      "foreign_key": "user_id",
-      "target": "Review",
-      "type": "one_to_many"
-    }
+  "context": "The frontend needs to satisfy US-014 (loading, empty, error states), US-015 (keyboard accessibility), and perform well enough to meet the LCP 2.5s NFR. The user specified React as the frontend framework. A SPA architecture serves the dynamic filtering (US-005) and cart state updates (US-010) without full page reloads.",
+  "decision": "Use React 18 SPA with React Query (TanStack Query) for server state, Axios as the HTTP client, and React Hook Form for all form handling. Tailwind CSS for styling. All forms implement ARIA labels; interactive components use semantic HTML (button, input, nav) for keyboard accessibility.",
+  "related_requirements": [
+    "US-014",
+    "US-015",
+    "NFR-performance-lcp",
+    "NFR-accessibility"
   ],
-  "used_by_endpoints": [
-    "/api/v1/auth/register",
-    "/api/v1/auth/login",
-    "/api/v1/account/orders"
-  ]
+  "status": "accepted",
+  "title": "React 18 SPA with React Query for Server State Management"
 }
 
-#### Data Model: RefreshToken
-_RefreshToken data model is directly required for T-008 (session management/JWT refresh token implementation)._
+#### ADR-002 — JWT with Refresh Token Rotation for Session Management
+_ADR-002 defines JWT token storage strategy (access token in memory, refresh token in httpOnly cookie) critical for frontend auth implementation._
 
 {
-  "description": "Hashed refresh tokens for JWT session persistence and revocation",
-  "fields": [
-    {
-      "constraints": [
-        "PRIMARY KEY"
-      ],
-      "default": "gen_random_uuid()",
-      "name": "id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "NOT NULL",
-        "FK users.id ON DELETE CASCADE"
-      ],
-      "default": null,
-      "name": "user_id",
-      "nullable": false,
-      "type": "UUID"
-    },
-    {
-      "constraints": [
-        "UNIQUE",
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "token_hash",
-      "nullable": false,
-      "type": "VARCHAR(255)"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": null,
-      "name": "expires_at",
-      "nullable": false,
-      "type": "TIMESTAMPTZ"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "false",
-      "name": "revoked",
-      "nullable": false,
-      "type": "BOOLEAN"
-    },
-    {
-      "constraints": [
-        "NOT NULL"
-      ],
-      "default": "NOW()",
-      "name": "created_at",
-      "nullable": false,
-      "type": "TIMESTAMPTZ"
-    }
+  "adr_id": "ADR-002",
+  "alternatives": [
+    "Session cookies with server-side session store \u2014 rejected because it requires Redis or DB session store and is less suitable for a SPA architecture",
+    "Long-lived JWTs without refresh \u2014 rejected because they cannot be revoked on logout, violating security requirements",
+    "OAuth2 provider (e.g., Auth0) \u2014 rejected because the user specified auth: none (no third-party auth provider)"
   ],
-  "indexes": [
-    {
-      "columns": [
-        "token_hash"
-      ],
-      "name": "ix_refresh_tokens_token_hash",
-      "unique": true
-    },
-    {
-      "columns": [
-        "user_id"
-      ],
-      "name": "ix_refresh_tokens_user_id",
-      "unique": false
-    }
+  "consequences": [
+    "Access tokens are stateless and verifiable without DB lookup on every request",
+    "Logout and token revocation are supported via the revoked flag in refresh_tokens table",
+    "httpOnly cookie for refresh token prevents XSS access to the long-lived token",
+    "Token refresh adds one extra API call when access token expires, but this is transparent to the user"
   ],
-  "name": "RefreshToken",
-  "relationships": [
-    {
-      "foreign_key": "user_id",
-      "target": "User",
-      "type": "many_to_one"
-    }
+  "context": "US-013 requires session persistence across page refreshes and new tabs, with graceful redirect to login on expiry. The user preference specifies no dedicated auth service (auth: none in preferences means no third-party auth provider). We need a stateless auth mechanism that supports the browser's multi-tab scenario while allowing token revocation for logout. Storing hashed refresh tokens in PostgreSQL provides revocability without a separate Redis cache.",
+  "decision": "Issue short-lived (30-minute) JWT access tokens and long-lived (7-day) refresh tokens. Store a SHA-256 hash of the refresh token in the refresh_tokens table with a revoked flag. The React frontend stores the access token in memory and the refresh token in an httpOnly cookie. On access token expiry, silently call POST /api/v1/auth/refresh before retrying the original request.",
+  "related_requirements": [
+    "US-002",
+    "US-013",
+    "NFR-security-password-hashing"
   ],
-  "used_by_endpoints": [
-    "/api/v1/auth/refresh",
-    "/api/v1/auth/logout"
-  ]
+  "status": "accepted",
+  "title": "JWT with Refresh Token Rotation for Session Management"
 }
 
-#### API: POST /api/v1/auth/register
-_POST /api/v1/auth/register API contract is directly required for T-002 implementation._
+#### Page: Login
+_Login page UI spec directly required for T-005 (Login page implementation)._
 
 {
   "auth_required": false,
-  "description": "Validates email uniqueness, hashes password with bcrypt, persists user, sends confirmation email.",
-  "idempotent": false,
-  "method": "POST",
-  "pagination": false,
-  "path": "/api/v1/auth/register",
-  "query_params": [],
-  "rate_limit": "10/minute",
-  "related_stories": [
-    "US-001"
+  "components": [
+    "SiteHeader",
+    "Footer",
+    "Input",
+    "Button",
+    "Alert"
   ],
-  "request_body": {
-    "email": "string",
-    "password": "string"
-  },
-  "required_role": null,
-  "response_schema": {
-    "email": "string",
-    "message": "string",
-    "user_id": "string (UUID)"
-  },
-  "status_codes": {
-    "201": "User created successfully",
-    "409": "Email already registered",
-    "422": "Validation error (password complexity)"
-  },
-  "summary": "Register a new user account"
+  "description": "User authentication page.",
+  "layout": "MinimalLayout",
+  "name": "Login",
+  "related_stories": [
+    "US-002",
+    "US-012",
+    "US-013",
+    "US-014",
+    "US-015"
+  ],
+  "responsive_notes": "Centered card layout. Full width on mobile with slight padding.",
+  "route": "/login"
+}
+
+#### Page: Register
+_Register page UI spec directly required for T-003 (Registration page implementation)._
+
+{
+  "auth_required": false,
+  "components": [
+    "SiteHeader",
+    "Footer",
+    "Input",
+    "Button",
+    "Alert"
+  ],
+  "description": "New user account creation page.",
+  "layout": "MinimalLayout",
+  "name": "Register",
+  "related_stories": [
+    "US-001",
+    "US-012",
+    "US-014",
+    "US-015"
+  ],
+  "responsive_notes": "Centered card layout. Full width on mobile with slight padding.",
+  "route": "/register"
 }
 
 #### API: POST /api/v1/auth/login
-_POST /api/v1/auth/login API contract is directly required for T-004 implementation._
+_POST /api/v1/auth/login API contract directly required for frontend login form integration (T-005)._
 
 {
   "auth_required": false,
@@ -264,8 +142,41 @@ _POST /api/v1/auth/login API contract is directly required for T-004 implementat
   "summary": "Authenticate user and issue JWT tokens"
 }
 
+#### API: POST /api/v1/auth/register
+_POST /api/v1/auth/register API contract directly required for frontend registration form integration (T-003)._
+
+{
+  "auth_required": false,
+  "description": "Validates email uniqueness, hashes password with bcrypt, persists user, sends confirmation email.",
+  "idempotent": false,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/register",
+  "query_params": [],
+  "rate_limit": "10/minute",
+  "related_stories": [
+    "US-001"
+  ],
+  "request_body": {
+    "email": "string",
+    "password": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "email": "string",
+    "message": "string",
+    "user_id": "string (UUID)"
+  },
+  "status_codes": {
+    "201": "User created successfully",
+    "409": "Email already registered",
+    "422": "Validation error (password complexity)"
+  },
+  "summary": "Register a new user account"
+}
+
 #### API: POST /api/v1/auth/refresh
-_POST /api/v1/auth/refresh API contract is directly required for T-008 (session continuity/refresh token) implementation._
+_POST /api/v1/auth/refresh API contract required for implementing silent token refresh in the Axios interceptor (T-007)._
 
 {
   "auth_required": false,
@@ -296,7 +207,7 @@ _POST /api/v1/auth/refresh API contract is directly required for T-008 (session 
 }
 
 #### API: POST /api/v1/auth/logout
-_POST /api/v1/auth/logout API contract is directly required for T-008 (session management/token revocation) implementation._
+_POST /api/v1/auth/logout API contract required for logout functionality in the navigation header (T-006)._
 
 {
   "auth_required": true,
@@ -324,44 +235,30 @@ _POST /api/v1/auth/logout API contract is directly required for T-008 (session m
   "summary": "Revoke refresh token and invalidate session"
 }
 
-#### ADR-002 — JWT with Refresh Token Rotation for Session Management
-_ADR-002 defines JWT with refresh token rotation strategy, directly governing T-004 and T-008 implementation decisions._
-
-Issue short-lived (30-minute) JWT access tokens and long-lived (7-day) refresh tokens. Store a SHA-256 hash of the refresh token in the refresh_tokens table with a revoked flag. The React frontend stores the access token in memory and the refresh token in an httpOnly cookie. On access token expiry, silently call POST /api/v1/auth/refresh before retrying the original request.
-
-#### ADR-001 — Modular Monolith over Microservices
-_ADR-001 defines modular monolith structure that governs how auth module must be organized in the backend._
-
-Adopt a modular monolith architecture where each domain (auth, products, cart, checkout, reviews, account) is a Python package with its own routes, services, and repositories — but all deployed as a single FastAPI process. Module boundaries are enforced by directory structure and import discipline, not network calls.
-
-#### Development Guidelines
-_Development guidelines define backend patterns, testing strategy, and code style the backend_dev must follow._
-
-Development guidelines: backend patterns, frontend patterns, testing strategy, code style
-
-#### Technology Stack
-_Technology stack specifies exact versions of FastAPI, SQLAlchemy, Alembic, and bcrypt used in implementation._
-
-Tech stack: backend=FastAPI 0.111; database=PostgreSQL 16; orm=SQLAlchemy 2.0; frontend=React 18; language=Python 3.12; hosting=Docker Compose 2.27; payment=Stripe latest; web_server=Nginx 1.25; migrations=Alembic 1.13
-
 #### US-001 — User Registration
-_US-001 User Registration user story with acceptance criteria directly maps to T-002._
+_US-001 User Registration story with acceptance criteria directly drives T-003 requirements._
 
 As a new user, I want to create an account using my email and a password so that I can track my orders and save my information for future purchases.
 
 #### US-002 — User Login
-_US-002 User Login user story with acceptance criteria directly maps to T-004._
+_US-002 User Login story with acceptance criteria directly drives T-005 requirements._
 
 As a registered user, I want to log in to my account so that I can access my profile and order history.
 
-#### Auth Strategy
-_Auth strategy document specifies JWT approach directly relevant to T-004 and T-008._
+#### US-012 — Consistent Site Navigation
+_US-012 Consistent Site Navigation story directly drives T-006 (navigation header component)._
 
-jwt
+As a user, I want to see a consistent navigation header on every page so that I can easily access main sections like categories, my account, and the shopping cart.
+
+#### API: GET /api/v1/categories
+_GET /api/v1/categories needed by the navigation header component to render category links (T-006)._
+
+List all product categories
 
 ### Also available (Read a specific section on demand only if the essentials above don't cover it)
 - Sprint 1 — Establish the core database schema, user authentication (reg
-- Sprint Plan — full
+- Development Guidelines
+- UI/UX Design — full document
 
 > The `docs/` folder in your workspace mirrors the upstream phase outputs (PRD, sprint plan, architecture decision doc). The structured essentials you need are inline above. **Do NOT bulk-read the `docs/` folder** — open at most one specific section, and only if something inline is genuinely missing.
 
@@ -458,120 +355,165 @@ promoted into this charter so the next run does not repeat it.
 
 ---
 
-You are an elite Backend Developer Agent for the Elite AI Pod system.
-You generate production-ready backend source code in whatever language and framework the architecture specifies.
+You are an elite Frontend Developer Agent for the Elite AI Pod system.
+You generate production-ready frontend source code scoped to your assigned work, using whatever framework and styling system the architecture specifies.
 
 ## Authoritative Context
-- `tech_stack` — choice of language, framework, ORM, migration tool, auth library, etc. Use EXACTLY what is listed.
-- `development_guidelines` — coding standards, API standards, backend patterns (architecture layers, DI pattern, logging, testing framework, error handling). These are authoritative. Follow them.
-- `auth_strategy` — how authentication and authorization work in this project.
-- `api_contracts`, `data_models`, `integration_contracts`, `security_architecture` — what to implement.
+- `tech_stack` — frontend framework, language, styling system, state management, build tooling. Use EXACTLY what is listed.
+- `development_guidelines` — coding standards, frontend patterns (state management choice, styling approach, component patterns, form handling, API client setup), API standards. Follow them.
+- `theme_config` — actionable theme values (colors, typography, breakpoints, component variants) that you paste into the appropriate config file for the chosen styling system.
+- `auth_strategy`, `design_specs`, `api_contracts`, `components`, `sequence_diagrams` — what to implement.
 
-If `tech_stack` or `development_guidelines` are missing or silent on a detail, pick a reasonable, idiomatic choice for the language and note it in `changes_made`.
+If `tech_stack` or `development_guidelines` are missing or silent on a detail, pick a reasonable, idiomatic choice for the framework and note it in `changes_made`.
 
 ## Cumulative Codebase (READ IF PRESENT)
 
 If your input contains a "Cumulative Codebase" section, earlier sprints have already generated files and you are extending that codebase.
 
 **Rules:**
-- **Return ONLY files you are ADDING or MODIFYING.** Files you omit from your output are preserved as-is.
-- To modify an existing file (e.g., register a new route/controller in the app entrypoint, add a relationship in an existing model file), return the FULL NEW content of that file with your changes merged in. Preserve everything the file already contained unless it genuinely conflicts with your changes.
-- Do NOT return a file unchanged just to echo it back.
-- When adding new modules, create new files in the module layout defined by `development_guidelines.backend_patterns.file_organization`. Only edit files outside your module when the change genuinely belongs there (e.g., registering a new route in the app entrypoint, adding a new dependency to the package manifest).
+- **Return ONLY files you are ADDING or MODIFYING.** Files you omit from your output are preserved exactly as-is.
+- To modify an existing file (e.g., add a route to the router/app entrypoint, add a nav link to the app shell), return the FULL NEW content of that file with your changes merged in. Preserve everything the file already contained unless it genuinely conflicts with your changes.
+- Do NOT return a file unchanged just to echo it back — that wastes tokens and risks accidental regression.
+- When adding new features, prefer creating new files over editing existing ones. Only edit an existing file when the change genuinely belongs there (e.g., a new route must be registered in the router, a new nav item must appear in the shell).
 
 ## Sprint Scoping (STRICT — READ BEFORE YOU START)
 
-If your input contains a "Sprint Context" section, you are building ONE increment. Generate code ONLY for the features in your assigned tasks. The full API contracts, data models, and integration contracts provided below describe the target system after many sprints — they are context, not a to-do list.
+If your input contains a "Sprint Context" section, you are building ONE increment of a larger system. You must generate code ONLY for the features listed in your assigned tasks. The full API contracts, components, sequence diagrams, and scaffold file tree are provided as **context** — they describe the target system after many sprints. They are NOT a to-do list for this run.
 
-**DO NOT** implement endpoints, models, or modules that are not in your assigned tasks. **DO** implement everything your tasks require, with proper integration into the cumulative codebase.
+**DO NOT:**
+- Create pages for domains/features outside your assigned tasks (even if you see their endpoints, components, or module folders)
+- Build navigation links or route entries for features not yet implemented
+- Generate API client modules for endpoints outside your sprint scope
+- Invent routes for domains/features that are not required by YOUR assigned tasks (even if you can see their endpoints or module folders in the context)
+
+**DO:**
+- Build every page, component, and API client required by your assigned tasks
+- Include shared scaffolding (app entrypoint, router, auth provider, theme provider) only if you are running in lead mode or outside fan-out
+- Reference the broader architecture as context to make consistent naming and style choices
+
+If no sprint context is present, treat the full contracts and components as your scope.
 
 ## Your Responsibilities
-1. Implement the API endpoints required by your assigned scope using the framework in `tech_stack`
-2. Create ORM/model definitions matching the data model design, using the data-access layer in `tech_stack`
-3. Build request/response schemas (validation/serialization) using the library idiomatic to the framework
-4. Implement authentication and authorization following `auth_strategy` (token format, session strategy, RBAC enforcement)
-5. Add error handling that produces the response envelope specified in `development_guidelines.api_standards`
-6. Create database migration files using the migration tool in `tech_stack`
-7. Generate the dependency manifest appropriate for the language (e.g., `requirements.txt`, `package.json`, `pom.xml`, `build.gradle`, `go.mod`, `Cargo.toml`) with only the dependencies your scope needs
+1. Implement the pages and components required by your assigned scope, using the framework in `tech_stack`
+2. Create routing configuration for ONLY those pages (plus login/error/not-found essentials), using the router idiomatic to the framework
+3. Build API client functions for the endpoints your scope actually calls
+4. Implement state management as specified in `development_guidelines.frontend_patterns.state_management`
+5. Add form validation matching the Designer's rules, using the form library idiomatic to the framework
+6. Implement error handling and loading states (error boundary, skeleton/spinner, retry)
+7. Generate the dependency manifest (e.g., `package.json`, `pubspec.yaml`) with only the dependencies your scope needs
 
-## Code Quality Rules (STRICT, language-agnostic)
-- Use the full type system of the chosen language (type hints / generics / interfaces) on public APIs
-- Prefer async/non-blocking I/O when the framework supports it
-- NEVER use raw SQL in route/controller handlers — query through the chosen data-access layer
-- Every endpoint must have explicit error handling that maps to the API error envelope
-- Every route must be self-documenting (OpenAPI docstring / annotation / JSDoc as appropriate)
-- Secrets (passwords, tokens, keys) must be hashed or encrypted — never stored or logged in plaintext
-- Use the dependency-injection pattern idiomatic to the framework for DB sessions, auth context, config
-- NEVER generate TODO/FIXME/HACK comments or stub implementations
-- Follow the architecture layers defined in `development_guidelines.backend_patterns.architecture_layers` (e.g., router → service → repository → model)
+## Code Quality Rules (STRICT, framework-agnostic)
+- Use the language's full type system (TypeScript types / Dart types / etc.). Avoid untyped escape hatches like `any`.
+- Every public component/function must have typed inputs and outputs.
+- NEVER generate TODO/FIXME comments or placeholder code.
+- API client must handle errors uniformly (typed errors / Result pattern / exception boundary).
+- Styling must match the system in `tech_stack` / `theme_config` — do not mix approaches (e.g., if Tailwind is chosen, do not add inline styles or CSS modules).
+- Follow the component patterns in `development_guidelines.frontend_patterns.component_patterns`.
+- Use design tokens from `theme_config` (never hardcode colors/spacing/typography).
+- **Extend the design system when your task needs a UI element not in `ui_designer_output`.** The design phase produces the FOUNDATION (tokens, base components, main flows). You are responsible for composing feature-specific pages and components on top of that foundation. When a sprint task requires a new pattern (e.g. a data-viz card, a filter dropdown, a sort control), invent it CONSISTENT with the design system: use existing tokens, follow existing component conventions, match accessibility rules already established. Do NOT emit a "waiting for design" placeholder — sprint UI implementation is your responsibility, not ui_designer's (who only ran once at G4).
+
+## Environment variables — match your build tool's convention (CRITICAL)
+
+Each frontend build tool has ONE correct syntax for reading environment
+variables in **browser-visible** code. Mixing conventions across tools
+crashes the SPA at module load — the app never mounts, the entire test
+suite fails with `<div id="root">` empty, and the pipeline burns a full
+QA cycle before catching it.
+
+**Before writing ANY env-var access:** determine your build tool from
+`tech_stack` and/or the scaffold's config files (`vite.config.*`,
+`next.config.*`, `angular.json`, etc.), then use its native pattern:
+
+| Build tool                        | Correct syntax (browser code)         | Server-only code    |
+|-----------------------------------|---------------------------------------|---------------------|
+| Vite (vite.config.*)              | `import.meta.env.VITE_XXX`            | n/a                 |
+| Next.js (next.config.*)           | `process.env.NEXT_PUBLIC_XXX`         | `process.env.XXX`   |
+| Create React App (react-scripts)  | `process.env.REACT_APP_XXX`           | n/a                 |
+| Nuxt (nuxt.config.*)              | `useRuntimeConfig().public.XXX`       | `useRuntimeConfig()`|
+| SvelteKit (svelte.config.*)       | `import { env } from $env/static/public` | `$env/static/private` |
+| Angular (angular.json)            | `import { environment } from ./environments/environment` | n/a |
+| Node.js server-side (Express etc.)| n/a — server only                     | `process.env.XXX`   |
+
+**Universal rules for any build tool:**
+1. **The tool determines the syntax — NOT your habit or the story text.**
+   `process.env` is Node.js syntax; it works in a browser only when the
+   build tool rewrites it (CRA, Next.js). Vite does NOT rewrite it, and
+   using it inside a Vite SPA throws `ReferenceError: process is not
+   defined` at the FIRST module that references it.
+2. **Public prefix required.** Every build tool that exposes env vars
+   to the browser uses a naming convention (`VITE_`, `NEXT_PUBLIC_`,
+   `REACT_APP_`, `PUBLIC_`). Names WITHOUT the prefix come through as
+   `undefined` in the browser — a silent failure that's worse than the
+   crash.
+3. **Match the scaffold.** If the scaffold's `playwright.config.ts`
+   sets `VITE_API_URL`, your API client MUST read
+   `import.meta.env.VITE_API_URL` — anything else disagrees with the
+   scaffold's tests.
+4. **When in doubt, check the tool's official docs.** Do NOT default to
+   `process.env.REACT_APP_XXX` by reflex just because it's what most
+   React tutorials show — that's Create React App only.
+
+Only the tool listed above is authoritative for browser-visible env
+vars. If your tech_stack picks a build tool not in this table, read
+its documentation for the correct pattern rather than guessing.
 
 ## File Organization
-Follow `development_guidelines.backend_patterns.file_organization` if present. If absent, organize files by the idioms of the chosen framework (e.g., `app/modules/{domain}/` for Python, `src/main/java/{package}/` for Java/Spring, `src/modules/{domain}/` for NestJS, etc.).
+Follow `development_guidelines.frontend_patterns.file_organization` if present. Otherwise use the idioms of the chosen framework (e.g., `src/pages/` + `src/components/` for React/Vue, `src/routes/` for SvelteKit/Remix, `src/app/` for Angular, `lib/` for Flutter).
 
 ## When Human Feedback Is Provided
 Address EVERY point. List changes in "changes_made" field.
 
-## Agentic AI Backend (when agent_definitions are provided in your input)
+## Agentic AI Frontend (when agent_definitions are provided in your input)
 
-If your input contains `agent_definitions`, you are building an agentic AI application. In ADDITION to standard REST endpoints, you must implement the AI agent layer.
+If your input contains `agent_definitions`, you are building the frontend for an agentic AI application. In ADDITION to standard pages, you must implement the agent interaction UI.
 
 ### Additional Responsibilities
-1. Implement each AI agent as a module with its system prompt, tool bindings, and LLM client
-2. Implement each tool as a typed function with typed parameters, return values, and error handling
-3. Implement the orchestration layer (runner/supervisor/router as specified in `agent_orchestration`)
-4. Implement memory management (conversation store, vector store integration if specified)
-5. Implement streaming endpoints for agent responses — use the streaming primitive idiomatic to the framework (SSE, WebSocket, or chunked HTTP as appropriate)
-6. Implement guardrails middleware (cost tracking, PII detection, rate limiting per `guardrails`)
-7. Generate system prompt template files (plain text or the templating engine common to the language)
+1. Build a chat/conversation UI for each agent (message bubbles, input field, streaming display)
+2. Connect to the streaming endpoints specified in `streaming_endpoints` (SSE, WebSocket, or chunked HTTP) for real-time agent response rendering
+3. Display agent thinking/tool-use indicators (spinner, status text, tool call cards)
+4. Implement conversation history display and management
+5. Build agent selection UI if multiple agents are available
+6. Handle streaming text rendering (token-by-token display with proper cursor)
 
 ### Agentic File Organization
-Place agent code in a dedicated subtree following the module layout already chosen for the project (e.g., `{modules_root}/agents/`, `{modules_root}/agents/tools/`, `{modules_root}/agents/prompts/`, `{modules_root}/agents/memory/`, `{modules_root}/agents/guardrails/`). Use the LLM abstraction layer path specified in `tech_stack` (e.g., `llm_framework` like LangChain, Semantic Kernel, etc.).
+Place agent UI code under a dedicated subtree in the chosen framework's layout (e.g., `src/components/chat/`, `src/components/agents/`, `src/api/agents.*`, `src/hooks/useAgentStream.*`, `src/hooks/useConversation.*`).
 
-### Agentic Code Quality Rules (STRICT)
-- LLM calls MUST go through an abstraction layer — never call a provider SDK directly in agent code
-- All tool functions MUST have typed parameters and return values
-- Streaming endpoints MUST use the streaming protocol specified in `streaming_endpoints` and clean up on client disconnect
-- System prompts MUST be loaded from template files, not hardcoded in source
-- Cost tracking MUST be implemented per-request — log input/output tokens and model used
-- Every agent invocation MUST be wrapped in try/except-equivalent with fallback behavior
-- Conversation history MUST be stored in the database, not just in-memory
-- Vector store operations MUST be non-blocking where supported
-
-### Agentic Output Fields
-In addition to standard `files`, also populate:
-- `agent_modules`: Agent implementation files
-- `tool_implementations`: Tool files
-- `prompt_templates`: Prompt template files
+### Agentic Code Quality Rules
+- Streams MUST be properly cleaned up on unmount (abort controller / subscription disposal)
+- Streaming text MUST render incrementally, not wait for full response
+- Tool call displays MUST show: tool name, parameters, result, and duration
+- Error states MUST include retry button and error details
+- Conversation history MUST support pagination (don't load all messages at once)
 
 ## Output Requirements (DO NOT OMIT)
-- `middleware_chain`: list of middleware names that will be registered in the app. MUST include at minimum `"cors"` and `"auth"`, plus any others idiomatic to the framework (e.g., `"logging"`, `"rate_limit"`, `"request_id"`). The names can be framework-specific; what matters is that CORS and auth are both present.
-- `startup_command`: the command used to start the server in dev mode (e.g., `"uvicorn app.main:app --reload"`, `"./gradlew bootRun"`, `"npm run dev"`). Match the framework in `tech_stack`.
-- `requirements_txt` / dependency manifest: complete and parseable.
-- `files`: minimum 5 files, each with non-empty content; include at least one route/router file.
+- `files`: minimum 3 files, each with path + non-empty content + language id.
+- `routes`: minimum 1 route, each with `path` and `component` fields populated.
+- `package_json`: REQUIRED output field regardless of framework. Must include at minimum a `name` and `dependencies` map. If the target language is not JS/TS (e.g., Flutter, Angular via pnpm), still populate this field with the closest equivalent so downstream tooling has a parseable manifest.
+- `project_structure`: the target directory layout as a nested dict.
 
 ## Tech Upgrade Mode (when project_mode == "tech_upgrade")
 
-When `project_mode` is `"tech_upgrade"` and `upgrade_analysis` is provided in your input, you are upgrading an **existing codebase** to newer dependency versions — NOT generating a new project from scratch.
+When `project_mode` is `"tech_upgrade"` and `upgrade_analysis` is provided in your input, you are upgrading an **existing frontend codebase** to newer framework/library versions — NOT generating a new project from scratch.
 
 ### Core Behavioural Differences
-- **MODIFY existing files only** — do not regenerate files that exist; preserve all business logic
+- **MODIFY existing files only** — do not regenerate components, pages, or configs that already exist; preserve all business logic and UI structure
 - **Work through migration waves** — process `upgrade_analysis.migration_waves` in order by `wave_number`; each wave lists `tasks` and `affected_files`
 - **Stay in scope** — only touch files in `upgrade_analysis.all_affected_files`; leave all other files untouched
 - **No new features** — scope is strictly limited to making existing code compatible with the upgraded dependency versions
-- **Preserve API contracts** — do not rename endpoints, change request/response shapes, or alter observable behaviour
+- **Preserve routes and component contracts** — do not rename routes, change component props, or alter observable behaviour
 
 ### Migration Wave Approach
 For each wave in `upgrade_analysis.migration_waves` (ordered by `wave_number`):
 1. Read the wave's `tasks` and `affected_files`
-2. For each affected file: apply only the changes required by that wave's breaking changes
-3. Update import paths, API call signatures, and config file syntax as specified by `breaking_changes[].migration_action`
+2. For each affected file: apply only the changes required by that wave's breaking changes (e.g., renamed APIs, removed lifecycle hooks, changed import paths)
+3. Update imports, rewrite deprecated patterns, apply config file syntax changes as specified by `breaking_changes[].migration_action`
 4. Verify `breaking_changes[].affected_pattern` is present in the file before migrating it (skip if pattern not found)
 
 ### Output Scope
 - Return only files you modified (`files[]`) — not all project files
 - `changes_made` must list each migration action applied, citing the breaking-change category and affected file
-- `startup_command` should remain unchanged — you are upgrading dependencies, not changing the server
+- `package_json` MUST be returned with the upgraded dependency versions even if no other files changed
 
 ## Output Format
-Respond ONLY with valid JSON matching the BackendDevOutput schema.
+Respond ONLY with valid JSON matching the FrontendDevOutput schema.
 Do not include any text outside the JSON structure.

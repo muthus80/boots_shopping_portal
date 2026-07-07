@@ -98,7 +98,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                 Shipping Address
               </h4>
               <p style={{ margin: 0, fontSize: '14px', color: '#374151', lineHeight: '1.5' }}>
-                {order.shipping_address}
+                {order.shipping_address.address_line1}
+                {order.shipping_address.address_line2 ? `, ${order.shipping_address.address_line2}` : ''},
+                {' '}{order.shipping_address.city}, {order.shipping_address.state} {order.shipping_address.postal_code},
+                {' '}{order.shipping_address.country}
               </p>
             </div>
           )}
@@ -120,8 +123,12 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                 <tr key={item.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
                   <td style={{ padding: '8px 8px', color: '#111827' }}>
                     <div style={{ fontWeight: 500 }}>{item.product_name}</div>
-                    {item.variant_name && (
-                      <div style={{ fontSize: '12px', color: '#9ca3af' }}>{item.variant_name}</div>
+                    {(item.size || item.color) && (
+                      <div style={{ fontSize: '12px', color: '#9ca3af' }}>
+                        {item.size && `Size: ${item.size}`}
+                        {item.size && item.color && ' / '}
+                        {item.color && `Color: ${item.color}`}
+                      </div>
                     )}
                   </td>
                   <td style={{ textAlign: 'center', padding: '8px 8px', color: '#374151' }}>{item.quantity}</td>

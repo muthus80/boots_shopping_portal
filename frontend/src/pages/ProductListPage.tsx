@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { Link, useSearchParams } from 'react-router-dom';
-import { getProducts } from '../api/products';
-import type { Product, Category } from '../types/index';
+import { getProducts, PaginatedProducts } from '../api/products';
+import type { Product } from '../types/index';
 
 export const ProductListPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,17 +15,11 @@ export const ProductListPage: React.FC = () => {
   const search = searchParams.get('search') || undefined;
   const page = parseInt(searchParams.get('page') || '1', 10);
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery<PaginatedProducts, Error>({
     queryKey: ['products', { categoryId, search, page }],
     queryFn: () =>
       getProducts({ category_id: categoryId, search, page, page_size: 12 }),
-    keepPreviousData: true,
-  });
-
-  const { data: categoriesData } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => getProducts({ page: 1, page_size: 1 }).then(() => null),
-    enabled: false,
+    placeholderData: keepPreviousData,
   });
 
   const handleSearchSubmit = useCallback(
@@ -43,20 +37,6 @@ export const ProductListPage: React.FC = () => {
     [searchInput, searchParams, setSearchParams]
   );
 
-  const handleCategoryChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const next = new URLSearchParams(searchParams);
-      if (e.target.value) {
-        next.set('category', e.target.value);
-      } else {
-        next.delete('category');
-      }
-      next.set('page', '1');
-      setSearchParams(next);
-    },
-    [searchParams, setSearchParams]
-  );
-
   const handlePageChange = useCallback(
     (newPage: number) => {
       const next = new URLSearchParams(searchParams);
@@ -67,10 +47,9 @@ export const ProductListPage: React.FC = () => {
     [searchParams, setSearchParams]
   );
 
-  const products: Product[] = data?.products ?? data?.items ?? (Array.isArray(data) ? data : []);
-  const totalPages: number = data?.total_pages ?? data?.pages ?? 1;
-  const totalCount: number = data?.total ?? data?.count ?? 0;
-  const categories: Category[] = data?.categories ?? [];
+  const products: Product[] = data?.items ?? [];
+  const totalPages: number = data?.total_pages ?? 1;
+  const totalCount: number = data?.total ?? 0;
 
   return (
     <div className="product-list-page" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 16px' }}>
@@ -138,35 +117,6 @@ export const ProductListPage: React.FC = () => {
             </button>
           )}
         </form>
-
-        {/* Category filter */}
-        {categories.length > 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label htmlFor="category-filter" style={{ fontSize: 12, color: '#6b7280' }}>
-              Category
-            </label>
-            <select
-              id="category-filter"
-              value={categoryId || ''}
-              onChange={handleCategoryChange}
-              style={{
-                padding: '8px 12px',
-                border: '1px solid #d1d5db',
-                borderRadius: 6,
-                fontSize: 14,
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-              }}
-            >
-              <option value="">All Categories</option>
-              {categories.map((cat: Category) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
       </div>
 
       {/* Active filters summary */}
@@ -176,14 +126,6 @@ export const ProductListPage: React.FC = () => {
           {search && (
             <span>
               {' '}for <strong>&ldquo;{search}&rdquo;</strong>
-            </span>
-          )}
-          {categoryId && categories.length > 0 && (
-            <span>
-              {' '}in{' '}
-              <strong>
-                {categories.find((c) => c.id === categoryId)?.name ?? categoryId}
-              </strong>
             </span>
           )}
         </div>
@@ -205,7 +147,6 @@ export const ProductListPage: React.FC = () => {
                 backgroundColor: '#f3f4f6',
                 borderRadius: 8,
                 height: 320,
-                animation: 'pulse 1.5s ease-in-out infinite',
               }}
             />
           ))}
@@ -356,15 +297,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const primaryImage =
     product.images && product.images.length > 0 ? product.images[0] : null;
 
-  const minPrice =
-    product.variants && product.variants.length > 0
-      ? Math.min(...product.variants.map((v) => v.price))
-      : product.price ?? null;
-
-  const hasDiscount =
-    product.variants && product.variants.length > 0
-      ? product.variants.some((v) => v.compare_at_price && v.compare_at_price > v.price)
-      : false;
+  const displayPrice = product.sale_price != null ? product.sale_price : product.base_price;
+  const hasDiscount = product.sale_price != null && product.sale_price < product.base_price;
 
   return (
     <Link
@@ -455,11 +389,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* Info */}
         <div style={{ padding: '12px 16px 16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-          {product.category && (
-            <span style={{ fontSize: 11, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
-              {product.category.name}
-            </span>
-          )}
           <h3
             style={{
               fontSize: 15,
@@ -494,18 +423,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </p>
           )}
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
-            {minPrice !== null ? (
-              <span style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>
-                {minPrice.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' })}
-              </span>
-            ) : (
-              <span style={{ fontSize: 14, color: '#9ca3af' }}>Price unavailable</span>
-            )}
-
-            {product.variants && product.variants.length > 1 && (
-              <span style={{ fontSize: 12, color: '#6b7280' }}>
-                {product.variants.length} options
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 'auto' }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>
+              {Number(displayPrice).toLocaleString('en-GB', { style: 'currency', currency: 'GBP' })}
+            </span>
+            {hasDiscount && (
+              <span style={{ fontSize: 13, color: '#9ca3af', textDecoration: 'line-through' }}>
+                {Number(product.base_price).toLocaleString('en-GB', { style: 'currency', currency: 'GBP' })}
               </span>
             )}
           </div>

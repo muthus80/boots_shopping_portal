@@ -1,6 +1,21 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getCart, updateCartItem, removeCartItem } from '../api/cart';
+import { getCart, removeCartItem } from '../api/cart';
+import { apiClient } from '../api/client';
 import { Cart, CartItem } from '../types/index';
+
+const updateCartItemQty = async (cartItemId: string, quantity: number): Promise<Cart> => {
+  const response = await apiClient.put<Cart>(`/api/v1/cart/items/${cartItemId}`, { quantity });
+  return response.data;
+};
+
+const removeCartItemAndRefetch = async (cartItemId: string): Promise<Cart> => {
+  await removeCartItem(cartItemId);
+  return getCart();
+};
+
+const getItemPrice = (item: CartItem): number => {
+  return item.unit_price ?? 0;
+};
 
 export const CartPage: React.FC = () => {
   const [cart, setCart] = useState<Cart | null>(null);
@@ -29,7 +44,7 @@ export const CartPage: React.FC = () => {
     if (newQuantity < 1) return;
     setUpdatingItems((prev) => new Set(prev).add(item.id));
     try {
-      const updatedCart = await updateCartItem(item.id, newQuantity);
+      const updatedCart = await updateCartItemQty(item.id, newQuantity);
       setCart(updatedCart);
     } catch (err: unknown) {
       setError('Failed to update item quantity. Please try again.');
@@ -45,7 +60,7 @@ export const CartPage: React.FC = () => {
   const handleRemoveItem = async (itemId: string) => {
     setUpdatingItems((prev) => new Set(prev).add(itemId));
     try {
-      const updatedCart = await removeCartItem(itemId);
+      const updatedCart = await removeCartItemAndRefetch(itemId);
       setCart(updatedCart);
     } catch (err: unknown) {
       setError('Failed to remove item. Please try again.');
@@ -64,7 +79,7 @@ export const CartPage: React.FC = () => {
 
   const calculateTotal = (items: CartItem[]): number => {
     return items.reduce((sum, item) => {
-      const price = item.variant?.price ?? 0;
+      const price = getItemPrice(item);
       return sum + price * item.quantity;
     }, 0);
   };
@@ -112,14 +127,14 @@ export const CartPage: React.FC = () => {
         <div style={styles.itemsList}>
           {cart.items.map((item: CartItem) => {
             const isUpdating = updatingItems.has(item.id);
-            const price = item.variant?.price ?? 0;
+            const price = getItemPrice(item);
             const itemTotal = price * item.quantity;
 
             return (
               <div key={item.id} style={{ ...styles.cartItem, opacity: isUpdating ? 0.6 : 1 }}>
                 <div style={styles.itemInfo}>
                   <div style={styles.itemName}>
-                    {item.variant?.product_id ?? 'Product'}
+                    {item.product?.name ?? item.product_id}
                   </div>
                   {item.variant && (
                     <div style={styles.itemVariant}>

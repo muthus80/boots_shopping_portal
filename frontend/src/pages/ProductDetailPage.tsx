@@ -1,20 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProduct, createReview } from '../api/products';
+import { getProduct } from '../api/products';
 import { addCartItem } from '../api/cart';
 import { useAuth } from '../stores/authStore';
 import { Product, ProductVariant, Review } from '../types/index';
+import { apiClient } from '../api/client';
+
+// Extended types for fields the API returns but are not yet in the base types
+interface ProductVariantExtended extends ProductVariant {
+  price?: number;
+}
+
+interface ProductExtended extends Omit<Product, 'variants'> {
+  variants?: ProductVariantExtended[];
+  reviews?: Review[];
+  category?: { id: string; name: string };
+}
+
+interface CreateReviewPayload {
+  rating: number;
+  comment?: string;
+}
+
+const createReviewForProduct = async (
+  productId: string,
+  payload: CreateReviewPayload
+): Promise<Review> => {
+  const response = await apiClient.post<Review>(
+    `/api/v1/products/${productId}/reviews`,
+    payload
+  );
+  return response.data;
+};
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<ProductExtended | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariantExtended | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [addingToCart, setAddingToCart] = useState<boolean>(false);
   const [cartMessage, setCartMessage] = useState<string | null>(null);
@@ -31,13 +59,14 @@ const ProductDetailPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await getProduct(id);
+        const data = await getProduct(id) as ProductExtended;
         setProduct(data);
         if (data.variants && data.variants.length > 0) {
           setSelectedVariant(data.variants[0]);
         }
-      } catch (err: any) {
-        setError(err?.message || 'Failed to load product.');
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Failed to load product.';
+        setError(msg);
       } finally {
         setLoading(false);
       }
@@ -45,7 +74,7 @@ const ProductDetailPage: React.FC = () => {
     fetchProduct();
   }, [id]);
 
-  const handleVariantSelect = (variant: ProductVariant) => {
+  const handleVariantSelect = (variant: ProductVariantExtended) => {
     setSelectedVariant(variant);
     setQuantity(1);
     setCartMessage(null);
@@ -63,10 +92,11 @@ const ProductDetailPage: React.FC = () => {
     setAddingToCart(true);
     setCartMessage(null);
     try {
-      await addCartItem({ variant_id: selectedVariant.id, quantity });
+      await addCartItem(selectedVariant.id, quantity);
       setCartMessage('Item added to cart!');
-    } catch (err: any) {
-      setCartMessage(err?.message || 'Failed to add item to cart.');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to add item to cart.';
+      setCartMessage(msg);
     } finally {
       setAddingToCart(false);
     }
@@ -83,14 +113,15 @@ const ProductDetailPage: React.FC = () => {
     setReviewError(null);
     setReviewSuccess(null);
     try {
-      await createReview(id, { rating: reviewRating, comment: reviewComment });
+      await createReviewForProduct(id, { rating: reviewRating, comment: reviewComment });
       setReviewSuccess('Review submitted successfully!');
       setReviewRating(5);
       setReviewComment('');
-      const updated = await getProduct(id);
+      const updated = await getProduct(id) as ProductExtended;
       setProduct(updated);
-    } catch (err: any) {
-      setReviewError(err?.message || 'Failed to submit review.');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to submit review.';
+      setReviewError(msg);
     } finally {
       setSubmittingReview(false);
     }
@@ -115,13 +146,18 @@ const ProductDetailPage: React.FC = () => {
     );
   }
 
+  const reviews = product.reviews ?? [];
   const averageRating =
-    product.reviews && product.reviews.length > 0
+    reviews.length > 0
       ? (
-          product.reviews.reduce((sum: number, r: Review) => sum + r.rating, 0) /
-          product.reviews.length
+          reviews.reduce((sum: number, r: Review) => sum + r.rating, 0) /
+          reviews.length
         ).toFixed(1)
       : null;
+
+  const displayPrice = selectedVariant?.price != null
+    ? Number(selectedVariant.price)
+    : Number(product.base_price);
 
   return (
     <div style={styles.container}>
@@ -147,14 +183,14 @@ const ProductDetailPage: React.FC = () => {
 
           {averageRating && (
             <p style={styles.rating}>
-              ⭐ {averageRating} ({product.reviews?.length} review
-              {product.reviews?.length !== 1 ? 's' : ''})
+              ⭐ {averageRating} ({reviews.length} review
+              {reviews.length !== 1 ? 's' : ''})
             </p>
           )}
 
           <div style={styles.priceRow}>
             <span style={styles.price}>
-              ${selectedVariant ? Number(selectedVariant.price).toFixed(2) : Number(product.base_price).toFixed(2)}
+              ${displayPrice.toFixed(2)}
             </span>
             {selectedVariant && selectedVariant.stock_quantity <= 0 && (
               <span style={styles.outOfStock}>Out of Stock</span>
@@ -168,7 +204,7 @@ const ProductDetailPage: React.FC = () => {
             <div style={styles.variantSection}>
               <h3 style={styles.variantTitle}>Select Variant</h3>
               <div style={styles.variantGrid}>
-                {product.variants.map((variant: ProductVariant) => (
+                {product.variants.map((variant: ProductVariantExtended) => (
                   <button
                     key={variant.id}
                     style={{
@@ -183,7 +219,9 @@ const ProductDetailPage: React.FC = () => {
                     {variant.color && (
                       <span style={styles.variantColor}>{variant.color}</span>
                     )}
-                    <span style={styles.variantPrice}>${Number(variant.price).toFixed(2)}</span>
+                    {variant.price != null && (
+                      <span style={styles.variantPrice}>${Number(variant.price).toFixed(2)}</span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -245,9 +283,9 @@ const ProductDetailPage: React.FC = () => {
       <div style={styles.reviewsSection}>
         <h2 style={styles.reviewsTitle}>Customer Reviews</h2>
 
-        {product.reviews && product.reviews.length > 0 ? (
+        {reviews.length > 0 ? (
           <div style={styles.reviewsList}>
-            {product.reviews.map((review: Review) => (
+            {reviews.map((review: Review) => (
               <div key={review.id} style={styles.reviewCard}>
                 <div style={styles.reviewHeader}>
                   <span style={styles.reviewRating}>
@@ -257,8 +295,8 @@ const ProductDetailPage: React.FC = () => {
                     {new Date(review.created_at).toLocaleDateString()}
                   </span>
                 </div>
-                {review.comment && (
-                  <p style={styles.reviewComment}>{review.comment}</p>
+                {review.body && (
+                  <p style={styles.reviewComment}>{review.body}</p>
                 )}
               </div>
             ))}

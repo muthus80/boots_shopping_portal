@@ -1,192 +1,217 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { useAuth } from '../stores/authStore';
+import axios from 'axios';
 
-export const LoginPage: React.FC = () => {
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
+
+const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
   const { login } = useAuth();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    mode: 'onBlur',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = async (data: LoginFormValues): Promise<void> => {
+    setServerError(null);
+
     try {
-      await login({ email, password });
+      await login({ email: data.email, password: data.password });
+      navigate('/');
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const detail = err.response?.data?.detail;
+
+        if (status === 401) {
+          setServerError('Invalid email or password. Please try again.');
+        } else if (status === 429) {
+          setServerError('Too many login attempts. Please wait a moment before trying again.');
+        } else if (typeof detail === 'string') {
+          setServerError(detail);
+        } else {
+          setServerError('Login failed. Please try again.');
+        }
+      } else if (err instanceof Error) {
+        setServerError(err.message);
       } else {
-        setError('Login failed. Please check your credentials and try again.');
+        setServerError('An unexpected error occurred. Please try again.');
       }
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Sign In</h1>
-        <p style={styles.subtitle}>Welcome back! Please sign in to your account.</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-8 sm:p-10">
+        <header className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-900">Sign In</h1>
+          <p className="mt-2 text-sm text-gray-500">
+            Welcome back! Please sign in to your account.
+          </p>
+        </header>
 
-        {error && (
-          <div style={styles.errorBox} role="alert">
-            {error}
+        {serverError && (
+          <div
+            role="alert"
+            aria-live="polite"
+            className="mb-6 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            <svg
+              className="mt-0.5 h-4 w-4 shrink-0"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>{serverError}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} noValidate style={styles.form}>
-          <div style={styles.fieldGroup}>
-            <label htmlFor="email" style={styles.label}>
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              autoComplete="email"
-              disabled={loading}
-              style={styles.input}
-            />
-          </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          aria-label="Login form"
+        >
+          <div className="space-y-5">
+            {/* Email */}
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold text-gray-700 mb-1"
+              >
+                Email Address <span className="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                aria-label="Email address"
+                aria-required="true"
+                aria-describedby={errors.email ? 'email-error' : undefined}
+                aria-invalid={errors.email ? 'true' : 'false'}
+                className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors ${
+                  errors.email
+                    ? 'border-red-400 focus:ring-red-500'
+                    : 'border-gray-300 focus:border-gray-900'
+                }`}
+                placeholder="you@example.com"
+                {...register('email', {
+                  required: 'Email address is required.',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Please enter a valid email address.',
+                  },
+                })}
+              />
+              {errors.email && (
+                <p id="email-error" role="alert" className="mt-1 text-xs text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-          <div style={styles.fieldGroup}>
-            <label htmlFor="password" style={styles.label}>
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              autoComplete="current-password"
-              disabled={loading}
-              style={styles.input}
-            />
+            {/* Password */}
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-gray-700 mb-1"
+              >
+                Password <span className="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                aria-label="Password"
+                aria-required="true"
+                aria-describedby={errors.password ? 'password-error' : undefined}
+                aria-invalid={errors.password ? 'true' : 'false'}
+                className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors ${
+                  errors.password
+                    ? 'border-red-400 focus:ring-red-500'
+                    : 'border-gray-300 focus:border-gray-900'
+                }`}
+                placeholder="••••••••"
+                {...register('password', {
+                  required: 'Password is required.',
+                })}
+              />
+              {errors.password && (
+                <p id="password-error" role="alert" className="mt-1 text-xs text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <button
             type="submit"
-            disabled={loading || !email || !password}
-            style={{
-              ...styles.button,
-              ...(loading || !email || !password ? styles.buttonDisabled : {}),
-            }}
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+            className="mt-7 w-full rounded-lg bg-gray-900 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
           >
-            {loading ? 'Signing in…' : 'Sign In'}
+            {isSubmitting ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg
+                  className="h-4 w-4 animate-spin"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
+                </svg>
+                Signing In…
+              </span>
+            ) : (
+              'Sign In'
+            )}
           </button>
         </form>
 
-        <p style={styles.footerText}>
+        <p className="mt-6 text-center text-sm text-gray-500">
           Don&apos;t have an account?{' '}
-          <a href="/register" style={styles.link}>
+          <Link
+            to="/register"
+            className="font-semibold text-gray-900 underline underline-offset-2 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded"
+          >
             Create one
-          </a>
+          </Link>
         </p>
       </div>
     </div>
   );
 };
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: '1rem',
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    borderRadius: '8px',
-    boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-    padding: '2.5rem',
-    width: '100%',
-    maxWidth: '420px',
-  },
-  title: {
-    margin: '0 0 0.5rem 0',
-    fontSize: '1.75rem',
-    fontWeight: 700,
-    color: '#1a1a1a',
-    textAlign: 'center',
-  },
-  subtitle: {
-    margin: '0 0 1.5rem 0',
-    fontSize: '0.95rem',
-    color: '#666666',
-    textAlign: 'center',
-  },
-  errorBox: {
-    backgroundColor: '#fff0f0',
-    border: '1px solid #ffcccc',
-    borderRadius: '4px',
-    color: '#cc0000',
-    fontSize: '0.875rem',
-    marginBottom: '1.25rem',
-    padding: '0.75rem 1rem',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.25rem',
-  },
-  fieldGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.375rem',
-  },
-  label: {
-    fontSize: '0.875rem',
-    fontWeight: 600,
-    color: '#333333',
-  },
-  input: {
-    border: '1px solid #cccccc',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    padding: '0.625rem 0.75rem',
-    outline: 'none',
-    transition: 'border-color 0.2s',
-    width: '100%',
-    boxSizing: 'border-box',
-  },
-  button: {
-    backgroundColor: '#1a73e8',
-    border: 'none',
-    borderRadius: '4px',
-    color: '#ffffff',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    fontWeight: 600,
-    marginTop: '0.5rem',
-    padding: '0.75rem',
-    transition: 'background-color 0.2s',
-    width: '100%',
-  },
-  buttonDisabled: {
-    backgroundColor: '#a0bce8',
-    cursor: 'not-allowed',
-  },
-  footerText: {
-    fontSize: '0.875rem',
-    color: '#666666',
-    marginTop: '1.5rem',
-    textAlign: 'center',
-  },
-  link: {
-    color: '#1a73e8',
-    textDecoration: 'none',
-    fontWeight: 600,
-  },
-};
-
+export { LoginPage };
 export default LoginPage;

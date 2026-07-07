@@ -3,10 +3,10 @@ import { getProducts } from '../api/products';
 import { Product, Category } from '../types/index';
 
 const FEATURED_CATEGORIES: Category[] = [
-  { id: '1', name: 'Ankle Boots', slug: 'ankle-boots', description: 'Stylish ankle boots for every occasion', image_url: null, created_at: '', updated_at: '' },
-  { id: '2', name: 'Chelsea Boots', slug: 'chelsea-boots', description: 'Classic Chelsea boots', image_url: null, created_at: '', updated_at: '' },
-  { id: '3', name: 'Knee High Boots', slug: 'knee-high-boots', description: 'Elegant knee high boots', image_url: null, created_at: '', updated_at: '' },
-  { id: '4', name: 'Work Boots', slug: 'work-boots', description: 'Durable work boots', image_url: null, created_at: '', updated_at: '' },
+  { id: '1', name: 'Ankle Boots', slug: 'ankle-boots', description: 'Stylish ankle boots for every occasion', parent_id: null, image_url: null, is_active: true, created_at: '', updated_at: '' },
+  { id: '2', name: 'Chelsea Boots', slug: 'chelsea-boots', description: 'Classic Chelsea boots', parent_id: null, image_url: null, is_active: true, created_at: '', updated_at: '' },
+  { id: '3', name: 'Knee High Boots', slug: 'knee-high-boots', description: 'Elegant knee high boots', parent_id: null, image_url: null, is_active: true, created_at: '', updated_at: '' },
+  { id: '4', name: 'Work Boots', slug: 'work-boots', description: 'Durable work boots', parent_id: null, image_url: null, is_active: true, created_at: '', updated_at: '' },
 ];
 
 const CategoryCard: React.FC<{ category: Category }> = ({ category }) => (
@@ -124,8 +124,8 @@ export const HomePage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const products = await getProducts({ limit: 8, skip: 0 });
-        setFeaturedProducts(products);
+        const result = await getProducts({ page: 1, page_size: 8 });
+        setFeaturedProducts(result.items);
       } catch (err) {
         setError('Failed to load featured products. Please try again later.');
       } finally {
