@@ -1,2 +1,11 @@
 ........................................................................ [ 50%]
-................
+......................................................................   [100%]
+=============================== warnings summary ===============================
+tests/unit/sprint_1/test_auth_login.py: 17 warnings
+tests/unit/sprint_1/test_auth_session_t008.py: 32 warnings
+tests/_selfcheck_sprint_1_t004.py: 4 warnings
+  /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/jose/jwt.py:311: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = timegm(datetime.utcnow().utctimetuple())
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+142 passed, 53 warnings in 57.69s
