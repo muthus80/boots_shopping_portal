@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { apiClient } from '../api/client';
-import { useAuth } from '../stores/authStore';
-import { Order, OrderItem } from '../types/index';
+/**
+ * OrdersPage — T-027 / US-003
+ *
+ * Displays a paginated list of past orders for the authenticated user.
+ * Each order card shows the order number, date, total price, and status.
+ * Status badges align right on desktop and bottom-left on mobile.
+ *
+ * Route: /orders (protected — requires authentication)
+ * API:   GET /api/v1/account/orders
+ */
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getOrders } from '../api/orders';
+import type { OrderSummary } from '../api/orders';
+import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { ErrorMessage } from '../components/common/ErrorMessage';
+import { EmptyState } from '../components/common/EmptyState';
 
-const statusColors: Record<string, string> = {
-  pending: '#f59e0b',
-  confirmed: '#3b82f6',
-  processing: '#8b5cf6',
-  shipped: '#06b6d4',
-  delivered: '#10b981',
-  cancelled: '#ef4444',
-  refunded: '#6b7280',
-};
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 const formatCurrency = (amount: number): string =>
   new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(amount);
@@ -23,234 +29,211 @@ const formatDate = (dateStr: string): string =>
     day: 'numeric',
   }).format(new Date(dateStr));
 
+// ── Status badge colours — maps status string to Tailwind class pair ───────────
+
+type StatusVariant =
+  | 'pending'
+  | 'confirmed'
+  | 'processing'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled'
+  | 'refunded';
+
+const STATUS_CLASSES: Record<StatusVariant, string> = {
+  pending:    'bg-amber-100  text-amber-800',
+  confirmed:  'bg-blue-100   text-blue-800',
+  processing: 'bg-violet-100 text-violet-800',
+  shipped:    'bg-cyan-100   text-cyan-800',
+  delivered:  'bg-emerald-100 text-emerald-800',
+  cancelled:  'bg-red-100    text-red-800',
+  refunded:   'bg-gray-100   text-gray-700',
+};
+
+const statusClasses = (status: string): string =>
+  STATUS_CLASSES[status as StatusVariant] ?? 'bg-gray-100 text-gray-700';
+
+// ── OrderCard ─────────────────────────────────────────────────────────────────
+
 interface OrderCardProps {
-  order: Order;
+  order: OrderSummary;
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
-  const [expanded, setExpanded] = useState(false);
-
-  const statusColor = statusColors[order.status] ?? '#6b7280';
-
-  return (
-    <div
-      style={{
-        border: '1px solid #e5e7eb',
-        borderRadius: '8px',
-        marginBottom: '16px',
-        overflow: 'hidden',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.07)',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '16px 20px',
-          backgroundColor: '#f9fafb',
-          cursor: 'pointer',
-          userSelect: 'none',
-        }}
-        onClick={() => setExpanded((prev) => !prev)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') setExpanded((prev) => !prev);
-        }}
-        aria-expanded={expanded}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <span style={{ fontWeight: 600, fontSize: '15px', color: '#111827' }}>
-            Order #{order.id.slice(0, 8).toUpperCase()}
-          </span>
-          <span style={{ fontSize: '13px', color: '#6b7280' }}>
-            Placed on {formatDate(order.created_at)}
-          </span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <span
-            style={{
-              display: 'inline-block',
-              padding: '3px 10px',
-              borderRadius: '9999px',
-              fontSize: '12px',
-              fontWeight: 600,
-              color: '#fff',
-              backgroundColor: statusColor,
-              textTransform: 'capitalize',
-            }}
-          >
-            {order.status}
-          </span>
-          <span style={{ fontWeight: 700, fontSize: '15px', color: '#111827' }}>
-            {formatCurrency(order.total_amount)}
-          </span>
-          <span style={{ fontSize: '18px', color: '#9ca3af' }}>{expanded ? '▲' : '▼'}</span>
-        </div>
+const OrderCard: React.FC<OrderCardProps> = ({ order }) => (
+  <article
+    aria-label={`Order ${order.order_number}`}
+    className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+  >
+    {/* Desktop: single row. Mobile: stacked. */}
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {/* Left: order number + date */}
+      <div className="min-w-0">
+        <p className="truncate text-base font-semibold text-gray-900">
+          Order {order.order_number}
+        </p>
+        <p className="mt-0.5 text-sm text-gray-500">
+          <time dateTime={order.created_at}>{formatDate(order.created_at)}</time>
+        </p>
       </div>
 
-      {expanded && (
-        <div style={{ padding: '16px 20px' }}>
-          {order.shipping_address && (
-            <div style={{ marginBottom: '16px' }}>
-              <h4 style={{ margin: '0 0 6px', fontSize: '13px', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Shipping Address
-              </h4>
-              <p style={{ margin: 0, fontSize: '14px', color: '#374151', lineHeight: '1.5' }}>
-                {order.shipping_address.address_line1}
-                {order.shipping_address.address_line2 ? `, ${order.shipping_address.address_line2}` : ''},
-                {' '}{order.shipping_address.city}, {order.shipping_address.state} {order.shipping_address.postal_code},
-                {' '}{order.shipping_address.country}
-              </p>
-            </div>
-          )}
-
-          <h4 style={{ margin: '0 0 10px', fontSize: '13px', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Items
-          </h4>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: '#6b7280', fontWeight: 600 }}>Product</th>
-                <th style={{ textAlign: 'center', padding: '6px 8px', color: '#6b7280', fontWeight: 600 }}>Qty</th>
-                <th style={{ textAlign: 'right', padding: '6px 8px', color: '#6b7280', fontWeight: 600 }}>Unit Price</th>
-                <th style={{ textAlign: 'right', padding: '6px 8px', color: '#6b7280', fontWeight: 600 }}>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((item: OrderItem) => (
-                <tr key={item.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                  <td style={{ padding: '8px 8px', color: '#111827' }}>
-                    <div style={{ fontWeight: 500 }}>{item.product_name}</div>
-                    {(item.size || item.color) && (
-                      <div style={{ fontSize: '12px', color: '#9ca3af' }}>
-                        {item.size && `Size: ${item.size}`}
-                        {item.size && item.color && ' / '}
-                        {item.color && `Color: ${item.color}`}
-                      </div>
-                    )}
-                  </td>
-                  <td style={{ textAlign: 'center', padding: '8px 8px', color: '#374151' }}>{item.quantity}</td>
-                  <td style={{ textAlign: 'right', padding: '8px 8px', color: '#374151' }}>
-                    {formatCurrency(item.unit_price)}
-                  </td>
-                  <td style={{ textAlign: 'right', padding: '8px 8px', color: '#111827', fontWeight: 600 }}>
-                    {formatCurrency(item.unit_price * item.quantity)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colSpan={3} style={{ textAlign: 'right', padding: '10px 8px', fontWeight: 700, color: '#111827' }}>
-                  Total
-                </td>
-                <td style={{ textAlign: 'right', padding: '10px 8px', fontWeight: 700, color: '#111827' }}>
-                  {formatCurrency(order.total_amount)}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      )}
+      {/* Right: total + status badge */}
+      <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end sm:gap-1">
+        <p
+          className="text-base font-bold text-gray-900"
+          data-testid={`order-total-${order.id}`}
+        >
+          {formatCurrency(order.total_amount)}
+        </p>
+        <span
+          className={`inline-block rounded-full px-3 py-0.5 text-xs font-semibold capitalize ${statusClasses(order.status)}`}
+          data-testid={`order-status-${order.id}`}
+        >
+          {order.status}
+        </span>
+      </div>
     </div>
+  </article>
+);
+
+// ── Pagination controls ───────────────────────────────────────────────────────
+
+interface PaginationProps {
+  page: number;
+  totalPages: number;
+  onPrev: () => void;
+  onNext: () => void;
+}
+
+const Pagination: React.FC<PaginationProps> = ({ page, totalPages, onPrev, onNext }) => {
+  if (totalPages <= 1) return null;
+
+  return (
+    <nav
+      aria-label="Order history pagination"
+      className="mt-8 flex items-center justify-center gap-4"
+    >
+      <button
+        type="button"
+        onClick={onPrev}
+        disabled={page <= 1}
+        aria-label="Previous page"
+        className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-gray-900"
+      >
+        ← Previous
+      </button>
+
+      <span className="text-sm text-gray-600" aria-live="polite">
+        Page {page} of {totalPages}
+      </span>
+
+      <button
+        type="button"
+        onClick={onNext}
+        disabled={page >= totalPages}
+        aria-label="Next page"
+        className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-gray-900"
+      >
+        Next →
+      </button>
+    </nav>
   );
 };
 
+// ── OrdersPage ────────────────────────────────────────────────────────────────
+
+const PER_PAGE = 10;
+
 export const OrdersPage: React.FC = () => {
-  const { user } = useAuth();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
 
-  useEffect(() => {
-    if (!user) return;
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['orders', page],
+    queryFn: () => getOrders({ page, per_page: PER_PAGE }),
+  });
 
-    const fetchOrders = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await apiClient.get<Order[]>('/api/v1/checkout/orders');
-        setOrders(response.data);
-      } catch (err: unknown) {
-        if (err && typeof err === 'object' && 'response' in err) {
-          const axiosErr = err as { response?: { data?: { detail?: string } } };
-          setError(axiosErr.response?.data?.detail ?? 'Failed to load orders.');
-        } else {
-          setError('Failed to load orders.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+  const orders = data?.orders ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
 
-    fetchOrders();
-  }, [user]);
+  // ── Loading ──────────────────────────────────────────────────────────────
 
-  if (!user) {
+  if (isLoading) {
     return (
-      <div style={{ maxWidth: '720px', margin: '60px auto', padding: '0 16px', textAlign: 'center' }}>
-        <h2 style={{ color: '#111827' }}>Please log in to view your orders.</h2>
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900">Order History</h1>
+        <LoadingSpinner size="lg" label="Loading your orders…" centered />
       </div>
     );
   }
 
+  // ── Error ─────────────────────────────────────────────────────────────────
+
+  if (isError) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900">Order History</h1>
+        <ErrorMessage
+          heading="Something went wrong, please try again"
+          detail="We couldn't load your orders. Please check your connection and try again."
+          onRetry={() => void refetch()}
+        />
+      </div>
+    );
+  }
+
+  // ── Empty ─────────────────────────────────────────────────────────────────
+
+  if (orders.length === 0) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900">Order History</h1>
+        <EmptyState
+          icon={<span aria-hidden="true">📦</span>}
+          heading="You have not placed any orders yet."
+          description="Explore our catalogue to find something you love."
+          action={
+            <Link
+              to="/products"
+              className="inline-block rounded-lg bg-gray-900 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+            >
+              Browse Boots
+            </Link>
+          }
+        />
+      </div>
+    );
+  }
+
+  // ── Order list ────────────────────────────────────────────────────────────
+
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '0 16px' }}>
-      <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
-        Order History
-      </h1>
-      <p style={{ color: '#6b7280', marginBottom: '28px', fontSize: '15px' }}>
-        View and track all your past orders.
+    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+      <h1 className="mb-2 text-3xl font-bold tracking-tight text-gray-900">Order History</h1>
+      <p className="mb-8 text-sm text-gray-500">
+        {total} {total === 1 ? 'order' : 'orders'} placed
       </p>
 
-      {loading && (
-        <div style={{ textAlign: 'center', padding: '48px 0', color: '#6b7280', fontSize: '16px' }}>
-          Loading your orders…
-        </div>
-      )}
-
-      {!loading && error && (
-        <div
-          style={{
-            backgroundColor: '#fef2f2',
-            border: '1px solid #fecaca',
-            borderRadius: '8px',
-            padding: '16px 20px',
-            color: '#b91c1c',
-            fontSize: '14px',
-          }}
-        >
-          {error}
-        </div>
-      )}
-
-      {!loading && !error && orders.length === 0 && (
-        <div
-          style={{
-            textAlign: 'center',
-            padding: '64px 0',
-            color: '#9ca3af',
-          }}
-        >
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>📦</div>
-          <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
-            No orders yet
-          </h3>
-          <p style={{ fontSize: '14px' }}>
-            When you place an order, it will appear here.
-          </p>
-        </div>
-      )}
-
-      {!loading && !error && orders.length > 0 && (
-        <div>
-          {orders.map((order) => (
-            <OrderCard key={order.id} order={order} />
+      <section aria-label="Orders list">
+        <ul className="flex flex-col gap-4 list-none p-0 m-0" role="list">
+          {orders.map((order: OrderSummary) => (
+            <li key={order.id}>
+              <OrderCard order={order} />
+            </li>
           ))}
-        </div>
-      )}
+        </ul>
+      </section>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPrev={() => setPage((p) => Math.max(1, p - 1))}
+        onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
+      />
     </div>
   );
 };
