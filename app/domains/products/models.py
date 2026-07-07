@@ -19,6 +19,7 @@ from sqlalchemy import (
     types,
 )
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -58,11 +59,38 @@ class Product(Base):
     sku = Column(String(100), nullable=True, unique=True, index=True)
     base_price = Column(Numeric(10, 2), nullable=False)
     sale_price = Column(Numeric(10, 2), nullable=True)
+
+    # ------------------------------------------------------------------ #
+    # price — read/write alias for base_price (QA-fix: ProductRead uses   #
+    # 'price' field name; the DB column is 'base_price').                 #
+    # ------------------------------------------------------------------ #
+    @hybrid_property
+    def price(self):  # type: ignore[override]
+        return self.base_price
+
+    @price.setter
+    def price(self, value):
+        self.base_price = value
+
+    @price.expression
+    def price(cls):  # noqa: N805
+        return cls.base_price
+
     currency = Column(String(3), nullable=False, default="GBP")
     stock_quantity = Column(Integer, nullable=False, default=0)
     is_active = Column(Boolean, nullable=False, default=True)
     is_featured = Column(Boolean, nullable=False, default=False)
     image_url = Column(String(500), nullable=True)
+
+    # thumbnail_url — alias for image_url (schema uses thumbnail_url)
+    @hybrid_property
+    def thumbnail_url(self):  # type: ignore[override]
+        return self.image_url
+
+    @thumbnail_url.setter
+    def thumbnail_url(self, value):
+        self.image_url = value
+
     # JSON renders as JSONB on PostgreSQL, as JSON/TEXT on SQLite (test-compatible)
     images = Column(JSON, nullable=False, default=list)
     attributes = Column(JSON, nullable=False, default=dict)
@@ -77,20 +105,6 @@ class Product(Base):
         onupdate=func.now(),
         nullable=False,
     )
-
-    # ---------------------------------------------------------------------------
-    # Compat alias: architecture data model calls this field "price".
-    # The physical column is "base_price" (migration 0001 is immutable), so we
-    # expose a Python property so that Pydantic schema `price: float` and any
-    # service/repository code using `.price` work without needing a new migration.
-    # ---------------------------------------------------------------------------
-    @property
-    def price(self):  # type: ignore[override]
-        return self.base_price
-
-    @price.setter
-    def price(self, value) -> None:  # type: ignore[override]
-        self.base_price = value
 
     # Relationships
     category = relationship("Category", back_populates="products")
