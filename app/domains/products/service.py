@@ -24,7 +24,7 @@ class ProductService:
         min_price: Optional[float] = None,
         max_price: Optional[float] = None,
         in_stock: Optional[bool] = None,
-        sort_by: str = "created_at",
+        sort_by: Optional[str] = None,
         sort_order: str = "desc",
         page: int = 1,
         page_size: int = 20,
@@ -69,7 +69,22 @@ class ProductService:
         if filters:
             stmt = stmt.where(and_(*filters))
 
-        sort_column = getattr(Product, sort_by, Product.created_at)
+        # Map router-facing sort_by values to (column, direction) pairs.
+        _SORT_MAP = {
+            "price_asc": (Product.base_price, "asc"),
+            "price_desc": (Product.base_price, "desc"),
+            "name_asc": (Product.name, "asc"),
+            "name_desc": (Product.name, "desc"),
+            "newest": (Product.created_at, "desc"),
+        }
+        if sort_by in _SORT_MAP:
+            sort_column, sort_order = _SORT_MAP[sort_by]
+        elif sort_by and sort_by != "None":
+            # Fallback: try direct column attribute lookup, default to created_at desc
+            sort_column = getattr(Product, sort_by, Product.created_at)
+        else:
+            # Default: newest first
+            sort_column = Product.created_at
         if sort_order.lower() == "asc":
             stmt = stmt.order_by(sort_column.asc())
         else:
@@ -168,3 +183,6 @@ class ProductService:
         reviews = result.scalars().all()
 
         return [ReviewRead.model_validate(r) for r in reviews]
+
+    # Alias so router code using either name works.
+    list_reviews = get_product_reviews

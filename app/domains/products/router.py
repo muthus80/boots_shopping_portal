@@ -39,18 +39,28 @@ async def list_products(
     )
 
 
+@router.get("/search", response_model=ProductList)
+async def search_products(
+    q: str = Query(..., min_length=1, description="Full-text search keyword"),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    service: ProductService = Depends(get_product_service),
+) -> ProductList:
+    """Full-text search across product name, brand, and description (US-004)."""
+    return await service.list_products(
+        page=page,
+        page_size=page_size,
+        search=q,
+    )
+
+
 @router.get("/{product_id}", response_model=ProductRead)
 async def get_product(
     product_id: UUID,
     service: ProductService = Depends(get_product_service),
 ) -> ProductRead:
-    product = await service.get_product(product_id=product_id)
-    if product is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Product not found.",
-        )
-    return product
+    # NotFoundError raised by service is caught by the global exception handler
+    return await service.get_product(product_id=product_id)
 
 
 @router.get("/{product_id}/reviews", response_model=List[ReviewRead])
@@ -60,13 +70,7 @@ async def list_reviews(
     page_size: int = Query(20, ge=1, le=100),
     service: ProductService = Depends(get_product_service),
 ) -> List[ReviewRead]:
-    product = await service.get_product(product_id=product_id)
-    if product is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Product not found.",
-        )
-    return await service.list_reviews(
+    return await service.get_product_reviews(
         product_id=product_id,
         page=page,
         page_size=page_size,
@@ -84,15 +88,8 @@ async def create_review(
     current_user=Depends(get_current_user),
     service: ProductService = Depends(get_product_service),
 ) -> ReviewRead:
-    product = await service.get_product(product_id=product_id)
-    if product is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Product not found.",
-        )
-    review = await service.create_review(
+    return await service.create_review(
         product_id=product_id,
         user_id=current_user.id,
         payload=payload,
     )
-    return review

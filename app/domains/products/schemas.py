@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -10,9 +10,9 @@ from pydantic import BaseModel, Field
 class ProductVariantRead(BaseModel):
     id: UUID
     product_id: UUID
-    size: str
+    size: Optional[str] = None
     color: Optional[str] = None
-    sku: str
+    sku: Optional[str] = None
     stock_quantity: int
     price_modifier: float = 0.0
 
@@ -48,19 +48,21 @@ class ProductRead(BaseModel):
     category_id: Optional[UUID] = None
     brand: Optional[str] = None
     thumbnail_url: Optional[str] = None
-    images: list[str] = Field(default_factory=list)
+    images: list = Field(default_factory=list)
     is_active: bool
     average_rating: Optional[float] = None
     review_count: int = 0
-    variants: list[ProductVariantRead] = Field(default_factory=list)
-    reviews: list[ReviewRead] = Field(default_factory=list)
+    variants: List[ProductVariantRead] = Field(default_factory=list)
+    reviews: List[ReviewRead] = Field(default_factory=list)
     created_at: datetime
     updated_at: datetime
 
     model_config = {"from_attributes": True}
 
 
-class ProductList(BaseModel):
+class ProductCard(BaseModel):
+    """Lightweight product card used in listing pages (no nested relations)."""
+
     id: UUID
     name: str
     slug: str
@@ -76,3 +78,13 @@ class ProductList(BaseModel):
     updated_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class ProductList(BaseModel):
+    """Paginated product listing response — wraps a list of ProductRead items."""
+
+    items: List[ProductRead] = Field(default_factory=list)
+    total: int = 0
+    page: int = 1
+    page_size: int = 20
+    total_pages: int = 1
