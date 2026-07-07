@@ -12,7 +12,7 @@ import { getCart } from '../api/cart';
 import { useAuth } from '../stores/authStore';
 import { Cart, Order } from '../types/index';
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
 
 const CARD_ELEMENT_OPTIONS: StripeCardElementOptions = {
   style: {
@@ -70,7 +70,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cart, onOrderConfirmed }) =
   const [intentError, setIntentError] = useState<string | null>(null);
 
   const totalAmount = cart.items.reduce((sum, item) => {
-    return sum + item.quantity * parseFloat(String(item.product_variant?.price ?? 0));
+    return sum + item.quantity * item.unit_price;
   }, 0);
 
   useEffect(() => {
@@ -264,12 +264,12 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cart, onOrderConfirmed }) =
           {cart.items.map((item) => (
             <div key={item.id} className="order-item">
               <span className="item-name">
-                {item.product_variant?.product_id ?? 'Product'} — {item.product_variant?.size ?? ''}{' '}
-                {item.product_variant?.color ?? ''}
+                {item.product?.name ?? 'Product'} — {item.variant?.size ?? ''}{' '}
+                {item.variant?.color ?? ''}
               </span>
               <span className="item-qty">x{item.quantity}</span>
               <span className="item-price">
-                ${(item.quantity * parseFloat(String(item.product_variant?.price ?? 0))).toFixed(2)}
+                ${(item.quantity * item.unit_price).toFixed(2)}
               </span>
             </div>
           ))}
@@ -338,7 +338,7 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ order, onContinue
         <h3>Items Ordered</h3>
         {order.items.map((item) => (
           <div key={item.id} className="confirmation-item">
-            <span>Variant ID: {item.product_variant_id}</span>
+            <span>Variant ID: {item.variant_id}</span>
             <span>Qty: {item.quantity}</span>
             <span>${parseFloat(String(item.unit_price)).toFixed(2)} each</span>
           </div>

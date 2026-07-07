@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import enum
+import uuid as _uuid
 from datetime import datetime
 from typing import List, Optional
 
@@ -8,20 +8,36 @@ from sqlalchemy import (
     Boolean,
     Column,
     DateTime,
-    Enum,
     Float,
     ForeignKey,
     Integer,
+    JSON,
     Numeric,
     String,
     Text,
+    TypeDecorator,
     func,
+    types,
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-import uuid as _uuid
 
 from app.core.database import Base
+
+
+class TsVector(TypeDecorator):
+    """
+    Portable wrapper around PostgreSQL TSVECTOR.
+    Falls back to Text on non-PostgreSQL engines (e.g., SQLite for tests).
+    """
+    impl = types.Text
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql":
+            from sqlalchemy.dialects.postgresql import TSVECTOR
+            return dialect.type_descriptor(TSVECTOR())
+        return dialect.type_descriptor(types.Text())
 
 
 class Product(Base):
@@ -29,6 +45,12 @@ class Product(Base):
     __allow_unmapped__ = True
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=_uuid.uuid4, index=True)
+    category_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("categories.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     name = Column(String(255), nullable=False)
     slug = Column(String(255), nullable=False, unique=True, index=True)
     description = Column(Text, nullable=True)
@@ -42,13 +64,11 @@ class Product(Base):
     is_active = Column(Boolean, nullable=False, default=True)
     is_featured = Column(Boolean, nullable=False, default=False)
     image_url = Column(String(500), nullable=True)
-    images = Column(Text, nullable=True)  # JSON-encoded list of image URLs
-    category_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("categories.id", ondelete="SET NULL"),
-        nullable=True,
-        index=True,
-    )
+    # JSON renders as JSONB on PostgreSQL, as JSON/TEXT on SQLite (test-compatible)
+    images = Column(JSON, nullable=False, default=list)
+    attributes = Column(JSON, nullable=False, default=dict)
+    # TsVector: TSVECTOR on PG, TEXT on SQLite — maintained by DB trigger (ADR-004)
+    search_vector = Column(TsVector, nullable=True)
     average_rating = Column(Float, nullable=True)
     review_count = Column(Integer, nullable=False, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -84,11 +104,13 @@ class ProductVariant(Base):
     )
     name = Column(String(255), nullable=False)
     sku = Column(String(100), nullable=True, unique=True, index=True)
-    size = Column(String(50), nullable=True)
-    color = Column(String(50), nullable=True)
+    size = Column(String(50), nullable=True, index=True)
+    color = Column(String(50), nullable=True, index=True)
     material = Column(String(100), nullable=True)
     price_modifier = Column(Numeric(10, 2), nullable=False, default=0)
     stock_quantity = Column(Integer, nullable=False, default=0)
+    # inventory_count mirrors the architecture data model (>= 0 check)
+    inventory_count = Column(Integer, nullable=False, default=0)
     image_url = Column(String(500), nullable=True)
     is_active = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -122,6 +144,12 @@ class Review(Base):
         nullable=False,
         index=True,
     )
+    order_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("orders.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     rating = Column(Integer, nullable=False)  # 1-5
     title = Column(String(255), nullable=True)
     body = Column(Text, nullable=True)
@@ -139,3 +167,4 @@ class Review(Base):
     # Relationships
     product: "Product" = relationship("Product", back_populates="reviews")
     user = relationship("User", back_populates="reviews")
+    order = relationship("Order", back_populates="reviews")

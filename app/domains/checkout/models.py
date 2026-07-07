@@ -8,9 +8,9 @@ from typing import List, Optional
 from sqlalchemy import (
     Column,
     DateTime,
-    Enum,
     ForeignKey,
     Integer,
+    JSON,
     Numeric,
     String,
     Text,
@@ -55,21 +55,27 @@ class Order(Base):
         nullable=True,
         index=True,
     )
+    order_number: Column = Column(String(50), nullable=True, unique=True, index=True)
+    guest_email: Column = Column(String(255), nullable=True)
     status: Column = Column(
-        Enum(OrderStatus, name="order_status_enum"),
+        String(50),
         nullable=False,
-        default=OrderStatus.pending,
+        default=OrderStatus.pending.value,
     )
     payment_status: Column = Column(
-        Enum(PaymentStatus, name="payment_status_enum"),
+        String(50),
         nullable=False,
-        default=PaymentStatus.unpaid,
+        default=PaymentStatus.unpaid.value,
     )
     subtotal: Column = Column(Numeric(12, 2), nullable=False, default=0)
     shipping_cost: Column = Column(Numeric(12, 2), nullable=False, default=0)
     tax: Column = Column(Numeric(12, 2), nullable=False, default=0)
     total: Column = Column(Numeric(12, 2), nullable=False, default=0)
+    # total_amount mirrors the architecture data model field name
+    total_amount: Column = Column(Numeric(10, 2), nullable=True)
     currency: Column = Column(String(8), nullable=False, default="GBP")
+    # JSON shipping_address (JSONB on PostgreSQL, JSON/Text on SQLite — test-compatible)
+    shipping_address: Column = Column(JSON, nullable=False, default=dict)
     shipping_name: Column = Column(String(255), nullable=True)
     shipping_address_line1: Column = Column(String(255), nullable=True)
     shipping_address_line2: Column = Column(String(255), nullable=True)
@@ -85,6 +91,7 @@ class Order(Base):
     billing_postcode: Column = Column(String(20), nullable=True)
     billing_country: Column = Column(String(100), nullable=True)
     payment_reference: Column = Column(String(255), nullable=True)
+    stripe_payment_intent_id: Column = Column(String(255), nullable=True)
     notes: Column = Column(Text, nullable=True)
     created_at: Column = Column(
         DateTime(timezone=True),
@@ -105,6 +112,7 @@ class Order(Base):
         cascade="all, delete-orphan",
         lazy="selectin",
     )
+    reviews = relationship("Review", back_populates="order")
 
 
 class OrderItem(Base):

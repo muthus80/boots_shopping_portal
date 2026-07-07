@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.12.13', 'Platform': 'Linux-7.0.0-1006-aws-x86_64-with-glibc2.43', 'Packages': {'pytest': '9.1.1', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1', 'asyncio': '1.4.0', 'anyio': '4.14.1'}, 'AWS_REGION': 'us-east-1'}
+rootdir: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app
+configfile: pyproject.toml
+plugins: json-report-1.5.0, metadata-3.1.1, asyncio-1.4.0, anyio-4.14.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 51 items / 20 deselected / 31 selected
+
+tests/unit/sprint_1/test_db_models.py::TestUserModel::test_create_user_minimal PASSED [  3%]
+tests/unit/sprint_1/test_db_models.py::TestUserModel::test_user_defaults PASSED [  6%]
+tests/unit/sprint_1/test_db_models.py::TestUserModel::test_user_email_unique_constraint PASSED [  9%]
+tests/unit/sprint_1/test_db_models.py::TestUserModel::test_user_created_at_populated PASSED [ 12%]
+tests/unit/sprint_1/test_db_models.py::TestRefreshTokenModel::test_create_refresh_token PASSED [ 16%]
+tests/unit/sprint_1/test_db_models.py::TestRefreshTokenModel::test_refresh_token_jti_unique PASSED [ 19%]
+tests/unit/sprint_1/test_db_models.py::TestRefreshTokenModel::test_refresh_token_cascade_delete PASSED [ 22%]
+tests/unit/sprint_1/test_db_models.py::TestCategoryModel::test_create_category PASSED [ 25%]
+tests/unit/sprint_1/test_db_models.py::TestCategoryModel::test_category_slug_unique PASSED [ 29%]
+tests/unit/sprint_1/test_db_models.py::TestCategoryModel::test_category_self_referential PASSED [ 32%]
+tests/unit/sprint_1/test_db_models.py::TestProductModel::test_create_product PASSED [ 35%]
+tests/unit/sprint_1/test_db_models.py::TestProductModel::test_product_slug_unique PASSED [ 38%]
+tests/unit/sprint_1/test_db_models.py::TestProductModel::test_product_category_fk_nullable PASSED [ 41%]
+tests/unit/sprint_1/test_db_models.py::TestProductModel::test_product_defaults PASSED [ 45%]
+tests/unit/sprint_1/test_db_models.py::TestProductVariantModel::test_create_variant PASSED [ 48%]
+tests/unit/sprint_1/test_db_models.py::TestProductVariantModel::test_variant_cascade_delete PASSED [ 51%]
+tests/unit/sprint_1/test_db_models.py::TestProductVariantModel::test_variant_sku_unique PASSED [ 54%]
+tests/unit/sprint_1/test_db_models.py::TestCartModel::test_create_guest_cart PASSED [ 58%]
+tests/unit/sprint_1/test_db_models.py::TestCartModel::test_create_authenticated_cart PASSED [ 61%]
+tests/unit/sprint_1/test_db_models.py::TestCartModel::test_cart_item_quantity_default PASSED [ 64%]
+tests/unit/sprint_1/test_db_models.py::TestCartModel::test_cart_item_cascade_delete PASSED [ 67%]
+tests/unit/sprint_1/test_db_models.py::TestOrderModel::test_create_order_for_user PASSED [ 70%]
+tests/unit/sprint_1/test_db_models.py::TestOrderModel::test_create_guest_order PASSED [ 74%]
+tests/unit/sprint_1/test_db_models.py::TestOrderModel::test_order_number_unique PASSED [ 77%]
+tests/unit/sprint_1/test_db_models.py::TestOrderModel::test_order_item_cascade_delete PASSED [ 80%]
+tests/unit/sprint_1/test_db_models.py::TestReviewModel::test_create_review PASSED [ 83%]
+tests/unit/sprint_1/test_db_models.py::TestReviewModel::test_review_linked_to_order PASSED [ 87%]
+tests/unit/sprint_1/test_db_models.py::TestReviewModel::test_review_cascade_delete_with_product PASSED [ 90%]
+tests/unit/sprint_1/test_db_models.py::TestRelationships::test_user_has_refresh_tokens_relationship PASSED [ 93%]
+tests/unit/sprint_1/test_db_models.py::TestRelationships::test_product_variants_relationship PASSED [ 96%]
+tests/unit/sprint_1/test_db_models.py::TestRelationships::test_order_items_relationship PASSED [100%]
+
+====================== 31 passed, 20 deselected in 2.49s =======================

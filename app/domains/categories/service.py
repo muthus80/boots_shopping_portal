@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from typing import List, Optional
 
 from sqlalchemy import select
@@ -16,7 +17,7 @@ class CategoryService:
 
     async def list_categories(
         self,
-        parent_id: Optional[int] = None,
+        parent_id: Optional[uuid.UUID] = None,
         include_inactive: bool = False,
     ) -> CategoryList:
         stmt = select(Category)
@@ -37,7 +38,7 @@ class CategoryService:
         items = [CategoryRead.model_validate(c) for c in categories]
         return CategoryList(items=items, total=len(items))
 
-    async def get_category(self, category_id: int) -> CategoryRead:
+    async def get_category(self, category_id: uuid.UUID) -> CategoryRead:
         stmt = select(Category).where(Category.id == category_id)
         result = await self.db.execute(stmt)
         category: Optional[Category] = result.scalar_one_or_none()

@@ -1,0 +1,60 @@
+6:13:37 AM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
+6:13:37 AM [vite] warning: `optimizeDeps.esbuildOptions` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `optimizeDeps.rolldownOptions` instead.
+Both esbuild and oxc options were set. oxc options will be used and esbuild options will be ignored. The following esbuild options were set: `{ jsx: 'automatic', jsxImportSource: undefined }`
+
+ RUN  v4.1.10 /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend
+
+stderr | src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields 360ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders a link to the login page 34ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when email is empty on submit 97ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error for invalid email format 121ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password is too short 80ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password fails complexity check 111ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when passwords do not match 128ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > calls authRegister with correct data on valid submission 229ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > navigates to home on successful registration 218ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > does not include full_name when the field is empty 181ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > displays a server error when email is already registered (409) 222ms
+stderr | src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting
+Warning: An update to RegisterPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at RegisterPage (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/src/pages/RegisterPage.tsx:21:74)
+    at Router (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router/dist/umd/react-router.development.js:1203:17)
+    at BrowserRouter (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router-dom/dist/umd/react-router-dom.development.js:688:7)
+
+stderr | src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting
+Warning: An update to RegisterPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at RegisterPage (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/src/pages/RegisterPage.tsx:21:74)
+    at Router (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router/dist/umd/react-router.development.js:1203:17)
+    at BrowserRouter (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router-dom/dist/umd/react-router-dom.development.js:688:7)
+
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting 227ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > fields have correct autocomplete attributes for accessibility 18ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > password and confirm inputs are of type password (not plain text) 11ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  06:13:37
+   Duration  4.24s (transform 147ms, setup 132ms, import 445ms, tests 2.04s, environment 1.23s)
+

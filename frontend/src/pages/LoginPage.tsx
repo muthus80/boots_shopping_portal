@@ -13,7 +13,7 @@ export const LoginPage: React.FC = () => {
     setError(null);
     setLoading(true);
     try {
-      await login(email, password);
+      await login({ email, password });
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
