@@ -1,5 +1,5 @@
-9:13:21 AM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
-9:13:21 AM [vite] warning: `optimizeDeps.esbuildOptions` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `optimizeDeps.rolldownOptions` instead.
+9:45:12 AM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
+9:45:12 AM [vite] warning: `optimizeDeps.esbuildOptions` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `optimizeDeps.rolldownOptions` instead.
 Both esbuild and oxc options were set. oxc options will be used and esbuild options will be ignored. The following esbuild options were set: `{ jsx: 'automatic', jsxImportSource: undefined }`
 
  RUN  v4.1.10 /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend
@@ -8,50 +8,50 @@ stderr | src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a <hea
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a <header> element with role banner 347ms
-stderr | src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields
-⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
-⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
-
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a <header> element with role banner 330ms
 stderr | src/pages/LoginPage.test.tsx > LoginPage > renders the login form with all required fields
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders the site logo link pointing to / 90ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a cart link 43ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a search form 28ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields 403ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders a link to the login page 49ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > renders the login form with all required fields 424ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > renders a link to the registration page 56ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows Sign In and Register links when user is not authenticated 55ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > does not show Log Out when user is not authenticated 35ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows My Orders link and Log Out button when user is authenticated 49ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when email is empty on submit 129ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error when email is empty on submit 115ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > calls logout when Log Out button is clicked 95ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error for invalid email format 132ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error for invalid email format 149ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders category links after they load 98ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > category links point to /products?category=<slug> 69ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password is too short 111ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows a fallback Shop All link when categories fail to load 48ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > mobile menu is closed by default 21ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > opens mobile menu when toggle button is clicked 71ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error when password is empty on submit 138ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password fails complexity check 141ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > closes mobile menu when toggle is clicked a second time 90ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > calls login with correct credentials on valid submission 185ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when passwords do not match 169ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > navigates to /products?search=<query> when search is submitted 140ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > does not navigate when search query is empty 49ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > navigates to home on successful login 161ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > mobile menu toggle has correct aria-expanded attribute 63ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > search input has an accessible label 15ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > cart link has an accessible aria-label 26ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > calls authRegister with correct data on valid submission 285ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > displays a server error message for invalid credentials (401) 171ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > displays a rate limit error message (429) 148ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders the site logo link pointing to / 101ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a cart link 52ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a search form 25ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > renders the login form with all required fields 464ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > renders a link to the registration page 39ms
+stderr | src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows Sign In and Register links when user is not authenticated 62ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > does not show Log Out when user is not authenticated 42ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows My Orders link and Log Out button when user is authenticated 56ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error when email is empty on submit 122ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields 542ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders a link to the login page 50ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > calls logout when Log Out button is clicked 88ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders category links after they load 94ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > category links point to /products?category=<slug> 52ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when email is empty on submit 117ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error for invalid email format 159ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows a fallback Shop All link when categories fail to load 55ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > mobile menu is closed by default 19ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > opens mobile menu when toggle button is clicked 60ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error when password is empty on submit 176ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error for invalid email format 179ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > closes mobile menu when toggle is clicked a second time 98ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password is too short 138ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > calls login with correct credentials on valid submission 189ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > navigates to /products?search=<query> when search is submitted 148ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password fails complexity check 168ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > does not navigate when search query is empty 70ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > mobile menu toggle has correct aria-expanded attribute 95ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > search input has an accessible label 14ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > cart link has an accessible aria-label 19ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > navigates to home on successful login 209ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when passwords do not match 174ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > displays a server error message for invalid credentials (401) 192ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > calls authRegister with correct data on valid submission 255ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > displays a rate limit error message (429) 156ms
 stderr | src/pages/LoginPage.test.tsx > LoginPage > shows loading state while submitting
 Warning: An update to LoginPage inside a test was not wrapped in act(...).
 
@@ -67,12 +67,13 @@ This ensures that you're testing the behavior the user would see in the browser.
     at Router (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router/dist/umd/react-router.development.js:1203:17)
     at BrowserRouter (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router-dom/dist/umd/react-router-dom.development.js:688:7)
 
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > navigates to home on successful registration 256ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > shows loading state while submitting 146ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > fields have correct autocomplete attributes 11ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > shows loading state while submitting 168ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > fields have correct autocomplete attributes 10ms
  ✓ src/pages/LoginPage.test.tsx > LoginPage > password input is of type password (not plain text) 8ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > does not navigate when login fails 129ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > does not include full_name when the field is empty 179ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > does not navigate when login fails 160ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > navigates to home on successful registration 278ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > does not include full_name when the field is empty 214ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > displays a server error when email is already registered (409) 283ms
 stderr | src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting
 Warning: An update to RegisterPage inside a test was not wrapped in act(...).
 
@@ -103,19 +104,18 @@ This ensures that you're testing the behavior the user would see in the browser.
     at Router (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router/dist/umd/react-router.development.js:1203:17)
     at BrowserRouter (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router-dom/dist/umd/react-router-dom.development.js:688:7)
 
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > displays a server error when email is already registered (409) 243ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting 267ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > fields have correct autocomplete attributes for accessibility 35ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > password and confirm inputs are of type password (not plain text) 29ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > shows loading while restoring session, then ready 70ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > stays unauthenticated when no refresh token is stored 11ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > restores session when a valid refresh token is stored 21ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting 301ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > fields have correct autocomplete attributes for accessibility 31ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > password and confirm inputs are of type password (not plain text) 24ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > shows loading while restoring session, then ready 73ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > stays unauthenticated when no refresh token is stored 17ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > restores session when a valid refresh token is stored 16ms
  ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > clears stored token and stays unauthenticated when refresh fails 9ms
  ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > registers an auth failure handler on mount 5ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > clears the auth failure handler on unmount 3ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > clears the auth failure handler on unmount 4ms
  ✓ src/stores/authStore.test.tsx > AuthProvider — auth failure handler > clears state and redirects to /login when handler is invoked 9ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — login > stores refresh token in localStorage on successful login 249ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — logout > clears tokens and resets auth state on logout 24ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — login > stores refresh token in localStorage on successful login 290ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — logout > clears tokens and resets auth state on logout 28ms
  ✓ src/stores/authStore.test.tsx > AuthProvider — logout > still clears local state when logout API call fails 17ms
  ✓ src/stores/authStore.test.tsx > AuthProvider — register > stores refresh token in localStorage when register returns one 17ms
  ✓ src/api/client.test.ts > api/client — setAuthToken (T-007) > adds Bearer Authorization header when a token is provided 6ms
@@ -135,6 +135,6 @@ This ensures that you're testing the behavior the user would see in the browser.
 
  Test Files  5 passed (5)
       Tests  71 passed (71)
-   Start at  09:13:21
-   Duration  6.68s (transform 606ms, setup 676ms, import 2.01s, tests 6.23s, environment 7.05s)
+   Start at  09:45:12
+   Duration  7.01s (transform 467ms, setup 717ms, import 2.11s, tests 6.87s, environment 7.31s)
 
