@@ -12,6 +12,7 @@ import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { OrdersPage } from './pages/OrdersPage';
 import { SearchResultsPage } from './pages/SearchResultsPage';
+import { OrderConfirmationPage } from './pages/OrderConfirmationPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -55,6 +56,10 @@ const AppRoutes: React.FC = () => {
           <Route
             path="/checkout"
             element={<CheckoutPage />}
+          />
+          <Route
+            path="/order-confirmation"
+            element={<OrderConfirmationPage />}
           />
           <Route
             path="/orders"

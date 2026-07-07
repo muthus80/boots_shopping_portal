@@ -670,93 +670,10 @@ const PaymentStepInner: React.FC<PaymentStepInnerProps> = ({
   );
 };
 
-// ── OrderConfirmation ─────────────────────────────────────────────────────────
-
-interface OrderConfirmationProps {
-  order: ConfirmOrderResponse;
-}
-
-const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ order }) => {
-  const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(amount);
-
-  return (
-    <section
-      aria-labelledby="confirmation-heading"
-      className="text-center"
-    >
-      <div
-        className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100"
-        aria-hidden="true"
-      >
-        <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-
-      <h2
-        id="confirmation-heading"
-        className="mb-2 text-2xl font-bold text-gray-900"
-      >
-        Order Confirmed!
-      </h2>
-      <p className="mb-1 text-sm text-gray-600">
-        Thank you for your order. A confirmation email is on its way.
-      </p>
-      <p className="mb-6 text-sm font-semibold text-gray-700">
-        Order #{order.order_number}
-      </p>
-
-      {/* Items */}
-      {order.items.length > 0 && (
-        <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-left">
-          <h3 className="mb-3 text-sm font-bold text-gray-900">Items ordered</h3>
-          <ul className="space-y-2">
-            {order.items.map((item, i) => (
-              <li
-                key={i}
-                className="flex items-center justify-between text-sm text-gray-700"
-              >
-                <span>
-                  {item.product_name}
-                  {item.size && <span className="ml-1 text-gray-500">/ {item.size}</span>}
-                  {item.color && <span className="ml-1 text-gray-500">/ {item.color}</span>}
-                  <span className="ml-2 text-gray-400">×{item.quantity}</span>
-                </span>
-                <span className="font-medium">
-                  {formatCurrency(item.unit_price * item.quantity)}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-3 flex justify-between border-t border-gray-200 pt-3 text-sm font-bold text-gray-900">
-            <span>Total</span>
-            <span>{formatCurrency(order.total_amount)}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Shipping address */}
-      <div className="mb-8 rounded-xl border border-gray-200 bg-gray-50 p-4 text-left text-sm text-gray-700">
-        <h3 className="mb-1.5 text-sm font-bold text-gray-900">Shipping to</h3>
-        <p>{order.shipping_address.line1}</p>
-        <p>
-          {order.shipping_address.city}, {order.shipping_address.state}{' '}
-          {order.shipping_address.postal_code}
-        </p>
-      </div>
-
-      <Link
-        to="/products"
-        className="inline-block rounded-lg bg-gray-900 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
-      >
-        Continue Shopping
-      </Link>
-    </section>
-  );
-};
-
 // ── CheckoutPage ──────────────────────────────────────────────────────────────
+// Note: order confirmation is rendered by the standalone OrderConfirmationPage
+// at /order-confirmation (T-032). On successful payment, CheckoutPage navigates
+// there via React Router state, passing the ConfirmOrderResponse as state.order.
 
 export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -768,7 +685,6 @@ export const CheckoutPage: React.FC = () => {
   const [step, setStep] = useState<CheckoutStep>(initialStep);
   const [guestEmail, setGuestEmail] = useState<string | null>(null);
   const [shippingValues, setShippingValues] = useState<ShippingFormValues | null>(null);
-  const [confirmedOrder, setConfirmedOrder] = useState<ConfirmOrderResponse | null>(null);
 
   // Fetch cart to validate it is non-empty
   const { data: cart, isLoading: cartLoading, isError: cartError, refetch } = useQuery({
@@ -806,9 +722,8 @@ export const CheckoutPage: React.FC = () => {
   }, []);
 
   const handleOrderConfirmed = useCallback((order: ConfirmOrderResponse) => {
-    setConfirmedOrder(order);
-    setStep('confirmation');
-  }, []);
+    navigate('/order-confirmation', { state: { order } });
+  }, [navigate]);
 
   // ── Derived values ────────────────────────────────────────────────────────
 
@@ -816,6 +731,9 @@ export const CheckoutPage: React.FC = () => {
   // Pass guest_email only for unauthenticated users — authenticated requests
   // are identified by the JWT bearer token, so no guest_email is needed.
   const effectiveEmail = isAuthenticated ? null : guestEmail;
+
+  // Confirmation step is now handled by the standalone OrderConfirmationPage —
+  // the step state never reaches 'confirmation' inside CheckoutPage.
 
   // ── Loading / error / empty states ───────────────────────────────────────
 
@@ -863,9 +781,7 @@ export const CheckoutPage: React.FC = () => {
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6 lg:px-8">
       <h1 className="mb-6 text-3xl font-bold tracking-tight text-gray-900">Checkout</h1>
 
-      {step !== 'confirmation' && (
-        <StepIndicator current={step} isGuest={isGuest} />
-      )}
+      <StepIndicator current={step} isGuest={isGuest} />
 
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         {/* ── Identity step ──────────────────────────────────────────────── */}
@@ -903,11 +819,6 @@ export const CheckoutPage: React.FC = () => {
               onConfirmed={handleOrderConfirmed}
             />
           </Elements>
-        )}
-
-        {/* ── Confirmation ────────────────────────────────────────────────── */}
-        {step === 'confirmation' && confirmedOrder && (
-          <OrderConfirmation order={confirmedOrder} />
         )}
       </div>
     </div>

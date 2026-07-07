@@ -149,6 +149,7 @@ const renderPage = () => {
       <MemoryRouter initialEntries={['/checkout']}>
         <Routes>
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/order-confirmation" element={<div data-testid="order-confirmation-page">Order Confirmation Page</div>} />
           <Route path="/products" element={<div>Products Page</div>} />
           <Route path="/cart" element={<div>Cart Page</div>} />
           <Route path="/login" element={<div>Login Page</div>} />
@@ -408,7 +409,7 @@ describe('CheckoutPage (T-030 / US-011)', () => {
 
   // ── Confirmation ────────────────────────────────────────────────────────
 
-  it('renders order confirmation with order number after successful payment', async () => {
+  it('navigates to /order-confirmation after successful payment', async () => {
     mockUseAuth.mockReturnValue(AUTH_USER);
     mockCreatePaymentIntent.mockResolvedValue({
       client_secret: 'pi_secret_test',
@@ -444,12 +445,11 @@ describe('CheckoutPage (T-030 / US-011)', () => {
     await user.click(screen.getByRole('button', { name: /pay now/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/order confirmed/i)).toBeInTheDocument();
+      expect(screen.getByTestId('order-confirmation-page')).toBeInTheDocument();
     });
-    expect(screen.getByText(/ORD-2024-001/)).toBeInTheDocument();
   });
 
-  it('renders Continue Shopping link on the confirmation page', async () => {
+  it('calls confirmOrder with the payment_intent_id from Stripe', async () => {
     mockUseAuth.mockReturnValue(AUTH_USER);
     mockCreatePaymentIntent.mockResolvedValue({
       client_secret: 'pi_secret_test',
@@ -484,8 +484,7 @@ describe('CheckoutPage (T-030 / US-011)', () => {
     await user.click(screen.getByRole('button', { name: /pay now/i }));
 
     await waitFor(() => {
-      const link = screen.getByRole('link', { name: /continue shopping/i });
-      expect(link).toHaveAttribute('href', '/products');
+      expect(mockConfirmOrder).toHaveBeenCalledWith({ payment_intent_id: 'pi_test_123' });
     });
   });
 
@@ -499,27 +498,8 @@ describe('CheckoutPage (T-030 / US-011)', () => {
     ).toBeInTheDocument();
   });
 
-  it('does not show the step indicator on the confirmation step', async () => {
+  it('shows step indicator on the payment step', async () => {
     mockUseAuth.mockReturnValue(AUTH_USER);
-    mockCreatePaymentIntent.mockResolvedValue({
-      client_secret: 'pi_secret_test',
-      payment_intent_id: 'pi_test_123',
-      amount: 8999,
-      currency: 'gbp',
-    });
-    mockConfirmOrder.mockResolvedValue(MOCK_ORDER);
-
-    const { useStripe, useElements } = await import('@stripe/react-stripe-js');
-    vi.mocked(useStripe).mockReturnValue({
-      confirmCardPayment: vi.fn().mockResolvedValue({
-        paymentIntent: { status: 'succeeded' },
-        error: null,
-      }),
-    } as unknown as ReturnType<typeof useStripe>);
-    vi.mocked(useElements).mockReturnValue({
-      getElement: vi.fn().mockReturnValue({ _element: true }),
-    } as unknown as ReturnType<typeof useElements>);
-
     const user = userEvent.setup();
     renderPage();
     await screen.findByText(/shipping address/i);
@@ -530,13 +510,11 @@ describe('CheckoutPage (T-030 / US-011)', () => {
     await user.type(screen.getByLabelText(/state/i), 'NY');
     await user.type(screen.getByLabelText(/postal code/i), '10001');
     await user.click(screen.getByRole('button', { name: /continue to payment/i }));
-    await waitFor(() => screen.getByRole('heading', { name: /^payment$/i }));
-    await user.click(screen.getByRole('button', { name: /pay now/i }));
 
-    await waitFor(() => screen.getByText(/order confirmed/i));
+    await waitFor(() => screen.getByRole('heading', { name: /^payment$/i }));
     expect(
-      screen.queryByRole('navigation', { name: /checkout progress/i })
-    ).not.toBeInTheDocument();
+      screen.getByRole('navigation', { name: /checkout progress/i })
+    ).toBeInTheDocument();
   });
 
   // ── Accessibility ───────────────────────────────────────────────────────
