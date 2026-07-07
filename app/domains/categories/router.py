@@ -3,9 +3,9 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from boots-shopping-app.app.core.deps import get_db
-from boots-shopping-app.app.domains.categories.schemas import CategoryList, CategoryRead
-from boots-shopping-app.app.domains.categories.service import CategoryService
+from app.core.deps import get_db
+from app.domains.categories.schemas import CategoryList, CategoryRead
+from app.domains.categories.service import CategoryService
 
 router = APIRouter(prefix="/api/v1/categories", tags=["categories"])
 

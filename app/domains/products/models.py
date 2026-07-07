@@ -26,6 +26,7 @@ from app.core.database import Base
 
 class Product(Base):
     __tablename__ = "products"
+    __allow_unmapped__ = True
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=_uuid.uuid4, index=True)
     name = Column(String(255), nullable=False)
@@ -72,6 +73,7 @@ class Product(Base):
 
 class ProductVariant(Base):
     __tablename__ = "product_variants"
+    __allow_unmapped__ = True
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=_uuid.uuid4, index=True)
     product_id = Column(
@@ -105,6 +107,7 @@ class ProductVariant(Base):
 
 class Review(Base):
     __tablename__ = "reviews"
+    __allow_unmapped__ = True
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=_uuid.uuid4, index=True)
     product_id = Column(

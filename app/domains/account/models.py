@@ -7,7 +7,7 @@ from sqlalchemy import Boolean, DateTime, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from boots_shopping_app.app.core.database import Base
+from app.core.database import Base
 
 
 class User(Base):
@@ -33,6 +33,15 @@ class User(Base):
 
     refresh_tokens: Mapped[list[RefreshToken]] = relationship(
         "RefreshToken", back_populates="user", cascade="all, delete-orphan"
+    )
+    reviews: Mapped[list] = relationship(
+        "Review", back_populates="user", cascade="all, delete-orphan"
+    )
+    orders: Mapped[list] = relationship(
+        "Order", back_populates="user"
+    )
+    carts: Mapped[list] = relationship(
+        "Cart", back_populates="user", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

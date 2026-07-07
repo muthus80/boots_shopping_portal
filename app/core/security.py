@@ -7,7 +7,7 @@ from typing import Optional
 import bcrypt
 from jose import JWTError, jwt
 
-from boots-shopping-app.app.core.config import settings
+from app.core.config import settings
 
 
 def create_access_token(subject: str, extra_claims: Optional[dict] = None) -> str:
@@ -24,19 +24,24 @@ def create_access_token(subject: str, extra_claims: Optional[dict] = None) -> st
     return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 
-def create_refresh_token(subject: str, extra_claims: Optional[dict] = None) -> str:
+def create_refresh_token(
+    subject: str, extra_claims: Optional[dict] = None
+) -> tuple[str, str, datetime]:
+    """Return (token_string, jti, expires_at) so callers can persist the JTI."""
     now = datetime.now(timezone.utc)
     expire = now + timedelta(days=settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS)
+    jti = str(uuid.uuid4())
     payload: dict = {
         "sub": subject,
         "iat": now,
         "exp": expire,
         "type": "refresh",
-        "jti": str(uuid.uuid4()),
+        "jti": jti,
     }
     if extra_claims:
         payload.update(extra_claims)
-    return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
+    token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
+    return token, jti, expire
 
 
 def decode_token(token: str) -> dict | None:

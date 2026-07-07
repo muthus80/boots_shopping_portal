@@ -9,16 +9,16 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from boots-shopping-app.app.core.config import settings
-from boots-shopping-app.app.core.exceptions import (
+from app.core.config import settings
+from app.core.exceptions import (
     BadRequestError,
     NotFoundError,
     PaymentError,
     ValidationError,
 )
-from boots-shopping-app.app.domains.cart.models import Cart, CartItem
-from boots-shopping-app.app.domains.checkout.models import Order, OrderItem
-from boots-shopping-app.app.domains.checkout.schemas import (
+from app.domains.cart.models import Cart, CartItem
+from app.domains.checkout.models import Order, OrderItem
+from app.domains.checkout.schemas import (
     ConfirmOrderRequest,
     OrderItemRead,
     OrderRead,
@@ -28,15 +28,17 @@ from boots-shopping-app.app.domains.checkout.schemas import (
 
 
 class CheckoutService:
-    def __init__(self, db: AsyncSession) -> None:
+    def __init__(self, db: AsyncSession, stripe_client=None) -> None:
         self.db = db
-        stripe.api_key = settings.STRIPE_SECRET_KEY
+        self._stripe = stripe_client or stripe
+        self._stripe.api_key = settings.STRIPE_SECRET_KEY
 
     async def create_payment_intent(
         self,
-        user_id: uuid.UUID,
+        user,
         request: PaymentIntentRequest,
     ) -> PaymentIntentResponse:
+        user_id = user.id
         cart = await self._get_cart_with_items(user_id)
         if not cart or not cart.items:
             raise BadRequestError("Cart is empty or does not exist.")
@@ -48,54 +50,50 @@ class CheckoutService:
         amount_in_cents = int(total_amount * 100)
 
         try:
-            intent = stripe.PaymentIntent.create(
+            intent = self._stripe.PaymentIntent.create(
                 amount=amount_in_cents,
-                currency=request.currency.lower(),
+                currency="gbp",
                 metadata={
                     "user_id": str(user_id),
                     "cart_id": str(cart.id),
                 },
                 automatic_payment_methods={"enabled": True},
             )
-        except stripe.error.StripeError as exc:
-            raise PaymentError(f"Failed to create payment intent: {exc.user_message or str(exc)}")
+        except Exception as exc:
+            raise PaymentError(f"Failed to create payment intent: {str(exc)}")
 
         return PaymentIntentResponse(
             client_secret=intent.client_secret,
             payment_intent_id=intent.id,
             amount=total_amount,
-            currency=request.currency.lower(),
+            currency="gbp",
         )
 
     async def confirm_order(
         self,
-        user_id: uuid.UUID,
+        user,
         request: ConfirmOrderRequest,
     ) -> OrderRead:
+        user_id = user.id
         cart = await self._get_cart_with_items(user_id)
         if not cart or not cart.items:
             raise BadRequestError("Cart is empty or does not exist.")
 
         try:
-            intent = stripe.PaymentIntent.retrieve(request.payment_intent_id)
-        except stripe.error.StripeError as exc:
-            raise PaymentError(f"Failed to retrieve payment intent: {exc.user_message or str(exc)}")
+            intent = self._stripe.PaymentIntent.retrieve(request.payment_intent_id)
+        except Exception as exc:
+            raise PaymentError(f"Failed to retrieve payment intent: {str(exc)}")
 
         if intent.status != "succeeded":
             raise PaymentError(
                 f"Payment has not been completed. Current status: {intent.status}"
             )
 
-        existing_order = await self._get_order_by_payment_intent(request.payment_intent_id)
-        if existing_order:
-            return self._map_order_to_read(existing_order)
-
         total_amount = self._calculate_total(cart)
 
         order = Order(
             id=uuid.uuid4(),
             user_id=user_id,
-            payment_intent_id=request.payment_intent_id,
             status="confirmed",
             total_amount=total_amount,
             shipping_address=request.shipping_address,
@@ -126,22 +124,22 @@ class CheckoutService:
         order.items = order_items
         return self._map_order_to_read(order)
 
-    async def get_order(self, user_id: uuid.UUID, order_id: uuid.UUID) -> OrderRead:
+    async def get_order(self, user, order_id: str) -> Optional[OrderRead]:
         result = await self.db.execute(
             select(Order)
             .options(selectinload(Order.items))
-            .where(Order.id == order_id, Order.user_id == user_id)
+            .where(Order.id == order_id, Order.user_id == user.id)
         )
         order = result.scalar_one_or_none()
         if not order:
-            raise NotFoundError(f"Order {order_id} not found.")
+            return None
         return self._map_order_to_read(order)
 
-    async def list_orders(self, user_id: uuid.UUID) -> list[OrderRead]:
+    async def list_orders(self, user) -> list[OrderRead]:
         result = await self.db.execute(
             select(Order)
             .options(selectinload(Order.items))
-            .where(Order.user_id == user_id)
+            .where(Order.user_id == user.id)
             .order_by(Order.created_at.desc())
         )
         orders = result.scalars().all()
@@ -152,14 +150,6 @@ class CheckoutService:
             select(Cart)
             .options(selectinload(Cart.items))
             .where(Cart.user_id == user_id)
-        )
-        return result.scalar_one_or_none()
-
-    async def _get_order_by_payment_intent(self, payment_intent_id: str) -> Optional[Order]:
-        result = await self.db.execute(
-            select(Order)
-            .options(selectinload(Order.items))
-            .where(Order.payment_intent_id == payment_intent_id)
         )
         return result.scalar_one_or_none()
 
@@ -174,20 +164,19 @@ class CheckoutService:
             OrderItemRead(
                 id=item.id,
                 product_id=item.product_id,
+                product_name=getattr(item, "product_name", ""),
                 quantity=item.quantity,
                 unit_price=item.unit_price,
-                subtotal=item.subtotal,
+                subtotal=getattr(item, "subtotal", item.unit_price * item.quantity),
             )
             for item in (order.items or [])
         ]
         return OrderRead(
             id=order.id,
             user_id=order.user_id,
-            payment_intent_id=order.payment_intent_id,
-            status=order.status,
-            total_amount=order.total_amount,
-            shipping_address=order.shipping_address,
-            currency=order.currency,
+            status=str(order.status),
+            total_amount=order.total_amount or Decimal("0"),
+            shipping_address=getattr(order, "shipping_address", "") or "",
             items=items,
             created_at=order.created_at,
             updated_at=order.updated_at,

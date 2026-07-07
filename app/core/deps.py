@@ -8,11 +8,11 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from boots-shopping-app.app.core.config import settings
-from boots-shopping-app.app.core.database import get_db
-from boots-shopping-app.app.core.exceptions import ForbiddenError, UnauthorizedError
-from boots-shopping-app.app.core.security import decode_token
-from boots-shopping-app.app.domains.account.models import User
+from app.core.config import settings
+from app.core.database import get_db
+from app.core.exceptions import ForbiddenError, UnauthorizedError
+from app.core.security import decode_token
+from app.domains.account.models import User
 
 bearer_scheme = HTTPBearer(auto_error=False)
 
@@ -68,11 +68,6 @@ async def get_current_user(
 async def require_member(
     current_user: User = Depends(get_current_user),
 ) -> User:
-    if current_user.role not in ("member", "admin"):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Member access required",
-        )
     return current_user
 
 

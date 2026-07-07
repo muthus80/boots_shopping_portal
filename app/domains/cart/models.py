@@ -8,7 +8,7 @@ from sqlalchemy import DateTime, ForeignKey, Integer, Numeric, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from boots_shopping_app.app.core.database import Base
+from app.core.database import Base
 
 
 class Cart(Base):

@@ -19,7 +19,7 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-from boots_shopping_app.app.core.database import Base
+from app.core.database import Base
 
 
 class OrderStatus(str, enum.Enum):
@@ -41,6 +41,7 @@ class PaymentStatus(str, enum.Enum):
 
 class Order(Base):
     __tablename__ = "orders"
+    __allow_unmapped__ = True
 
     id: Column = Column(
         UUID(as_uuid=True),
@@ -108,6 +109,7 @@ class Order(Base):
 
 class OrderItem(Base):
     __tablename__ = "order_items"
+    __allow_unmapped__ = True
 
     id: Column = Column(
         UUID(as_uuid=True),

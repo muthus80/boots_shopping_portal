@@ -40,19 +40,15 @@ async def update_profile(
     return UserRead.model_validate(updated)
 
 
-@router.post("/profile/change-password", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/profile/change-password", status_code=status.HTTP_200_OK)
 async def change_password(
     payload: PasswordChange,
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(require_member),
-) -> None:
+) -> dict:
     service = AccountService(db)
-    success = await service.change_password(current_user.id, payload)
-    if not success:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Current password is incorrect.",
-        )
+    await service.change_password(current_user.id, payload)
+    return {"message": "Password changed successfully."}
 
 
 @router.get("/orders", response_model=List[OrderRead])

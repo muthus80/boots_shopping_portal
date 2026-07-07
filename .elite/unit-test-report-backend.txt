@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.12.13', 'Platform': 'Linux-7.0.0-1006-aws-x86_64-with-glibc2.43', 'Packages': {'pytest': '9.1.1', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1', 'asyncio': '1.4.0', 'anyio': '4.14.1'}, 'AWS_REGION': 'us-east-1'}
+rootdir: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app
+plugins: json-report-1.5.0, metadata-3.1.1, asyncio-1.4.0, anyio-4.14.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 28 items
+
+tests/unit/sprint_1/test_auth_register.py::TestPasswordHashing::test_hash_is_not_plaintext PASSED [  3%]
+tests/unit/sprint_1/test_auth_register.py::TestPasswordHashing::test_verify_correct_password_returns_true PASSED [  7%]
+tests/unit/sprint_1/test_auth_register.py::TestPasswordHashing::test_verify_wrong_password_returns_false PASSED [ 10%]
+tests/unit/sprint_1/test_auth_register.py::TestPasswordHashing::test_two_hashes_of_same_password_differ PASSED [ 14%]
+tests/unit/sprint_1/test_auth_register.py::TestCreateRefreshToken::test_returns_tuple_of_three PASSED [ 17%]
+tests/unit/sprint_1/test_auth_register.py::TestCreateRefreshToken::test_token_is_string PASSED [ 21%]
+tests/unit/sprint_1/test_auth_register.py::TestCreateRefreshToken::test_jti_is_unique_per_call PASSED [ 25%]
+tests/unit/sprint_1/test_auth_register.py::TestCreateRefreshToken::test_tokens_differ_per_call PASSED [ 28%]
+tests/unit/sprint_1/test_auth_register.py::TestAuthServiceRegister::test_register_creates_user PASSED [ 32%]
+tests/unit/sprint_1/test_auth_register.py::TestAuthServiceRegister::test_register_stores_hashed_password PASSED [ 35%]
+tests/unit/sprint_1/test_auth_register.py::TestAuthServiceRegister::test_register_creates_refresh_token_record PASSED [ 39%]
+tests/unit/sprint_1/test_auth_register.py::TestAuthServiceRegister::test_register_duplicate_email_raises_conflict PASSED [ 42%]
+tests/unit/sprint_1/test_auth_register.py::TestAuthServiceRegister::test_register_weak_password_raises_validation_error PASSED [ 46%]
+tests/unit/sprint_1/test_auth_register.py::TestRegisterEndpoint::test_register_returns_201_on_success PASSED [ 50%]
+tests/unit/sprint_1/test_auth_register.py::TestRegisterEndpoint::test_register_response_body_shape PASSED [ 53%]
+tests/unit/sprint_1/test_auth_register.py::TestRegisterEndpoint::test_register_duplicate_email_returns_409 PASSED [ 57%]
+tests/unit/sprint_1/test_auth_register.py::TestRegisterEndpoint::test_register_invalid_email_returns_422 PASSED [ 60%]
+tests/unit/sprint_1/test_auth_register.py::TestRegisterEndpoint::test_register_password_too_short_returns_422 PASSED [ 64%]
+tests/unit/sprint_1/test_auth_register.py::TestRegisterEndpoint::test_register_missing_fields_returns_422 PASSED [ 67%]
+tests/unit/sprint_1/test_auth_register.py::TestRegisterEndpoint::test_register_with_full_name_succeeds PASSED [ 71%]
+tests/_selfcheck_sprint_1.py::TestUS001UserRegistration::test_ac1_valid_email_and_password_creates_account PASSED [ 75%]
+tests/_selfcheck_sprint_1.py::TestUS001UserRegistration::test_ac2_registration_returns_confirmation_message PASSED [ 78%]
+tests/_selfcheck_sprint_1.py::TestUS001UserRegistration::test_ac3_duplicate_email_returns_conflict PASSED [ 82%]
+tests/_selfcheck_sprint_1.py::TestUS001UserRegistration::test_ac_password_complexity_validation PASSED [ 85%]
+tests/_selfcheck_sprint_1.py::TestUS001UserRegistration::test_ac_missing_password_rejected PASSED [ 89%]
+tests/_selfcheck_sprint_1.py::TestUS001UserRegistration::test_ac_invalid_email_rejected PASSED [ 92%]
+tests/_selfcheck_sprint_1.py::TestUS001UserRegistration::test_ac_optional_full_name_field PASSED [ 96%]
+tests/_selfcheck_sprint_1.py::TestUS001UserRegistration::test_ac_full_name_accepted_when_provided PASSED [100%]
+
+============================== 28 passed in 9.92s ==============================
