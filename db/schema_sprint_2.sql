@@ -1,6 +1,7 @@
 -- ============================================================
 -- Sprint 2 — Product Discovery, Details & Cart
 -- Task T-009: Products and categories database schema
+-- Task T-021: Cart database schema (US-009, US-010)
 -- Engine: PostgreSQL
 -- Sprint 2 adds optimisation indexes on top of Sprint 1 tables.
 -- All table DDL is managed in schema_sprint_1.sql; this file
@@ -8,7 +9,7 @@
 -- ============================================================
 
 -- ============================================================
--- Sprint 2 index additions (migration 0002)
+-- Migration 0002 index additions (T-009 — product discovery)
 -- ============================================================
 
 -- Composite index on reviews (user_id, product_id) — used to check whether a
@@ -26,6 +27,22 @@ CREATE INDEX IF NOT EXISTS ix_products_brand
 CREATE INDEX IF NOT EXISTS ix_products_is_active
     ON products (is_active)
     WHERE is_active = TRUE;
+
+-- ============================================================
+-- Migration 0003 index additions (T-021 — cart schema)
+-- ============================================================
+
+-- Index: cart_items.product_id
+-- Supports fast lookup / cascade verification when a product is
+-- referenced from cart items (US-009 add-to-cart by product+variant).
+CREATE INDEX IF NOT EXISTS ix_cart_items_product_id
+    ON cart_items (product_id);
+
+-- Index: cart_items.variant_id
+-- Supports fast lookup when filtering cart items by product variant
+-- (US-009 / US-010: add, update, or remove a specific variant).
+CREATE INDEX IF NOT EXISTS ix_cart_items_variant_id
+    ON cart_items (variant_id);
 
 -- ============================================================
 -- Sprint 2 query patterns (informational)
@@ -66,8 +83,21 @@ CREATE INDEX IF NOT EXISTS ix_products_is_active
 --   Indexes used: ix_products_slug (unique), ix_product_variants_product_id,
 --                 ix_reviews_product_id
 
+-- US-009: Add to cart (product + variant lookup)
+--   SELECT ci.* FROM cart_items ci
+--   WHERE ci.cart_id = :cart_id
+--     AND ci.product_id = :product_id
+--     AND ci.variant_id = :variant_id;
+--   Indexes used: ix_cart_items_cart_id, ix_cart_items_product_id,
+--                 ix_cart_items_variant_id
+
 -- US-009/010: Cart management (guest and authenticated)
 --   SELECT c.*, ci.* FROM carts c
 --   JOIN cart_items ci ON ci.cart_id = c.id
 --   WHERE c.user_id = :user_id OR c.session_id = :session_id;
 --   Indexes used: ix_carts_user_id, ix_carts_session_id, ix_cart_items_cart_id
+
+-- US-010: Update or remove a cart item by variant
+--   SELECT ci.* FROM cart_items ci
+--   WHERE ci.variant_id = :variant_id AND ci.cart_id = :cart_id;
+--   Indexes used: ix_cart_items_variant_id, ix_cart_items_cart_id

@@ -41,7 +41,11 @@ class User(Base):
         "Order", back_populates="user"
     )
     carts: Mapped[list] = relationship(
-        "Cart", back_populates="user", cascade="all, delete-orphan"
+        "Cart",
+        back_populates="user",
+        # FK is ON DELETE SET NULL — user deletion must NOT ORM-cascade-delete
+        # the cart; the DB will NULL out cart.user_id instead.
+        passive_deletes=True,
     )
 
     def __repr__(self) -> str:

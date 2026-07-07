@@ -114,8 +114,8 @@ class Product(Base):
     reviews: List["Review"] = relationship(
         "Review", back_populates="product", cascade="all, delete-orphan"
     )
-    cart_items = relationship("CartItem", back_populates="product")
-    order_items = relationship("OrderItem", back_populates="product")
+    cart_items = relationship("CartItem", back_populates="product", passive_deletes=True)
+    order_items = relationship("OrderItem", back_populates="product", passive_deletes=True)
 
 
 class ProductVariant(Base):
