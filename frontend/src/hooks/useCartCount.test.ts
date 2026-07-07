@@ -13,6 +13,13 @@ vi.mock('../api/cart', () => ({
   getCart: () => mockGetCart(),
 }));
 
+// useCartCount now reads isAuthenticated from useAuth.
+// Default to authenticated=true so existing tests continue to exercise the
+// cart-fetch path without needing to be rewritten.
+vi.mock('../stores/authStore', () => ({
+  useAuth: () => ({ isAuthenticated: true }),
+}));
+
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 
 const makeCart = (items: Array<{ id: string; quantity: number }>): Cart => ({

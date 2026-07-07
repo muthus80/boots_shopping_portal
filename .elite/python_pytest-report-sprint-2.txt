@@ -46,4 +46,4 @@ tests/integration/sprint_2/test_products.py::TestProductReviews::test_authentica
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 --------------------------------- JSON report ----------------------------------
 report saved to: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.elite/python_pytest-report-sprint-2.json
-======================= 30 passed, 7 warnings in 21.67s ========================
+======================= 30 passed, 7 warnings in 21.49s ========================

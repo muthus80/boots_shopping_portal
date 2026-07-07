@@ -88,7 +88,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 13448,
+                      "duration": 13385,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:28:50",
@@ -112,7 +112,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:07:41.731Z",
+                      "startTime": "2026-07-07T17:53:30.363Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -146,7 +146,7 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 12276,
+                      "duration": 12163,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Account Created!' }).or(getByRole('heading', { name: 'Step Into Style' }))\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:28:50",
@@ -170,7 +170,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-07-07T17:07:56.529Z",
+                      "startTime": "2026-07-07T17:53:45.062Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -225,12 +225,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3994,
+                      "duration": 4139,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:08:10.118Z",
+                      "startTime": "2026-07-07T17:53:58.556Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -275,10 +275,10 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 14805,
+                      "duration": 14389,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/login\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/login\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
                           "column": 24,
@@ -293,13 +293,13 @@
                             "column": 24,
                             "line": 78
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/login\"\u001b[22m\n\n\n  76 |\n  77 |     // AC: redirected to homepage after successful login\n> 78 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  79 |     // Homepage heading is \"Step Into Style\" (HomePage.tsx)\n  80 |     await expect(page.getByRole('heading', { name: 'Step Into Style' })).toBeVisible()\n  81 |   })\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n\n\n  76 |\n  77 |     // AC: redirected to homepage after successful login\n> 78 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  79 |     // Homepage heading is \"Step Into Style\" (HomePage.tsx)\n  80 |     await expect(page.getByRole('heading', { name: 'Step Into Style' })).toBeVisible()\n  81 |   })\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:08:14.430Z",
+                      "startTime": "2026-07-07T17:54:03.043Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -333,10 +333,10 @@
                       "workerIndex": 3,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 15073,
+                      "duration": 14556,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/login\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/login\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts",
                           "column": 24,
@@ -351,13 +351,13 @@
                             "column": 24,
                             "line": 78
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/login\"\u001b[22m\n\n\n  76 |\n  77 |     // AC: redirected to homepage after successful login\n> 78 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  79 |     // Homepage heading is \"Step Into Style\" (HomePage.tsx)\n  80 |     await expect(page.getByRole('heading', { name: 'Step Into Style' })).toBeVisible()\n  81 |   })\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mlogin\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/login\"\u001b[22m\n\n\n  76 |\n  77 |     // AC: redirected to homepage after successful login\n> 78 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  79 |     // Homepage heading is \"Step Into Style\" (HomePage.tsx)\n  80 |     await expect(page.getByRole('heading', { name: 'Step Into Style' })).toBeVisible()\n  81 |   })\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_auth_flows.spec.ts:78:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-07-07T17:08:30.331Z",
+                      "startTime": "2026-07-07T17:54:18.517Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -412,12 +412,12 @@
                       "workerIndex": 4,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1566,
+                      "duration": 1246,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:08:46.684Z",
+                      "startTime": "2026-07-07T17:54:34.335Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -479,12 +479,12 @@
                       "workerIndex": 4,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 999,
+                      "duration": 987,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:08:48.512Z",
+                      "startTime": "2026-07-07T17:54:35.812Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -529,7 +529,7 @@
                       "workerIndex": 4,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 1536,
+                      "duration": 1526,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:30:33",
@@ -553,7 +553,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:08:49.561Z",
+                      "startTime": "2026-07-07T17:54:36.848Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -587,7 +587,7 @@
                       "workerIndex": 5,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 1622,
+                      "duration": 1611,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:30:33",
@@ -611,7 +611,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-07-07T17:08:52.134Z",
+                      "startTime": "2026-07-07T17:54:39.452Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -674,12 +674,12 @@
                       "workerIndex": 6,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1060,
+                      "duration": 1077,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:08:54.957Z",
+                      "startTime": "2026-07-07T17:54:42.263Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -724,10 +724,10 @@
                       "workerIndex": 6,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 11932,
+                      "duration": 11938,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
                           "column": 24,
@@ -742,13 +742,13 @@
                             "column": 24,
                             "line": 61
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n\n\n  59 |\n  60 |     // Wait for redirect to home\n> 61 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  62 |\n  63 |     // Navigate to order history\n  64 |     await page.goto('/orders')\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n\n  59 |\n  60 |     // Wait for redirect to home\n> 61 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  62 |\n  63 |     // Navigate to order history\n  64 |     await page.goto('/orders')\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:08:56.221Z",
+                      "startTime": "2026-07-07T17:54:43.539Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -782,10 +782,10 @@
                       "workerIndex": 7,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 12276,
+                      "duration": 12041,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
                           "column": 24,
@@ -800,13 +800,13 @@
                             "column": 24,
                             "line": 61
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n\n\n  59 |\n  60 |     // Wait for redirect to home\n> 61 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  62 |\n  63 |     // Navigate to order history\n  64 |     await page.goto('/orders')\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n\n  59 |\n  60 |     // Wait for redirect to home\n> 61 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  62 |\n  63 |     // Navigate to order history\n  64 |     await page.goto('/orders')\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:61:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-07-07T17:09:09.226Z",
+                      "startTime": "2026-07-07T17:54:56.556Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -869,10 +869,10 @@
                       "workerIndex": 8,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 12017,
+                      "duration": 12094,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
                           "column": 24,
@@ -887,13 +887,13 @@
                             "column": 24,
                             "line": 94
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n\n\n  92 |     await page.getByLabel('Confirm password').fill(password)\n  93 |     await page.getByRole('button', { name: 'Create Account' }).click()\n> 94 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  95 |\n  96 |     // AC: after refresh, user is still logged in\n  97 |     await page.reload()\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n\n  92 |     await page.getByLabel('Confirm password').fill(password)\n  93 |     await page.getByRole('button', { name: 'Create Account' }).click()\n> 94 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  95 |\n  96 |     // AC: after refresh, user is still logged in\n  97 |     await page.reload()\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:09:22.759Z",
+                      "startTime": "2026-07-07T17:55:09.840Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -927,10 +927,10 @@
                       "workerIndex": 9,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 12394,
+                      "duration": 12133,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts",
                           "column": 24,
@@ -945,13 +945,13 @@
                             "column": 24,
                             "line": 94
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:51371/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:51371/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:51371/register\"\u001b[22m\n\n\n  92 |     await page.getByLabel('Confirm password').fill(password)\n  93 |     await page.getByRole('button', { name: 'Create Account' }).click()\n> 94 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  95 |\n  96 |     // AC: after refresh, user is still logged in\n  97 |     await page.reload()\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://localhost:36477/\"\u001b[39m\nReceived: \u001b[31m\"http://localhost:36477/\u001b[7mregister\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    24 × unexpected value \"http://localhost:36477/register\"\u001b[22m\n\n\n  92 |     await page.getByLabel('Confirm password').fill(password)\n  93 |     await page.getByRole('button', { name: 'Create Account' }).click()\n> 94 |     await expect(page).toHaveURL('/', { timeout: 10000 })\n     |                        ^\n  95 |\n  96 |     // AC: after refresh, user is still logged in\n  97 |     await page.reload()\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_cart_and_orders.spec.ts:94:24"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-07-07T17:09:35.998Z",
+                      "startTime": "2026-07-07T17:55:23.229Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1023,31 +1023,31 @@
                       "workerIndex": 10,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 1336,
+                      "duration": 6817,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Search products')\nExpected: visible\nError: strict mode violation: getByLabel('Search products') resolved to 2 elements:\n    1) <form role=\"search\" aria-label=\"Search products\" class=\"relative flex items-center\">…</form> aka locator('form')\n    2) <input value=\"\" type=\"search\" id=\"site-search\" placeholder=\"Search boots…\" aria-label=\"Search products\" class=\"w-48 rounded-lg border border-gray-300 bg-gray-50 py-1.5 pl-3 pr-9 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors\"/> aka getByPlaceholder('Search boots…')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Search products')\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Search products')\nExpected: visible\nError: strict mode violation: getByLabel('Search products') resolved to 2 elements:\n    1) <form role=\"search\" aria-label=\"Search products\" class=\"relative flex items-center\">…</form> aka locator('form')\n    2) <input value=\"\" type=\"search\" id=\"site-search\" placeholder=\"Search boots…\" aria-label=\"Search products\" class=\"w-48 rounded-lg border border-gray-300 bg-gray-50 py-1.5 pl-3 pr-9 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors\"/> aka getByPlaceholder('Search boots…')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Search products')\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:54",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:70",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                          "column": 54,
+                          "column": 70,
                           "line": 17
                         },
-                        "snippet": "\u001b[0m \u001b[90m 15 |\u001b[39m     \u001b[90m// AC: header contains links to search, account, and cart (from SiteHeader.tsx)\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// Search input is visible in the header (SearchBar in SiteHeader)\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByLabel(\u001b[32m'Search products'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m   })\n \u001b[90m 19 |\u001b[39m\n \u001b[90m 20 |\u001b[39m   test(\u001b[32m'clicking logo returns user to homepage'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 15 |\u001b[39m     \u001b[90m// AC: header contains links to cart (from SiteHeader.tsx)\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// Search bar is hidden on some viewports — the cart link is always in the header\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/shopping cart/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m   })\n \u001b[90m 19 |\u001b[39m\n \u001b[90m 20 |\u001b[39m   test(\u001b[32m'clicking logo returns user to homepage'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 54,
+                            "column": 70,
                             "line": 17
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Search products')\nExpected: visible\nError: strict mode violation: getByLabel('Search products') resolved to 2 elements:\n    1) <form role=\"search\" aria-label=\"Search products\" class=\"relative flex items-center\">…</form> aka locator('form')\n    2) <input value=\"\" type=\"search\" id=\"site-search\" placeholder=\"Search boots…\" aria-label=\"Search products\" class=\"w-48 rounded-lg border border-gray-300 bg-gray-50 py-1.5 pl-3 pr-9 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors\"/> aka getByPlaceholder('Search boots…')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Search products')\u001b[22m\n\n\n  15 |     // AC: header contains links to search, account, and cart (from SiteHeader.tsx)\n  16 |     // Search input is visible in the header (SearchBar in SiteHeader)\n> 17 |     await expect(page.getByLabel('Search products')).toBeVisible()\n     |                                                      ^\n  18 |   })\n  19 |\n  20 |   test('clicking logo returns user to homepage', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:54"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n\n  15 |     // AC: header contains links to cart (from SiteHeader.tsx)\n  16 |     // Search bar is hidden on some viewports — the cart link is always in the header\n> 17 |     await expect(page.getByRole('link', { name: /shopping cart/i })).toBeVisible()\n     |                                                                      ^\n  18 |   })\n  19 |\n  20 |   test('clicking logo returns user to homepage', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:70"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:09:49.694Z",
+                      "startTime": "2026-07-07T17:55:36.714Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1073,7 +1073,7 @@
                       ],
                       "errorLocation": {
                         "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                        "column": 54,
+                        "column": 70,
                         "line": 17
                       }
                     },
@@ -1081,31 +1081,31 @@
                       "workerIndex": 11,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 1617,
+                      "duration": 6751,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Search products')\nExpected: visible\nError: strict mode violation: getByLabel('Search products') resolved to 2 elements:\n    1) <form role=\"search\" aria-label=\"Search products\" class=\"relative flex items-center\">…</form> aka locator('form')\n    2) <input value=\"\" type=\"search\" id=\"site-search\" placeholder=\"Search boots…\" aria-label=\"Search products\" class=\"w-48 rounded-lg border border-gray-300 bg-gray-50 py-1.5 pl-3 pr-9 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors\"/> aka getByPlaceholder('Search boots…')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Search products')\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Search products')\nExpected: visible\nError: strict mode violation: getByLabel('Search products') resolved to 2 elements:\n    1) <form role=\"search\" aria-label=\"Search products\" class=\"relative flex items-center\">…</form> aka locator('form')\n    2) <input value=\"\" type=\"search\" id=\"site-search\" placeholder=\"Search boots…\" aria-label=\"Search products\" class=\"w-48 rounded-lg border border-gray-300 bg-gray-50 py-1.5 pl-3 pr-9 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors\"/> aka getByPlaceholder('Search boots…')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Search products')\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:54",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:70",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                          "column": 54,
+                          "column": 70,
                           "line": 17
                         },
-                        "snippet": "\u001b[0m \u001b[90m 15 |\u001b[39m     \u001b[90m// AC: header contains links to search, account, and cart (from SiteHeader.tsx)\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// Search input is visible in the header (SearchBar in SiteHeader)\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByLabel(\u001b[32m'Search products'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m   })\n \u001b[90m 19 |\u001b[39m\n \u001b[90m 20 |\u001b[39m   test(\u001b[32m'clicking logo returns user to homepage'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 15 |\u001b[39m     \u001b[90m// AC: header contains links to cart (from SiteHeader.tsx)\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// Search bar is hidden on some viewports — the cart link is always in the header\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/shopping cart/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m   })\n \u001b[90m 19 |\u001b[39m\n \u001b[90m 20 |\u001b[39m   test(\u001b[32m'clicking logo returns user to homepage'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 54,
+                            "column": 70,
                             "line": 17
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Search products')\nExpected: visible\nError: strict mode violation: getByLabel('Search products') resolved to 2 elements:\n    1) <form role=\"search\" aria-label=\"Search products\" class=\"relative flex items-center\">…</form> aka locator('form')\n    2) <input value=\"\" type=\"search\" id=\"site-search\" placeholder=\"Search boots…\" aria-label=\"Search products\" class=\"w-48 rounded-lg border border-gray-300 bg-gray-50 py-1.5 pl-3 pr-9 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-colors\"/> aka getByPlaceholder('Search boots…')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Search products')\u001b[22m\n\n\n  15 |     // AC: header contains links to search, account, and cart (from SiteHeader.tsx)\n  16 |     // Search input is visible in the header (SearchBar in SiteHeader)\n> 17 |     await expect(page.getByLabel('Search products')).toBeVisible()\n     |                                                      ^\n  18 |   })\n  19 |\n  20 |   test('clicking logo returns user to homepage', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:54"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: /shopping cart/i })\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: /shopping cart/i })\u001b[22m\n\u001b[2m    14 × locator resolved to <a href=\"/cart\" aria-label=\"Shopping cart\" class=\"relative flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 rounded transition-colors\">…</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n\n  15 |     // AC: header contains links to cart (from SiteHeader.tsx)\n  16 |     // Search bar is hidden on some viewports — the cart link is always in the header\n> 17 |     await expect(page.getByRole('link', { name: /shopping cart/i })).toBeVisible()\n     |                                                                      ^\n  18 |   })\n  19 |\n  20 |   test('clicking logo returns user to homepage', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:17:70"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-07-07T17:09:52.280Z",
+                      "startTime": "2026-07-07T17:55:44.820Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1131,7 +1131,7 @@
                       ],
                       "errorLocation": {
                         "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                        "column": 54,
+                        "column": 70,
                         "line": 17
                       }
                     }
@@ -1160,12 +1160,12 @@
                       "workerIndex": 12,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1385,
+                      "duration": 1556,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:09:55.160Z",
+                      "startTime": "2026-07-07T17:55:52.850Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1204,7 +1204,7 @@
           "specs": [
             {
               "title": "user searches for a keyword and sees results page with matching boots",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -1217,35 +1217,19 @@
                     {
                       "workerIndex": 12,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 64498,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 23,
-                            "line": 41
-                          },
-                          "message": "Error: locator.fill: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Search products').first()\u001b[22m\n\u001b[2m    - locator resolved to <form role=\"search\" aria-label=\"Search products\" class=\"relative flex items-center\">…</form>\u001b[22m\n\u001b[2m    - fill(\"hiking\")\u001b[22m\n\u001b[2m  - attempting fill action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    126 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m        - element is not visible\u001b[22m\n\u001b[2m      - retrying fill action\u001b[22m\n\u001b[2m        - waiting 500ms\u001b[22m\n\n\n  39 |     // Use the search bar in the header — SearchBar renders input with aria-label=\"Search products\"\n  40 |     const searchInput = page.getByLabel('Search products').first()\n> 41 |     await searchInput.fill('hiking')\n     |                       ^\n  42 |\n  43 |     // Submit search via the form (press Enter)\n  44 |     await searchInput.press('Enter')\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:41:23"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 1012,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:09:56.779Z",
+                      "startTime": "2026-07-07T17:55:54.730Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium/test-failed-1.png"
+                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium/test-finished-1.png"
                         },
                         {
                           "name": "video",
@@ -1253,69 +1237,14 @@
                           "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium/video.webm"
                         },
                         {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium/error-context.md"
-                        },
-                        {
                           "name": "trace",
                           "contentType": "application/zip",
                           "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium/trace.zip"
                         }
                       ]
-                    },
-                    {
-                      "workerIndex": 13,
-                      "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 64570,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 23,
-                            "line": 41
-                          },
-                          "message": "Error: locator.fill: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Search products').first()\u001b[22m\n\u001b[2m    - locator resolved to <form role=\"search\" aria-label=\"Search products\" class=\"relative flex items-center\">…</form>\u001b[22m\n\u001b[2m    - fill(\"hiking\")\u001b[22m\n\u001b[2m  - attempting fill action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    126 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m        - element is not visible\u001b[22m\n\u001b[2m      - retrying fill action\u001b[22m\n\u001b[2m        - waiting 500ms\u001b[22m\n\n\n  39 |     // Use the search bar in the header — SearchBar renders input with aria-label=\"Search products\"\n  40 |     const searchInput = page.getByLabel('Search products').first()\n> 41 |     await searchInput.fill('hiking')\n     |                       ^\n  42 |\n  43 |     // Submit search via the form (press Enter)\n  44 |     await searchInput.press('Enter')\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:41:23"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:11:02.434Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-ab6f8-ts-page-with-matching-boots-chromium-retry1/trace.zip"
-                        }
-                      ]
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "3c5c5607b80ea43ce9c8-0ced7694f25598d1769e",
@@ -1336,34 +1265,34 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 14,
+                      "workerIndex": 12,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 11906,
+                      "duration": 11766,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'No results found for your search' })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'No results found for your search' })\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'No results found for your search' })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'No results found for your search' })\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:59:91",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:52:78",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                          "column": 91,
-                          "line": 59
+                          "column": 78,
+                          "line": 52
                         },
-                        "snippet": "\u001b[0m \u001b[90m 57 |\u001b[39m     \u001b[90m// AC: 'No results found for your search' text (SearchResultsPage.tsx empty state heading)\u001b[39m\n \u001b[90m 58 |\u001b[39m     \u001b[90m// Use exact match + heading role to avoid matching both the count text and heading\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 59 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'No results found for your search'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 60 |\u001b[39m   })\n \u001b[90m 61 |\u001b[39m\n \u001b[90m 62 |\u001b[39m   test(\u001b[32m'search results page shows loading indicator while fetching'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 50 |\u001b[39m     \u001b[90m// AC: 'No results found for your search' (SearchResultsPage.tsx line 189 renders as <p>)\u001b[39m\n \u001b[90m 51 |\u001b[39m     \u001b[90m// Both the count line and empty state p contain this text; .first() targets the first match\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 52 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'No results found for your search'\u001b[39m)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 53 |\u001b[39m   })\n \u001b[90m 54 |\u001b[39m\n \u001b[90m 55 |\u001b[39m   test(\u001b[32m'search results page shows loading indicator while fetching'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 91,
-                            "line": 59
+                            "column": 78,
+                            "line": 52
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'No results found for your search' })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'No results found for your search' })\u001b[22m\n\n\n  57 |     // AC: 'No results found for your search' text (SearchResultsPage.tsx empty state heading)\n  58 |     // Use exact match + heading role to avoid matching both the count text and heading\n> 59 |     await expect(page.getByRole('heading', { name: 'No results found for your search' })).toBeVisible({ timeout: 10000 })\n     |                                                                                           ^\n  60 |   })\n  61 |\n  62 |   test('search results page shows loading indicator while fetching', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:59:91"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n\n\n  50 |     // AC: 'No results found for your search' (SearchResultsPage.tsx line 189 renders as <p>)\n  51 |     // Both the count line and empty state p contain this text; .first() targets the first match\n> 52 |     await expect(page.getByText('No results found for your search').first()).toBeVisible({ timeout: 10000 })\n     |                                                                              ^\n  53 |   })\n  54 |\n  55 |   test('search results page shows loading indicator while fetching', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:52:78"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:12:08.347Z",
+                      "startTime": "2026-07-07T17:55:55.791Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1389,39 +1318,39 @@
                       ],
                       "errorLocation": {
                         "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                        "column": 91,
-                        "line": 59
+                        "column": 78,
+                        "line": 52
                       }
                     },
                     {
-                      "workerIndex": 15,
+                      "workerIndex": 13,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 12014,
+                      "duration": 12473,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'No results found for your search' })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'No results found for your search' })\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'No results found for your search' })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'No results found for your search' })\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:59:91",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:52:78",
                         "location": {
                           "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                          "column": 91,
-                          "line": 59
+                          "column": 78,
+                          "line": 52
                         },
-                        "snippet": "\u001b[0m \u001b[90m 57 |\u001b[39m     \u001b[90m// AC: 'No results found for your search' text (SearchResultsPage.tsx empty state heading)\u001b[39m\n \u001b[90m 58 |\u001b[39m     \u001b[90m// Use exact match + heading role to avoid matching both the count text and heading\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 59 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'No results found for your search'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 60 |\u001b[39m   })\n \u001b[90m 61 |\u001b[39m\n \u001b[90m 62 |\u001b[39m   test(\u001b[32m'search results page shows loading indicator while fetching'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 50 |\u001b[39m     \u001b[90m// AC: 'No results found for your search' (SearchResultsPage.tsx line 189 renders as <p>)\u001b[39m\n \u001b[90m 51 |\u001b[39m     \u001b[90m// Both the count line and empty state p contain this text; .first() targets the first match\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 52 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'No results found for your search'\u001b[39m)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 53 |\u001b[39m   })\n \u001b[90m 54 |\u001b[39m\n \u001b[90m 55 |\u001b[39m   test(\u001b[32m'search results page shows loading indicator while fetching'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                            "column": 91,
-                            "line": 59
+                            "column": 78,
+                            "line": 52
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'No results found for your search' })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'No results found for your search' })\u001b[22m\n\n\n  57 |     // AC: 'No results found for your search' text (SearchResultsPage.tsx empty state heading)\n  58 |     // Use exact match + heading role to avoid matching both the count text and heading\n> 59 |     await expect(page.getByRole('heading', { name: 'No results found for your search' })).toBeVisible({ timeout: 10000 })\n     |                                                                                           ^\n  60 |   })\n  61 |\n  62 |   test('search results page shows loading indicator while fetching', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:59:91"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('No results found for your search').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('No results found for your search').first()\u001b[22m\n\n\n  50 |     // AC: 'No results found for your search' (SearchResultsPage.tsx line 189 renders as <p>)\n  51 |     // Both the count line and empty state p contain this text; .first() targets the first match\n> 52 |     await expect(page.getByText('No results found for your search').first()).toBeVisible({ timeout: 10000 })\n     |                                                                              ^\n  53 |   })\n  54 |\n  55 |   test('search results page shows loading indicator while fetching', async ({ page }) => {\n    at /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts:52:78"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-07-07T17:12:21.525Z",
+                      "startTime": "2026-07-07T17:56:08.642Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1447,8 +1376,8 @@
                       ],
                       "errorLocation": {
                         "file": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/sprint_2/test_product_discovery.spec.ts",
-                        "column": 91,
-                        "line": 59
+                        "column": 78,
+                        "line": 52
                       }
                     }
                   ],
@@ -1457,7 +1386,7 @@
               ],
               "id": "3c5c5607b80ea43ce9c8-7c99edc530644c1210e4",
               "file": "sprint_2/test_product_discovery.spec.ts",
-              "line": 53,
+              "line": 46,
               "column": 7
             },
             {
@@ -1473,15 +1402,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 16,
+                      "workerIndex": 14,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1049,
+                      "duration": 1178,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:12:34.813Z",
+                      "startTime": "2026-07-07T17:56:22.373Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1507,7 +1436,7 @@
               ],
               "id": "3c5c5607b80ea43ce9c8-44eca067315d89e5e0d1",
               "file": "sprint_2/test_product_discovery.spec.ts",
-              "line": 62,
+              "line": 55,
               "column": 7
             }
           ]
@@ -1515,7 +1444,7 @@
         {
           "title": "Sprint 2 — US-006: View Product Listing Page",
           "file": "sprint_2/test_product_discovery.spec.ts",
-          "line": 74,
+          "line": 67,
           "column": 6,
           "specs": [
             {
@@ -1531,29 +1460,21 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 16,
+                      "workerIndex": 14,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 64657,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 1536,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-07T17:12:36.060Z",
+                      "startTime": "2026-07-07T17:56:23.749Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium/test-failed-1.png"
+                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium/test-finished-1.png"
                         },
                         {
                           "name": "video",
@@ -1561,53 +1482,19 @@
                           "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium/video.webm"
                         },
                         {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium/error-context.md"
-                        },
-                        {
                           "name": "trace",
                           "contentType": "application/zip",
                           "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium/trace.zip"
                         }
                       ]
-                    },
-                    {
-                      "workerIndex": 17,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1880,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-07-07T17:13:41.831Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium-retry1/test-finished-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium-retry1/video.webm"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/tests/e2e/test-results/sprint_2-test_product_disc-0279f--page-and-sees-product-grid-chromium-retry1/trace.zip"
-                        }
-                      ]
                     }
                   ],
-                  "status": "flaky"
+                  "status": "expected"
                 }
               ],
               "id": "3c5c5607b80ea43ce9c8-2ad688980f785e83cf38",
               "file": "sprint_2/test_product_discovery.spec.ts",
-              "line": 75,
+              "line": 68,
               "column": 7
             }
           ]
@@ -1617,11 +1504,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-07-07T17:07:35.926Z",
-    "duration": 368058.678,
-    "expected": 6,
+    "startTime": "2026-07-07T17:53:24.413Z",
+    "duration": 181002.997,
+    "expected": 8,
     "skipped": 0,
-    "unexpected": 8,
-    "flaky": 1
+    "unexpected": 7,
+    "flaky": 0
   }
 }

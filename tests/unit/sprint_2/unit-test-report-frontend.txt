@@ -1,5 +1,5 @@
-5:16:59 PM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
-5:16:59 PM [vite] warning: `optimizeDeps.esbuildOptions` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `optimizeDeps.rolldownOptions` instead.
+6:54:30 PM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
+6:54:30 PM [vite] warning: `optimizeDeps.esbuildOptions` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `optimizeDeps.rolldownOptions` instead.
 Both esbuild and oxc options were set. oxc options will be used and esbuild options will be ignored. The following esbuild options were set: `{ jsx: 'automatic', jsxImportSource: undefined }`
 
  RUN  v4.1.10 /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend
@@ -12,47 +12,47 @@ stderr | src/pages/LoginPage.test.tsx > LoginPage > renders the login form with 
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows a loading indicator while the product is being fetched 109ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > renders the login form with all required fields 376ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > renders a link to the registration page 58ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows a loading indicator while the product is being fetched 111ms
 stderr | src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows an error message when the product fails to load 245ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows a try again button on error 56ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error when email is empty on submit 106ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields 431ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders a link to the login page 41ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the product name as an h1 heading 123ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the brand 57ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error for invalid email format 144ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when email is empty on submit 105ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the product description 53ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the base price 54ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error when password is empty on submit 127ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error for invalid email format 132ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the category breadcrumb 54ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the primary product image 46ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password is too short 106ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders image thumbnails when multiple images exist 61ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows 3 thumbnail buttons for 3 images 66ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > calls login with correct credentials on valid submission 164ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password fails complexity check 157ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > switches main image when a thumbnail is clicked 79ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders a size picker with available sizes 64ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > navigates to home on successful login 197ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders size 8 and size 9 as options 89ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when passwords do not match 168ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > marks out-of-stock size variants as disabled 73ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > marks selected size as aria-pressed true 77ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > displays a server error message for invalid credentials (401) 171ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders a color picker with available colors 46ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders black and brown as color options 61ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > displays a rate limit error message (429) 166ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > calls authRegister with correct data on valid submission 285ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > marks selected color as aria-pressed true 64ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders quantity increase and decrease buttons 70ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > renders the login form with all required fields 396ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > renders a link to the registration page 45ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows an error message when the product fails to load 256ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows a try again button on error 71ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders the registration form with all required fields 432ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > renders a link to the login page 37ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error when email is empty on submit 109ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the product name as an h1 heading 126ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the brand 50ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when email is empty on submit 108ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error for invalid email format 127ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the product description 51ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the base price 58ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error for invalid email format 140ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > shows validation error when password is empty on submit 137ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the category breadcrumb 46ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the primary product image 55ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password is too short 107ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders image thumbnails when multiple images exist 57ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows 3 thumbnail buttons for 3 images 61ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > calls login with correct credentials on valid submission 167ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when password fails complexity check 166ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > switches main image when a thumbnail is clicked 105ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders a size picker with available sizes 65ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > navigates to home on successful login 172ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders size 8 and size 9 as options 87ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows validation error when passwords do not match 169ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > marks out-of-stock size variants as disabled 60ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > marks selected size as aria-pressed true 83ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > displays a server error message for invalid credentials (401) 165ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders a color picker with available colors 47ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders black and brown as color options 60ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > displays a rate limit error message (429) 170ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > calls authRegister with correct data on valid submission 262ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > marks selected color as aria-pressed true 78ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders quantity increase and decrease buttons 75ms
 stderr | src/pages/LoginPage.test.tsx > LoginPage > shows loading state while submitting
 Warning: An update to LoginPage inside a test was not wrapped in act(...).
 
@@ -68,24 +68,24 @@ This ensures that you're testing the behavior the user would see in the browser.
     at Router (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router/dist/umd/react-router.development.js:1203:17)
     at BrowserRouter (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router-dom/dist/umd/react-router-dom.development.js:688:7)
 
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > decrements quantity but not below 1 58ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > shows loading state while submitting 207ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > fields have correct autocomplete attributes 11ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > password input is of type password (not plain text) 9ms
- ✓ src/pages/LoginPage.test.tsx > LoginPage > does not navigate when login fails 147ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > navigates to home on successful registration 287ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > increments quantity when plus button is clicked 84ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > shows loading state while submitting 196ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > decrements quantity but not below 1 51ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > increments quantity when plus button is clicked 70ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > fields have correct autocomplete attributes 13ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > password input is of type password (not plain text) 17ms
+ ✓ src/pages/LoginPage.test.tsx > LoginPage > does not navigate when login fails 148ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > navigates to home on successful registration 290ms
  ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the Add to Cart button 55ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > calls addCartItem when a variant is selected and Add to Cart is clicked 130ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows a success confirmation after adding to cart 155ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > does not include full_name when the field is empty 203ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows an error if add to cart API fails 142ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > does not call addCartItem when unauthenticated user clicks Add to Cart 39ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the customer reviews section 29ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > displays a server error when email is already registered (409) 253ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > calls addCartItem when a variant is selected and Add to Cart is clicked 123ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > does not include full_name when the field is empty 196ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows a success confirmation after adding to cart 147ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows an error if add to cart API fails 122ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > does not call addCartItem when unauthenticated user clicks Add to Cart 35ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the customer reviews section 28ms
  ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > displays existing reviews 25ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows reviewer name 25ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the write a review form for authenticated users 54ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > displays a server error when email is already registered (409) 249ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows reviewer name 24ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the write a review form for authenticated users 61ms
 stderr | src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting
 Warning: An update to RegisterPage inside a test was not wrapped in act(...).
 
@@ -116,199 +116,199 @@ This ensures that you're testing the behavior the user would see in the browser.
     at Router (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router/dist/umd/react-router.development.js:1203:17)
     at BrowserRouter (/Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/frontend/node_modules/react-router-dom/dist/umd/react-router-dom.development.js:688:7)
 
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting 258ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > fields have correct autocomplete attributes for accessibility 22ms
- ✓ src/pages/RegisterPage.test.tsx > RegisterPage > password and confirm inputs are of type password (not plain text) 15ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows a sign-in prompt for unauthenticated users in the review section 54ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the rating summary stars when reviews exist 32ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows sale price and SALE badge when product is on sale 42ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders without size/color pickers when product has no variants 35ms
- ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders a fallback when there are no images 30ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > shows loading state while submitting 247ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > fields have correct autocomplete attributes for accessibility 19ms
+ ✓ src/pages/RegisterPage.test.tsx > RegisterPage > password and confirm inputs are of type password (not plain text) 12ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows a sign-in prompt for unauthenticated users in the review section 48ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders the rating summary stars when reviews exist 30ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > shows sale price and SALE badge when product is on sale 49ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders without size/color pickers when product has no variants 37ms
+ ✓ src/pages/ProductDetailPage.test.tsx > ProductDetailPage > renders a fallback when there are no images 29ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders the aside with accessible label 310ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders the Filters heading 93ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders Size (UK) section heading 32ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders Color section heading 19ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders all standard boot sizes 162ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders all standard boot colors 78ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > does not render "Clear all" button when no filters are selected 18ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > does not render active filter chips when no filters are selected 33ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > marks selected sizes as checked 74ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onSizeChange(size, true) when an unchecked size is clicked 115ms
 stderr | src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a <header> element with role banner
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a <header> element with role banner 381ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders the site logo link pointing to / 73ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a cart link 43ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a search form 24ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows Sign In and Register links when user is not authenticated 37ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > does not show Log Out when user is not authenticated 33ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows My Orders link and Log Out button when user is authenticated 51ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders the aside with accessible label 291ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onSizeChange(size, false) when a checked size is clicked 75ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > marks selected colors as checked 61ms
 stderr | src/pages/ProductListPage.test.tsx > ProductListPage > renders a default heading when no filter is active
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > calls logout when Log Out button is clicked 160ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders a default heading when no filter is active 396ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders a search results heading when search param is present 82ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders category links after they load 111ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > category links point to /products?category=<slug> 61ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders the Filters heading 100ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders Size (UK) section heading 27ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders Color section heading 18ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows a fallback Shop All link when categories fail to load 67ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > mobile menu is closed by default 23ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders all standard boot sizes 146ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > shows the category grid when no filter is active 49ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > hides the category grid when a category filter is active 98ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > opens mobile menu when toggle button is clicked 81ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > hides the category grid when a search filter is active 97ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders all standard boot colors 110ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > does not render "Clear all" button when no filters are selected 34ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > does not render active filter chips when no filters are selected 33ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > closes mobile menu when toggle is clicked a second time 114ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > marks selected sizes as checked 101ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > navigates to /search?q=<query> when search is submitted 143ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > does not navigate when search query is empty 53ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders category cards with accessible labels 119ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders product cards after data loads 94ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > mobile menu toggle has correct aria-expanded attribute 83ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > search input has an accessible label 17ms
- ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > cart link has an accessible aria-label 23ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onSizeChange(size, true) when an unchecked size is clicked 108ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onSizeChange(size, false) when a checked size is clicked 87ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > each product card displays brand 87ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > marks selected colors as checked 71ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onColorChange(color, true) when an unchecked color is clicked 67ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > each product card displays price 109ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > product card links to the product detail page 71ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onColorChange(color, false) when a checked color is clicked 83ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders a chip for each active size filter 24ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders a chip for each active color filter via remove button 41ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > shows a loading indicator while products are fetching 87ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > shows an error message when products fail to load 70ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onSizeChange(size, false) when size chip remove button is clicked 36ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onColorChange(color, false) when color chip remove button is clicked 40ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders "Clear all" button when sizes are selected 22ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders "Clear all" button when colors are selected 29ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > shows "No results found" message when search returns nothing 64ms
- ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders a search form with accessible role 29ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onClearAll when "Clear all" is clicked 28ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > size checkboxes are grouped with accessible group label 16ms
- ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > color checkboxes are grouped with accessible group label 31ms
-stderr | src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders a loading spinner while fetching the cart
-⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
-⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
-
-stderr | src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > does not show the badge when the cart is empty
-⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
-⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
-
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders a loading spinner while fetching the cart 325ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders an error message when the cart request fails 61ms
- ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > does not show the badge when the cart is empty 130ms
- ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > shows the badge with the correct count when cart has items 63ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders a retry button on error 47ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders an empty-cart message when there are no items 52ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a <header> element with role banner 302ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onColorChange(color, true) when an unchecked color is clicked 68ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onColorChange(color, false) when a checked color is clicked 75ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders a default heading when no filter is active 361ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders a search results heading when search param is present 88ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders the site logo link pointing to / 95ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a cart link 52ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders a search form 24ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders a chip for each active size filter 21ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders a chip for each active color filter via remove button 26ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onSizeChange(size, false) when size chip remove button is clicked 35ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > shows the category grid when no filter is active 50ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onColorChange(color, false) when color chip remove button is clicked 53ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders "Clear all" button when sizes are selected 34ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > renders "Clear all" button when colors are selected 38ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows Sign In and Register links when user is not authenticated 50ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > does not show Log Out when user is not authenticated 32ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > hides the category grid when a category filter is active 152ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > calls onClearAll when "Clear all" is clicked 70ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > size checkboxes are grouped with accessible group label 33ms
+ ✓ src/components/products/FilterPanel.test.tsx > FilterPanel > color checkboxes are grouped with accessible group label 58ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows My Orders link and Log Out button when user is authenticated 126ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > hides the category grid when a search filter is active 100ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > calls logout when Log Out button is clicked 161ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders category cards with accessible labels 115ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders product cards after data loads 84ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > renders category links after they load 110ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > category links point to /products?category=<slug> 55ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > each product card displays brand 83ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > shows a fallback Shop All link when categories fail to load 58ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > mobile menu is closed by default 30ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > opens mobile menu when toggle button is clicked 69ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > each product card displays price 82ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > product card links to the product detail page 73ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > closes mobile menu when toggle is clicked a second time 109ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > shows a loading indicator while products are fetching 101ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > shows an error message when products fail to load 68ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > shows "No results found" message when search returns nothing 56ms
+ ✓ src/pages/ProductListPage.test.tsx > ProductListPage > renders a search form with accessible role 36ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > navigates to /search?q=<query> when search is submitted 122ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > does not navigate when search query is empty 70ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > mobile menu toggle has correct aria-expanded attribute 73ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > search input has an accessible label 14ms
+ ✓ src/components/layout/SiteHeader.test.tsx > SiteHeader > cart link has an accessible aria-label 26ms
 stderr | src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders the search results heading with the query term
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders item names, per-unit price, quantity, and subtotal 57ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > displays cart-subtotal in the order summary 24ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > shows correct item count in subtotal label 22ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > uses singular "item" when total quantity is 1 17ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders the search results heading with the query term 413ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > calls searchProducts with the query from the URL 33ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows a prompt to enter a keyword when no query is provided 15ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders the search results heading with the query term 400ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > calls searchProducts with the query from the URL 35ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows a prompt to enter a keyword when no query is provided 14ms
  ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > does not call searchProducts when query is empty 5ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows a loading skeleton while results are fetching 25ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > calls updateCartItem with incremented quantity when + is clicked 103ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows an error alert when the search request fails 66ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows "No results found" when the search returns no products 34ms
- ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > shows 1 on the badge for a single item with quantity 1 30ms
- ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > caps the badge at 99+ for very large counts 32ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > calls updateCartItem with decremented quantity when − is clicked 88ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > disables the − button when quantity is 1 37ms
- ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > cart link aria-label includes item count when cart is non-empty 364ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders product cards after data loads 55ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows a loading skeleton while results are fetching 22ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows an error alert when the search request fails 54ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows "No results found" when the search returns no products 30ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders product cards after data loads 54ms
  ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > each product card displays the brand 37ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > each product card displays the price 51ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > calls removeCartItem when the Remove button is clicked 74ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > each product card displays the price 29ms
+stderr | src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > does not show the badge when the cart is empty
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > product card links to the product detail page 44ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows the result count when results are present 27ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders a search form with an accessible role 18ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > prefills the search input with the current query 31ms
+ ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > does not show the badge when the cart is empty 121ms
+ ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > shows the badge with the correct count when cart has items 57ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders a clear button 31ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > does not render pagination when there is only one page 12ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders pagination when there are multiple pages 30ms
+stderr | src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders a loading spinner while fetching the cart
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > previous page button is disabled on page 1 66ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > next page button is disabled on the last page 51ms
+ ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > re-executes search when the form is submitted with a new term 60ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders a loading spinner while fetching the cart 334ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders an error message when the cart request fails 63ms
+ ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > shows 1 on the badge for a single item with quantity 1 36ms
+ ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > caps the badge at 99+ for very large counts 30ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders a retry button on error 52ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders an empty-cart message when there are no items 46ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders item names, per-unit price, quantity, and subtotal 56ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > displays cart-subtotal in the order summary 23ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > shows correct item count in subtotal label 33ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > uses singular "item" when total quantity is 1 17ms
+ ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > cart link aria-label includes item count when cart is non-empty 345ms
+ ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > cart link aria-label is "Shopping cart" when cart is empty 28ms
+ ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > cart link aria-label uses singular "item" for exactly 1 item 82ms
+ ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > does not show the badge when the cart request fails 14ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > calls updateCartItem with incremented quantity when + is clicked 109ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > calls updateCartItem with decremented quantity when − is clicked 57ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > disables the − button when quantity is 1 32ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > calls removeCartItem when the Remove button is clicked 57ms
  ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders a "Proceed to Checkout" link pointing to /checkout 37ms
  ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > displays variant size and colour when present 20ms
- ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders all items when the cart has multiple entries 32ms
- ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > cart link aria-label is "Shopping cart" when cart is empty 30ms
- ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > cart link aria-label uses singular "item" for exactly 1 item 72ms
- ✓ src/components/layout/CartBadge.test.tsx > SiteHeader — cart badge (T-023) > does not show the badge when the cart request fails 24ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > product card links to the product detail page 57ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > shows the result count when results are present 37ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders a search form with an accessible role 20ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > prefills the search input with the current query 39ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders a clear button 38ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > does not render pagination when there is only one page 15ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > renders pagination when there are multiple pages 35ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > previous page button is disabled on page 1 67ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > next page button is disabled on the last page 56ms
- ✓ src/pages/SearchResultsPage.test.tsx > SearchResultsPage > re-executes search when the form is submitted with a new term 67ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > shows loading while restoring session, then ready 76ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > stays unauthenticated when no refresh token is stored 12ms
+ ✓ src/pages/CartPage.test.tsx > CartPage (T-024 / US-010) > renders all items when the cart has multiple entries 28ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > shows loading while restoring session, then ready 82ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > stays unauthenticated when no refresh token is stored 13ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > restores session when a valid refresh token is stored 20ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > clears stored token and stays unauthenticated when refresh fails 9ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > registers an auth failure handler on mount 6ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > clears the auth failure handler on unmount 5ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — auth failure handler > clears state and redirects to /login when handler is invoked 10ms
 stderr | src/components/products/ProductCard.test.tsx > ProductCard > renders the product name
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > restores session when a valid refresh token is stored 16ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > clears stored token and stays unauthenticated when refresh fails 10ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > registers an auth failure handler on mount 5ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — session restoration on mount > clears the auth failure handler on unmount 9ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — auth failure handler > clears state and redirects to /login when handler is invoked 9ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — login > stores refresh token in localStorage on successful login 275ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — logout > clears tokens and resets auth state on logout 25ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — logout > still clears local state when logout API call fails 18ms
- ✓ src/stores/authStore.test.tsx > AuthProvider — register > stores refresh token in localStorage when register returns one 18ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — login > stores refresh token in localStorage on successful login 270ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — logout > clears tokens and resets auth state on logout 26ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — logout > still clears local state when logout API call fails 23ms
+ ✓ src/stores/authStore.test.tsx > AuthProvider — register > stores refresh token in localStorage when register returns one 17ms
  ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > renders the default heading from US-014 acceptance criteria 74ms
- ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > renders a custom heading when provided 8ms
+ ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > renders a custom heading when provided 9ms
  ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > renders a technical detail when provided 8ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders the product name 148ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders the brand 11ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders the base price when no sale price 8ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders the product name 147ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders the brand 12ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders the base price when no sale price 9ms
  ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders the sale price when present 7ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > shows the SALE badge when sale_price is lower than base_price 10ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > does not show SALE badge when there is no discount 5ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > shows strikethrough base price when on sale 10ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > links to the correct product detail URL 197ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders a product image when images array has entries 32ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > falls back to image_url when images array is empty 24ms
- ✓ src/components/products/ProductCard.test.tsx > ProductCard > does not render the brand section when brand is null 7ms
- ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > does NOT render a detail paragraph when omitted 5ms
- ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > renders a "Try again" button when onRetry is provided 231ms
- ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > calls onRetry when the retry button is clicked 62ms
- ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > does NOT render a retry button when onRetry is omitted 3ms
- ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > has role="alert" so screen readers announce it immediately 10ms
- ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > has aria-live="assertive" for immediate announcement 9ms
- ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > displays the warning icon element 4ms
- ✓ src/components/common/EmptyState.test.tsx > EmptyState > renders the required heading 73ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > shows the SALE badge when sale_price is lower than base_price 9ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > does not show SALE badge when there is no discount 12ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > shows strikethrough base price when on sale 6ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > links to the correct product detail URL 227ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > renders a product image when images array has entries 66ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > falls back to image_url when images array is empty 41ms
+ ✓ src/components/products/ProductCard.test.tsx > ProductCard > does not render the brand section when brand is null 6ms
+ ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > does NOT render a detail paragraph when omitted 7ms
+ ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > renders a "Try again" button when onRetry is provided 290ms
+ ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > calls onRetry when the retry button is clicked 90ms
+ ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > does NOT render a retry button when onRetry is omitted 13ms
+ ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > has role="alert" so screen readers announce it immediately 15ms
+ ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > has aria-live="assertive" for immediate announcement 15ms
+ ✓ src/components/common/ErrorMessage.test.tsx > ErrorMessage > displays the warning icon element 6ms
+ ✓ src/components/common/EmptyState.test.tsx > EmptyState > renders the required heading 71ms
  ✓ src/components/common/EmptyState.test.tsx > EmptyState > renders the order history empty message from US-014 7ms
- ✓ src/components/common/EmptyState.test.tsx > EmptyState > renders description text when provided 11ms
- ✓ src/hooks/useCartCount.test.ts > useCartCount > returns 0 while the cart is loading 47ms
- ✓ src/hooks/useCartCount.test.ts > useCartCount > returns 0 when the cart is empty 16ms
- ✓ src/components/common/EmptyState.test.tsx > EmptyState > does NOT render a description element when omitted 8ms
+ ✓ src/components/common/EmptyState.test.tsx > EmptyState > renders description text when provided 8ms
+ ✓ src/components/common/EmptyState.test.tsx > EmptyState > does NOT render a description element when omitted 5ms
  ✓ src/components/common/EmptyState.test.tsx > EmptyState > renders an icon node when provided 12ms
  ✓ src/components/common/EmptyState.test.tsx > EmptyState > does NOT render an icon wrapper when icon is omitted 5ms
- ✓ src/components/common/EmptyState.test.tsx > EmptyState > renders an action node when provided 236ms
+ ✓ src/components/common/EmptyState.test.tsx > EmptyState > renders an action node when provided 221ms
  ✓ src/components/common/EmptyState.test.tsx > EmptyState > does NOT render an action container when action is omitted 3ms
  ✓ src/components/common/EmptyState.test.tsx > EmptyState > has role="status" and aria-live="polite" for assistive technology 13ms
- ✓ src/hooks/useCartCount.test.ts > useCartCount > returns the total quantity of a single item 69ms
+ ✓ src/hooks/useCartCount.test.ts > useCartCount > returns 0 while the cart is loading 49ms
+ ✓ src/hooks/useCartCount.test.ts > useCartCount > returns 0 when the cart is empty 10ms
+ ✓ src/hooks/useCartCount.test.ts > useCartCount > returns the total quantity of a single item 58ms
  ✓ src/hooks/useCartCount.test.ts > useCartCount > sums quantities across multiple items 55ms
- ✓ src/hooks/useCartCount.test.ts > useCartCount > returns 0 when the cart request fails 6ms
- ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > renders with default accessible label 267ms
- ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > renders a custom label 13ms
+ ✓ src/hooks/useCartCount.test.ts > useCartCount > returns 0 when the cart request fails 7ms
+ ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > renders with default accessible label 256ms
+ ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > renders a custom label 12ms
  ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > exposes the label text for screen readers via sr-only span 13ms
  ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > has aria-live="polite" to announce non-urgent status updates 11ms
  ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > wraps in a centered container when centered=true 5ms
  ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > does NOT add centering wrapper when centered is false (default) 3ms
  ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > applies sm size classes to the inner spinner element 4ms
  ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > applies lg size classes to the inner spinner element 3ms
- ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > applies animate-spin to the inner spinner element 6ms
+ ✓ src/components/common/LoadingSpinner.test.tsx > LoadingSpinner > applies animate-spin to the inner spinner element 5ms
  ✓ src/api/client.test.ts > api/client — setAuthToken (T-007) > adds Bearer Authorization header when a token is provided 6ms
  ✓ src/api/client.test.ts > api/client — setAuthToken (T-007) > removes Authorization header when token is null 1ms
  ✓ src/api/client.test.ts > api/client — setAuthToken (T-007) > stores the refresh token without throwing 2ms
  ✓ src/api/client.test.ts > api/client — authFailureHandler wiring (T-007) > registerAuthFailureHandler stores the callback (no throw) 2ms
  ✓ src/api/client.test.ts > api/client — authFailureHandler wiring (T-007) > clearAuthFailureHandler removes the callback (no throw) 1ms
  ✓ src/api/client.test.ts > api/client — response interceptor passthrough (T-007) > passes 200 responses through unchanged 9ms
- ✓ src/api/client.test.ts > api/client — response interceptor passthrough (T-007) > does not attempt refresh for 500 errors 13ms
+ ✓ src/api/client.test.ts > api/client — response interceptor passthrough (T-007) > does not attempt refresh for 500 errors 14ms
  ✓ src/api/client.test.ts > api/client — response interceptor passthrough (T-007) > passes through network errors without a refresh attempt 3ms
  ✓ src/api/client.test.ts > api/client — 401 with no refresh token (T-007) > fires authFailureHandler and rejects when no refresh token is present 3ms
  ✓ src/api/client.test.ts > api/client — 401 with no refresh token (T-007) > clears the auth token when 401 fires with no refresh token 2ms
@@ -319,6 +319,6 @@ stderr | src/components/products/ProductCard.test.tsx > ProductCard > renders th
 
  Test Files  16 passed (16)
       Tests  231 passed (231)
-   Start at  17:17:00
-   Duration  20.11s (transform 995ms, setup 1.91s, import 5.27s, tests 16.78s, environment 24.93s)
+   Start at  18:54:30
+   Duration  19.55s (transform 1.01s, setup 1.84s, import 5.19s, tests 16.75s, environment 23.88s)
 

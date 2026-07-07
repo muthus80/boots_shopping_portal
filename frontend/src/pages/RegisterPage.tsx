@@ -66,6 +66,8 @@ const RegisterPage: React.FC = () => {
           }
         } else if (status === 429) {
           setServerError('Too many attempts. Please wait a moment before trying again.');
+        } else if (status === 404) {
+          setServerError('Registration service is temporarily unavailable. Please try again later.');
         } else if (typeof detail === 'string') {
           setServerError(detail);
         } else {

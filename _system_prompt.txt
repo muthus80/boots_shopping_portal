@@ -4,17 +4,17 @@ _The Context Engineer has already selected what you need for this task. Use the 
 ### Essentials (inline — use these directly)
 
 #### qa_engineer output
-_AUTHORITATIVE: qa_engineer output from testing stage is the primary handoff driving this frontend_dev testing task._
+_AUTHORITATIVE: QA engineer output from testing stage — primary handoff containing failing assertions and root cause hypotheses that frontend_dev must address._
 
 {
   "agent_observations": [
     {
-      "assigned_role": "backend_dev",
-      "failing_assertion": "form filled, Create Account clicked \u2014 got \"Not Found\" alert instead of redirect",
-      "root_cause_hypothesis": "The error-context.md shows an `alert: Not Found` appearing on the registration page directly after form fill \u2014 before button click. This is likely the API registration endpoi
+      "assigned_role": "frontend_dev",
+      "failing_assertion": "expect(successHeading.or(homeHeading)).toBeVisible \u2014 page shows `alert: Not Found` before form submission",
+      "root_cause_hypothesis": "The RegisterPage shows a `role=\"alert\"` with \"Not Found\" before the form is submitted. This indicates the frontend AuthContext or a mounted component 
 
 #### frontend_dev output
-_AUTHORITATIVE: frontend_dev output from development stage is the direct prior work that needs to be fixed/tested._
+_Prior frontend_dev development output — contains the existing frontend codebase state, file conflicts, and implementation details that must be understood before fixing test failures._
 
 {
   "_merge_metadata": {
@@ -34,25 +34,8 @@ _AUTHORITATIVE: frontend_dev output from development stage is the direct prior w
         "claimed_by": "T-013",
         "path": "frontend/sr
 
-#### integration_smoke output
-_Integration smoke test results directly inform what is passing and what needs frontend fixes._
-
-{
-  "checks_failed": [],
-  "checks_passed": [
-    "health",
-    "auth_login",
-    "protected_requires_auth",
-    "frontend_renders"
-  ],
-  "cycles": 1,
-  "error": null,
-  "fixes_applied": [],
-  "status": "passed"
-}
-
 #### ADR-002 — JWT with Refresh Token Rotation for Session Management
-_JWT/refresh token ADR is directly relevant to fixing the auth/registration issues identified by QA._
+_ADR-002 on JWT/refresh token strategy directly governs AuthContext implementation, which is implicated in the RegisterPage 'Not Found' alert bug identified by QA._
 
 {
   "adr_id": "ADR-002",
@@ -79,7 +62,7 @@ _JWT/refresh token ADR is directly relevant to fixing the auth/registration issu
 }
 
 #### ADR-005 — React 18 SPA with React Query for Server State Management
-_ADR-005 defines the React frontend architecture (React Query, Axios, React Hook Form, Tailwind) that governs all frontend fixes._
+_ADR-005 defines the React 18 + React Query + Axios + React Hook Form stack — directly governs how frontend state and forms should be implemented._
 
 {
   "adr_id": "ADR-005",
@@ -106,7 +89,7 @@ _ADR-005 defines the React frontend architecture (React Query, Axios, React Hook
 }
 
 #### ADR-003 — Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance
-_ADR-003 Stripe PaymentIntents is directly relevant to checkout frontend fixes identified in QA._
+_ADR-003 on Stripe PaymentIntents/Elements is directly relevant to checkout frontend implementation that QA may be testing._
 
 {
   "adr_id": "ADR-003",
@@ -132,7 +115,7 @@ _ADR-003 Stripe PaymentIntents is directly relevant to checkout frontend fixes i
 }
 
 #### API: POST /api/v1/auth/register
-_POST /api/v1/auth/register contract is directly relevant to the registration 'Not Found' bug identified by QA._
+_POST /api/v1/auth/register contract is directly implicated in the RegisterPage bug identified by QA._
 
 {
   "auth_required": false,
@@ -165,7 +148,7 @@ _POST /api/v1/auth/register contract is directly relevant to the registration 'N
 }
 
 #### API: POST /api/v1/auth/login
-_POST /api/v1/auth/login contract needed for fixing auth flow issues._
+_POST /api/v1/auth/login contract is needed to correctly implement AuthContext and login flow being tested._
 
 {
   "auth_required": false,
@@ -199,7 +182,7 @@ _POST /api/v1/auth/login contract needed for fixing auth flow issues._
 }
 
 #### API: POST /api/v1/auth/refresh
-_POST /api/v1/auth/refresh contract needed for token refresh implementation in frontend._
+_POST /api/v1/auth/refresh contract governs the silent token refresh logic in AuthContext that is implicated in the QA-identified bug._
 
 {
   "auth_required": false,
@@ -229,47 +212,54 @@ _POST /api/v1/auth/refresh contract needed for token refresh implementation in f
   "summary": "Issue new access token from valid refresh token"
 }
 
-#### US-001 — User Registration
-_US-001 User Registration acceptance criteria needed to validate the fix for the registration bug._
+#### API: POST /api/v1/auth/logout
+_POST /api/v1/auth/logout contract needed for complete auth flow implementation._
 
 {
-  "acceptance_criteria": [
-    "Given I am on the registration page, when I enter a valid email and a password meeting complexity requirements, then my account is created.",
-    "Given my account is created, when I check my email, then I receive a confirmation message.",
-    "Given I try to register with an email that already exists, when I submit the form, then I see an error message indicating the email is already in use."
+  "auth_required": true,
+  "description": "Marks the refresh token as revoked in the database, effectively ending the session.",
+  "idempotent": true,
+  "method": "POST",
+  "pagination": false,
+  "path": "/api/v1/auth/logout",
+  "query_params": [],
+  "rate_limit": null,
+  "related_stories": [
+    "US-013"
   ],
-  "as_a": "new user",
-  "dependencies": [],
-  "epic": "User Authentication & Account Management",
-  "i_want": "to create an account using my email and a password",
-  "id": "US-001",
-  "priority": "high",
-  "so_that": "I can track my orders and save my information for future purchases.",
-  "story_points": 5,
-  "title": "User Registration"
+  "request_body": {
+    "refresh_token": "string"
+  },
+  "required_role": null,
+  "response_schema": {
+    "message": "string"
+  },
+  "status_codes": {
+    "200": "Logged out successfully",
+    "401": "Not authenticated"
+  },
+  "summary": "Revoke refresh token and invalidate session"
 }
 
-#### US-002 — User Login
-_US-002 User Login acceptance criteria needed to validate auth flow fixes._
+#### integration_smoke output
+_Integration smoke test results confirm what is passing vs failing, providing context for what the frontend_dev needs to preserve while fixing issues._
 
 {
-  "acceptance_criteria": [
-    "Given I am on the login page, when I enter my correct credentials, then I am successfully logged in and redirected to the homepage.",
-    "Given I am on the login page, when I enter incorrect credentials, then I see an error message and remain on the login page."
+  "checks_failed": [],
+  "checks_passed": [
+    "health",
+    "auth_login",
+    "protected_requires_auth",
+    "frontend_renders"
   ],
-  "as_a": "registered user",
-  "dependencies": [],
-  "epic": "User Authentication & Account Management",
-  "i_want": "to log in to my account",
-  "id": "US-002",
-  "priority": "critical",
-  "so_that": "I can access my profile and order history.",
-  "story_points": 3,
-  "title": "User Login"
+  "cycles": 1,
+  "error": null,
+  "fixes_applied": [],
+  "status": "passed"
 }
 
 #### Page: Register
-_Register page UI spec directly relevant to fixing the registration page bug._
+_Register page UI design spec directly relevant to the failing RegisterPage test._
 
 {
   "auth_required": false,
@@ -294,7 +284,7 @@ _Register page UI spec directly relevant to fixing the registration page bug._
 }
 
 #### Page: Login
-_Login page UI spec directly relevant to auth flow fixes._
+_Login page UI design spec needed for correct auth page implementation._
 
 {
   "auth_required": false,
@@ -319,59 +309,143 @@ _Login page UI spec directly relevant to auth flow fixes._
   "route": "/login"
 }
 
+#### US-001 — User Registration
+_US-001 User Registration acceptance criteria define what the RegisterPage must satisfy for tests to pass._
+
+{
+  "acceptance_criteria": [
+    "Given I am on the registration page, when I enter a valid email and a password meeting complexity requirements, then my account is created.",
+    "Given my account is created, when I check my email, then I receive a confirmation message.",
+    "Given I try to register with an email that already exists, when I submit the form, then I see an error message indicating the email is already in use."
+  ],
+  "as_a": "new user",
+  "dependencies": [],
+  "epic": "User Authentication & Account Management",
+  "i_want": "to create an account using my email and a password",
+  "id": "US-001",
+  "priority": "high",
+  "so_that": "I can track my orders and save my information for future purchases.",
+  "story_points": 5,
+  "title": "User Registration"
+}
+
+#### US-002 — User Login
+_US-002 User Login acceptance criteria needed to validate correct login flow implementation._
+
+{
+  "acceptance_criteria": [
+    "Given I am on the login page, when I enter my correct credentials, then I am successfully logged in and redirected to the homepage.",
+    "Given I am on the login page, when I enter incorrect credentials, then I see an error message and remain on the login page."
+  ],
+  "as_a": "registered user",
+  "dependencies": [],
+  "epic": "User Authentication & Account Management",
+  "i_want": "to log in to my account",
+  "id": "US-002",
+  "priority": "critical",
+  "so_that": "I can access my profile and order history.",
+  "story_points": 3,
+  "title": "User Login"
+}
+
+#### US-013 — Session Continuity
+_US-013 Session Continuity acceptance criteria govern the AuthContext/refresh token behavior implicated in the QA bug._
+
+{
+  "acceptance_criteria": [
+    "Given I am logged in, when I refresh the current page, then I remain logged in.",
+    "Given I am logged in, when I open a new browser tab and navigate to the site, then I am already logged in.",
+    "Given my session token expires due to inactivity, when I try to perform an action requiring authentication, then I am gracefully redirected to the login page."
+  ],
+  "as_a": "logged-in user",
+  "dependencies": [],
+  "epic": "Core User Experience & Accessibility",
+  "i_want": "my session to persist across page refreshes and new tabs",
+  "id": "US-013",
+  "priority": "high",
+  "so_that": "I don't have to log in repeatedly.",
+  "story_points": 5,
+  "title": "Session Continuity"
+}
+
 #### Technology Stack
-_Tech stack summary provides context on versions and tools used in the frontend._
+_Tech stack summary provides version context for React, Axios, and other frontend dependencies._
 
 Tech stack: backend=FastAPI 0.111; database=PostgreSQL 16; orm=SQLAlchemy 2.0; frontend=React 18; language=Python 3.12; hosting=Docker Compose 2.27; payment=Stripe latest; web_server=Nginx 1.25; migrations=Alembic 1.13
 
+#### Component: ReactFrontend
+_ReactFrontend component description summarizes the SPA's responsibilities including client-side routing and accessibility._
+
+React 18 single-page application served as static files via Nginx. Handles all UI rendering, client-side routing, form validation, cart state, and WCAG 2.1 AA accessibility.
+
+#### code_reviewer output
+_Code reviewer output may contain frontend-relevant findings (e.g., CORS misconfiguration) that affect frontend API calls._
+
+{
+  "blocking_issues": [],
+  "changes_made": [
+    "app/domains/products/router.py"
+  ],
+  "findings": [
+    {
+      "category": "security",
+      "code_snippet": null,
+      "description": "CORS configured with allow_origins=[\"*\"] combined with allow_credentials=True \u2014 this combination is rejected by browsers and is a misconfiguration that could expose credentials to any origin",
+      "fi
+
+#### backend_dev output
+_Backend dev output summary provides context on backend API implementation state that frontend must integrate against._
+
+{
+  "_merge_metadata": {
+    "file_conflicts": [
+      {
+        "also_by": "T-012",
+        "claimed_by": "T-010",
+        "path": "app/domains/cart/router.py"
+      },
+      {
+        "also_by": "T-012",
+        "claimed_by": "T-010",
+        "path": "app/domains/cart/service.py"
+      },
+      {
+        "also_by": "T-012",
+        "claimed_by": "T-010",
+        "path": "app/domains/cart/schemas
+
 #### Page: Checkout
-_Checkout page spec is relevant context given QA findings around checkout flow._
+_Checkout page design spec relevant if QA tests cover checkout flow._
 
 Multi-step checkout flow including shipping, payment via Stripe Elements, and confirmation.
 
-#### API: POST /api/v1/checkout/payment-intent
-_POST /api/v1/checkout/payment-intent contract relevant to Stripe checkout frontend fixes._
+#### Page: Cart
+_Cart page design spec relevant to cart-related test scenarios._
 
-Create a Stripe PaymentIntent for the current cart
+Shopping cart review page showing items, quantities, and subtotal.
 
-#### API: POST /api/v1/checkout/confirm
-_POST /api/v1/checkout/confirm contract relevant to checkout flow fixes._
+#### Page: Home
+_Home page design spec relevant since QA assertion checks for homeHeading visibility after registration._
 
-Confirm payment, create order, send confirmation email
+Landing page featuring search, category highlights, and featured products.
 
-#### US-013 — Session Continuity
-_US-013 Session Continuity is relevant to the JWT refresh token frontend implementation._
+#### US-012 — Consistent Site Navigation
+_US-012 Consistent Site Navigation acceptance criteria relevant to navigation header tests._
 
-As a logged-in user, I want my session to persist across page refreshes and new tabs so that I don't have to log in repeatedly.
-
-#### US-011 — Guest Checkout
-_US-011 Guest Checkout acceptance criteria relevant to checkout flow testing._
-
-As a shopper, I want to complete my purchase without creating an account so that I can check out quickly and easily.
-
-#### API: POST /api/v1/auth/logout
-_POST /api/v1/auth/logout contract needed for complete auth flow context._
-
-Revoke refresh token and invalidate session
-
-#### Non-Functional Requirements (6)
-_Non-functional requirements (performance, security, accessibility) provide acceptance criteria context for testing._
-
-NFR set: performance; security; security; accessibility; reliability; usability
+As a user, I want to see a consistent navigation header on every page so that I can easily access main sections like categories, my account, and the shopping cart.
 
 #### US-015 — Keyboard Accessibility
-_US-015 Keyboard Accessibility is a testing concern for the frontend_dev in testing stage._
+_US-015 Keyboard Accessibility requirements may be tested in the testing stage._
 
 As a keyboard-only user, I want to navigate and interact with all site features using only my keyboard so that I can use the application without a mouse.
 
 #### US-014 — System Feedback States
-_US-014 System Feedback States relevant to frontend error handling fixes identified by QA._
+_US-014 System Feedback States requirements relevant to loading/error state tests._
 
 As a user, I want to see loading, empty, and error states for dynamic content so that I understand the system's status and am not left guessing.
 
 ### Also available (Read a specific section on demand only if the essentials above don't cover it)
 - Development Guidelines
-- code_reviewer output
 
 > The `docs/` folder in your workspace mirrors the upstream phase outputs (PRD, sprint plan, architecture decision doc). The structured essentials you need are inline above. **Do NOT bulk-read the `docs/` folder** — open at most one specific section, and only if something inline is genuinely missing.
 
