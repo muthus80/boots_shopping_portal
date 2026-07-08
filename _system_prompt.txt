@@ -3,124 +3,65 @@ _The Context Engineer has already selected what you need for this task. Use the 
 
 ### Essentials (inline — use these directly)
 
+#### qa_engineer output
+_AUTHORITATIVE: qa_engineer output from testing stage is the primary handoff containing test failures and observations that frontend_dev must address._
+
+{
+  "agent_observations": [
+    {
+      "assigned_role": "frontend_dev",
+      "failing_assertion": "expect(page).toHaveURL('/') \u2014 page stays on /register after clicking Create Account",
+      "root_cause_hypothesis": "The Playwright E2E runner port 8000 is occupied by the platform orchestrator in the sandbox environment. When the frontend (port 3000) tries to POST to /api/v1/auth/register vi
+
 #### frontend_dev output
-_Most recent frontend_dev output (authoritative prior phase handoff) containing existing frontend code structure and file conflicts to build upon._
+_Prior frontend_dev development output — contains the existing frontend code and file structure that must be modified to fix test failures._
 
 {
   "_merge_metadata": {
     "file_conflicts": [
       {
-        "also_by": "T-015",
-        "claimed_by": "T-013",
-        "path": "frontend/src/api/products.ts"
+        "also_by": "T-031",
+        "claimed_by": "T-030",
+        "path": "frontend/src/App.tsx"
       },
       {
-        "also_by": "T-015",
-        "claimed_by": "T-011",
-        "path": "frontend/src/pages/ProductListPage.tsx"
+        "also_by": "T-031",
+        "claimed_by": "T-020",
+        "path": "frontend/src/pages/ProductDetailPage.tsx"
       },
       {
-        "also_by": "T-023",
-        "claimed_by": "T-013",
-        "path": "frontend/sr
+        "also_by": "T-031",
+        "claimed_by": "T-030",
+        "path": "frontend/src/page
 
-#### frontend_dev output
-_Additional frontend_dev output from prior sprint providing context on existing implementation._
+#### backend_dev output
+_Backend dev output containing API implementations that the frontend integrates with, needed to understand correct endpoint behavior._
 
 {
   "_merge_metadata": {
     "file_conflicts": [
       {
-        "also_by": "T-015",
-        "claimed_by": "T-013",
-        "path": "frontend/src/api/products.ts"
-      },
-      {
-        "also_by": "T-015",
-        "claimed_by": "T-011",
-        "path": "frontend/src/pages/ProductListPage.tsx"
-      },
-      {
-        "also_by": "T-023",
-        "claimed_by": "T-013",
-        "path": "frontend/sr
-
-#### frontend_dev output
-_Frontend_dev output with file list and environment variables relevant to sprint 3 implementation._
-
-{
-  "api_base_url": "/api/v1",
-  "build_command": "npm run build",
+        "also_by": "T-029",
+        "claimed_by": "T-026",
+        "path": "app/domains/account/service.py"
+      }
+    ],
+    "instance_count": 3,
+    "instances": [
+      "T-026",
+      "T-019",
+      "T-029"
+    ],
+    "lead_instance": "T-026",
+    "total_files": 10
+  },
+  "agent_modules": [],
+  "alembic_config": "",
   "changes_made": [
-    "SDK session generated/modified 22 impl + 3 test files in boots-shopping-app/frontend"
-  ],
-  "dev_command": "npm run dev",
-  "environment_variables": [
-    {
-      "description": "Backend API base URL",
-      "name": "VITE_API_URL",
-      "required": true
-    }
-  ],
-  "files": [
-    {
-      "content": "impo
-
-#### ADR-003 — Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance
-_ADR-003 defines Stripe PaymentIntents + Elements integration pattern directly required for checkout tasks T-027/T-030/T-031._
-
-{
-  "adr_id": "ADR-003",
-  "alternatives": [
-    "Stripe Checkout (redirect) \u2014 rejected because it takes the user off-site, breaking the 5-step checkout UX requirement",
-    "Braintree \u2014 rejected because Stripe is the only provider explicitly referenced in the NFRs and user preference",
-    "Manual card collection + server-side Stripe charge \u2014 rejected because it places card data on application servers, violating PCI-DSS"
-  ],
-  "consequences": [
-    "Application servers never see raw card data \u2014 achieves PCI-DSS SAQ A compliance",
-    "PaymentIntent server-side creation ensures the amount is set by the backend, preventing client-side tampering",
-    "Two API calls required for checkout (create PaymentIntent + confirm), but both fit within the 5-step UX constraint",
-    "Stripe webhook handling should be added post-MVP for reliable payment status updates"
-  ],
-  "context": "The critical NFR requires PCI-DSS compliance ensuring no cardholder data is stored on application servers. The checkout must be completable in 5 steps or fewer (US-011). We need a payment integration that handles card data entirely within the Stripe iframe while giving the backend control over order amounts.",
-  "decision": "Use Stripe PaymentIntents API on the backend to create server-authorised payment intents with the correct order total, and Stripe Elements (CardElement React component) on the frontend for card capture. The frontend confirms the payment directly with Stripe using the client_secret; the backend then verifies payment_intent status before creating the order record.",
-  "related_requirements": [
-    "US-011",
-    "NFR-security-pci"
-  ],
-  "status": "accepted",
-  "title": "Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance"
-}
-
-#### ADR-005 — React 18 SPA with React Query for Server State Management
-_ADR-005 defines React Query, Axios, React Hook Form, and Tailwind CSS patterns that govern all frontend implementation decisions._
-
-{
-  "adr_id": "ADR-005",
-  "alternatives": [
-    "Next.js \u2014 considered for SSR performance benefits but rejected because the user explicitly specified react (not next.js) and SSR adds deployment complexity beyond Docker Compose",
-    "Redux Toolkit \u2014 rejected in favour of React Query which handles server state, caching, and loading/error states more ergonomically with less boilerplate"
-  ],
-  "consequences": [
-    "React Query provides built-in loading/error/empty state management satisfying US-014 with minimal custom code",
-    "SPA routing via React Router v6 enables fast client-side navigation",
-    "No SSR means first-paint depends on CDN-cached static JS bundle; CDN delivery is required to meet LCP 2.5s NFR",
-    "Stripe Elements integrates cleanly as a React component within the checkout flow"
-  ],
-  "context": "The frontend needs to satisfy US-014 (loading, empty, error states), US-015 (keyboard accessibility), and perform well enough to meet the LCP 2.5s NFR. The user specified React as the frontend framework. A SPA architecture serves the dynamic filtering (US-005) and cart state updates (US-010) without full page reloads.",
-  "decision": "Use React 18 SPA with React Query (TanStack Query) for server state, Axios as the HTTP client, and React Hook Form for all form handling. Tailwind CSS for styling. All forms implement ARIA labels; interactive components use semantic HTML (button, input, nav) for keyboard accessibility.",
-  "related_requirements": [
-    "US-014",
-    "US-015",
-    "NFR-performance-lcp",
-    "NFR-accessibility"
-  ],
-  "status": "accepted",
-  "title": "React 18 SPA with React Query for Server State Management"
-}
+ 
 
 #### ADR-002 — JWT with Refresh Token Rotation for Session Management
-_ADR-002 defines JWT/refresh token strategy and httpOnly cookie handling required for authenticated checkout and order history flows._
+_ADR-002 on JWT/refresh token strategy directly governs frontend auth token storage and refresh logic, which is implicated in test failures._
 
 {
   "adr_id": "ADR-002",
@@ -146,490 +87,216 @@ _ADR-002 defines JWT/refresh token strategy and httpOnly cookie handling require
   "title": "JWT with Refresh Token Rotation for Session Management"
 }
 
-#### Page: Checkout
-_Checkout page UI design spec directly required for implementing T-027/T-030/T-031 checkout flow tasks._
+#### ADR-005 — React 18 SPA with React Query for Server State Management
+_ADR-005 on React 18 SPA with React Query governs frontend architecture decisions directly relevant to fixing test failures._
 
 {
-  "auth_required": false,
-  "components": [
-    "SiteHeader",
-    "Footer",
-    "CheckoutForm",
-    "Button",
-    "Input",
-    "Spinner",
-    "Alert"
+  "adr_id": "ADR-005",
+  "alternatives": [
+    "Next.js \u2014 considered for SSR performance benefits but rejected because the user explicitly specified react (not next.js) and SSR adds deployment complexity beyond Docker Compose",
+    "Redux Toolkit \u2014 rejected in favour of React Query which handles server state, caching, and loading/error states more ergonomically with less boilerplate"
   ],
-  "description": "Multi-step checkout flow including shipping, payment via Stripe Elements, and confirmation.",
-  "layout": "MinimalLayout",
-  "name": "Checkout",
-  "related_stories": [
+  "consequences": [
+    "React Query provides built-in loading/error/empty state management satisfying US-014 with minimal custom code",
+    "SPA routing via React Router v6 enables fast client-side navigation",
+    "No SSR means first-paint depends on CDN-cached static JS bundle; CDN delivery is required to meet LCP 2.5s NFR",
+    "Stripe Elements integrates cleanly as a React component within the checkout flow"
+  ],
+  "context": "The frontend needs to satisfy US-014 (loading, empty, error states), US-015 (keyboard accessibility), and perform well enough to meet the LCP 2.5s NFR. The user specified React as the frontend framework. A SPA architecture serves the dynamic filtering (US-005) and cart state updates (US-010) without full page reloads.",
+  "decision": "Use React 18 SPA with React Query (TanStack Query) for server state, Axios as the HTTP client, and React Hook Form for all form handling. Tailwind CSS for styling. All forms implement ARIA labels; interactive components use semantic HTML (button, input, nav) for keyboard accessibility.",
+  "related_requirements": [
+    "US-014",
+    "US-015",
+    "NFR-performance-lcp",
+    "NFR-accessibility"
+  ],
+  "status": "accepted",
+  "title": "React 18 SPA with React Query for Server State Management"
+}
+
+#### ADR-003 — Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance
+_ADR-003 on Stripe PaymentIntents governs checkout frontend implementation, relevant to checkout-related test failures._
+
+{
+  "adr_id": "ADR-003",
+  "alternatives": [
+    "Stripe Checkout (redirect) \u2014 rejected because it takes the user off-site, breaking the 5-step checkout UX requirement",
+    "Braintree \u2014 rejected because Stripe is the only provider explicitly referenced in the NFRs and user preference",
+    "Manual card collection + server-side Stripe charge \u2014 rejected because it places card data on application servers, violating PCI-DSS"
+  ],
+  "consequences": [
+    "Application servers never see raw card data \u2014 achieves PCI-DSS SAQ A compliance",
+    "PaymentIntent server-side creation ensures the amount is set by the backend, preventing client-side tampering",
+    "Two API calls required for checkout (create PaymentIntent + confirm), but both fit within the 5-step UX constraint",
+    "Stripe webhook handling should be added post-MVP for reliable payment status updates"
+  ],
+  "context": "The critical NFR requires PCI-DSS compliance ensuring no cardholder data is stored on application servers. The checkout must be completable in 5 steps or fewer (US-011). We need a payment integration that handles card data entirely within the Stripe iframe while giving the backend control over order amounts.",
+  "decision": "Use Stripe PaymentIntents API on the backend to create server-authorised payment intents with the correct order total, and Stripe Elements (CardElement React component) on the frontend for card capture. The frontend confirms the payment directly with Stripe using the client_secret; the backend then verifies payment_intent status before creating the order record.",
+  "related_requirements": [
     "US-011",
-    "US-012",
-    "US-014",
-    "US-015"
+    "NFR-security-pci"
   ],
-  "responsive_notes": "Single column centered layout. Stripe Elements card input must remain responsive to container width.",
-  "route": "/checkout"
+  "status": "accepted",
+  "title": "Stripe PaymentIntents API with Stripe Elements for PCI-DSS Compliance"
 }
 
-#### Page: OrderHistory
-_OrderHistory page UI design spec required for T-032 order history frontend task._
-
-{
-  "auth_required": true,
-  "components": [
-    "SiteHeader",
-    "Footer",
-    "OrderCard",
-    "Spinner",
-    "Alert"
-  ],
-  "description": "List of past orders for authenticated users.",
-  "layout": "MainLayout",
-  "name": "OrderHistory",
-  "related_stories": [
-    "US-003",
-    "US-012",
-    "US-013",
-    "US-014",
-    "US-015"
-  ],
-  "responsive_notes": "Order list stacks vertically. Status badges align right on desktop, bottom left on mobile.",
-  "route": "/account/orders"
-}
-
-#### Page: ProductDetail
-_ProductDetail page UI design spec required for T-033 reviews UI task._
+#### API: POST /api/v1/auth/register
+_POST /api/v1/auth/register API contract needed to fix registration flow test failure (page stays on /register after Create Account)._
 
 {
   "auth_required": false,
-  "components": [
-    "SiteHeader",
-    "Footer",
-    "Button",
-    "ReviewList",
-    "Spinner",
-    "Alert"
-  ],
-  "description": "Detailed view of a single product, including image gallery, variants, and reviews.",
-  "layout": "MainLayout",
-  "name": "ProductDetail",
-  "related_stories": [
-    "US-007",
-    "US-008",
-    "US-009",
-    "US-012",
-    "US-014",
-    "US-015"
-  ],
-  "responsive_notes": "Images and details are stacked on mobile, side-by-side on desktop. Reviews section is full width below.",
-  "route": "/products/:id"
-}
-
-#### Page: Cart
-_Cart page UI design spec needed as checkout flow starts from cart (T-027/T-030)._
-
-{
-  "auth_required": false,
-  "components": [
-    "SiteHeader",
-    "Footer",
-    "CartItem",
-    "Button",
-    "Alert"
-  ],
-  "description": "Shopping cart review page showing items, quantities, and subtotal.",
-  "layout": "MainLayout",
-  "name": "Cart",
-  "related_stories": [
-    "US-010",
-    "US-012",
-    "US-014",
-    "US-015"
-  ],
-  "responsive_notes": "Cart items display as compact rows on mobile. Order summary sticks to bottom on mobile, right side on desktop.",
-  "route": "/cart"
-}
-
-#### API: POST /api/v1/checkout/confirm
-_API contract for POST /api/v1/checkout/confirm directly required for checkout confirmation task T-031._
-
-{
-  "auth_required": false,
-  "description": "Verifies Stripe payment status, creates order record, clears cart, triggers order confirmation email. Handles both guest and authenticated checkout.",
+  "description": "Validates email uniqueness, hashes password with bcrypt, persists user, sends confirmation email.",
   "idempotent": false,
   "method": "POST",
   "pagination": false,
-  "path": "/api/v1/checkout/confirm",
+  "path": "/api/v1/auth/register",
   "query_params": [],
   "rate_limit": "10/minute",
   "related_stories": [
-    "US-011"
+    "US-001"
   ],
   "request_body": {
-    "payment_intent_id": "string"
+    "email": "string",
+    "password": "string"
   },
   "required_role": null,
   "response_schema": {
-    "items": [
-      {
-        "color": "string",
-        "product_name": "string",
-        "quantity": "integer",
-        "size": "string",
-        "unit_price": "number"
-      }
-    ],
-    "order_id": "string (UUID)",
-    "order_number": "string",
-    "shipping_address": {
-      "city": "string",
-      "line1": "string",
-      "postal_code": "string",
-      "state": "string"
-    },
-    "total_amount": "number"
+    "email": "string",
+    "message": "string",
+    "user_id": "string (UUID)"
   },
   "status_codes": {
-    "201": "Order created successfully",
-    "400": "Payment not succeeded or cart empty",
-    "502": "Stripe verification error"
+    "201": "User created successfully",
+    "409": "Email already registered",
+    "422": "Validation error (password complexity)"
   },
-  "summary": "Confirm payment, create order, send confirmation email"
+  "summary": "Register a new user account"
 }
 
-#### API: POST /api/v1/checkout/payment-intent
-_API contract for POST /api/v1/checkout/payment-intent required for Stripe payment intent creation in T-030._
+#### API: POST /api/v1/auth/login
+_POST /api/v1/auth/login API contract needed to fix login-related test failures._
 
 {
   "auth_required": false,
-  "description": "Fetches cart total, creates a Stripe PaymentIntent server-side. Returns client_secret for Stripe Elements. No card data touches application servers.",
+  "description": "Validates credentials against bcrypt hash, issues short-lived access JWT and long-lived refresh token.",
   "idempotent": false,
   "method": "POST",
   "pagination": false,
-  "path": "/api/v1/checkout/payment-intent",
+  "path": "/api/v1/auth/login",
   "query_params": [],
-  "rate_limit": "10/minute",
+  "rate_limit": "5/minute",
   "related_stories": [
-    "US-011"
+    "US-002"
   ],
   "request_body": {
-    "guest_email": "string (required if not authenticated)",
-    "shipping_address": {
-      "city": "string",
-      "country": "string",
-      "line1": "string",
-      "postal_code": "string",
-      "state": "string"
-    },
-    "shipping_name": "string"
+    "email": "string",
+    "password": "string"
   },
   "required_role": null,
   "response_schema": {
-    "amount": "integer (cents)",
-    "client_secret": "string",
-    "currency": "string",
-    "payment_intent_id": "string"
+    "access_token": "string (JWT)",
+    "expires_in": "integer (seconds)",
+    "refresh_token": "string",
+    "token_type": "bearer"
   },
   "status_codes": {
-    "200": "PaymentIntent created",
-    "400": "Cart is empty or invalid",
-    "502": "Stripe API error"
+    "200": "Login successful",
+    "401": "Invalid credentials",
+    "429": "Rate limit exceeded"
   },
-  "summary": "Create a Stripe PaymentIntent for the current cart"
+  "summary": "Authenticate user and issue JWT tokens"
 }
 
-#### API: GET /api/v1/account/orders
-_API contract for GET /api/v1/account/orders required for T-032 order history page implementation._
+#### API: POST /api/v1/auth/refresh
+_POST /api/v1/auth/refresh API contract needed to implement silent token refresh in frontend auth flow._
 
 {
-  "auth_required": true,
-  "description": "Returns paginated list of past orders for the authenticated user. Returns empty array with message if no orders placed.",
-  "idempotent": true,
-  "method": "GET",
-  "pagination": true,
-  "path": "/api/v1/account/orders",
-  "query_params": [
-    {
-      "description": "Page number (default 1)",
-      "name": "page",
-      "required": false,
-      "type": "integer"
-    },
-    {
-      "description": "Items per page (default 10)",
-      "name": "per_page",
-      "required": false,
-      "type": "integer"
-    }
-  ],
-  "rate_limit": null,
-  "related_stories": [
-    "US-003"
-  ],
-  "request_body": null,
-  "required_role": "member",
-  "response_schema": {
-    "message": "string (present when orders is empty)",
-    "orders": [
-      {
-        "created_at": "string (ISO 8601)",
-        "id": "string (UUID)",
-        "order_number": "string",
-        "status": "string",
-        "total_amount": "number"
-      }
-    ],
-    "total": "integer"
-  },
-  "status_codes": {
-    "200": "Orders returned",
-    "401": "Not authenticated"
-  },
-  "summary": "Get authenticated user order history"
-}
-
-#### API: POST /api/v1/products/{product_id}/reviews
-_API contract for POST /api/v1/products/{product_id}/reviews required for T-033 review submission task._
-
-{
-  "auth_required": true,
-  "description": "Creates a review. Verifies that the authenticated user has purchased the product via order_id join. Returns 403 if no matching purchase found.",
+  "auth_required": false,
+  "description": "Validates refresh token, checks revocation status, issues new access token.",
   "idempotent": false,
   "method": "POST",
   "pagination": false,
-  "path": "/api/v1/products/{product_id}/reviews",
+  "path": "/api/v1/auth/refresh",
   "query_params": [],
-  "rate_limit": "5/hour",
+  "rate_limit": "20/minute",
   "related_stories": [
-    "US-008"
+    "US-013"
   ],
   "request_body": {
-    "rating": "integer (1-5)",
-    "review_text": "string"
+    "refresh_token": "string"
   },
-  "required_role": "member",
-  "response_schema": {
-    "created_at": "string (ISO 8601)",
-    "id": "string (UUID)",
-    "rating": "integer",
-    "review_text": "string"
-  },
-  "status_codes": {
-    "201": "Review created",
-    "401": "Not authenticated",
-    "403": "User has not purchased this product",
-    "422": "Validation error"
-  },
-  "summary": "Submit a purchase-verified product review"
-}
-
-#### API: GET /api/v1/products/{product_id}/reviews
-_API contract for GET /api/v1/products/{product_id}/reviews required for T-033 reviews display task._
-
-{
-  "auth_required": false,
-  "description": "Returns paginated list of reviews with average star rating for the product.",
-  "idempotent": true,
-  "method": "GET",
-  "pagination": true,
-  "path": "/api/v1/products/{product_id}/reviews",
-  "query_params": [
-    {
-      "description": "Page number (default 1)",
-      "name": "page",
-      "required": false,
-      "type": "integer"
-    },
-    {
-      "description": "Items per page (default 10)",
-      "name": "per_page",
-      "required": false,
-      "type": "integer"
-    }
-  ],
-  "rate_limit": null,
-  "related_stories": [
-    "US-008"
-  ],
-  "request_body": null,
   "required_role": null,
   "response_schema": {
-    "average_rating": "number",
-    "reviews": [
-      {
-        "created_at": "string (ISO 8601)",
-        "id": "string (UUID)",
-        "rating": "integer",
-        "review_text": "string"
-      }
-    ],
-    "total_reviews": "integer"
+    "access_token": "string (JWT)",
+    "expires_in": "integer (seconds)",
+    "token_type": "bearer"
   },
   "status_codes": {
-    "200": "Reviews returned"
+    "200": "New access token issued",
+    "401": "Refresh token invalid or expired"
   },
-  "summary": "List reviews for a product"
+  "summary": "Issue new access token from valid refresh token"
 }
 
-#### API: GET /api/v1/cart
-_API contract for GET /api/v1/cart required for checkout flow to read cart contents in T-027._
+#### UI/UX Design — full document
+_UI/UX design document provides page and component specifications needed to ensure fixes align with intended design._
 
-{
-  "auth_required": false,
-  "description": "Returns all items in the current cart (guest session or authenticated user), with per-item details and subtotal.",
-  "idempotent": true,
-  "method": "GET",
-  "pagination": false,
-  "path": "/api/v1/cart",
-  "query_params": [],
-  "rate_limit": null,
-  "related_stories": [
-    "US-010"
-  ],
-  "request_body": null,
-  "required_role": null,
-  "response_schema": {
-    "cart_id": "string (UUID)",
-    "item_count": "integer",
-    "items": [
-      {
-        "color": "string",
-        "id": "string (UUID)",
-        "price": "number",
-        "primary_image": "string (URL)",
-        "product_name": "string",
-        "product_variant_id": "string (UUID)",
-        "quantity": "integer",
-        "size": "string"
-      }
-    ],
-    "subtotal": "number"
-  },
-  "status_codes": {
-    "200": "Cart returned (empty cart returns items: [])"
-  },
-  "summary": "Get current cart contents"
-}
+UI Design: 8 pages, 12 components, 2 user flows.
 
 #### Technology Stack
-_Technology stack confirms React 18, Stripe, and other dependencies relevant to sprint 3 frontend tasks._
+_Tech stack details confirm React 18, Axios, React Query versions relevant to frontend implementation._
 
 Tech stack: backend=FastAPI 0.111; database=PostgreSQL 16; orm=SQLAlchemy 2.0; frontend=React 18; language=Python 3.12; hosting=Docker Compose 2.27; payment=Stripe latest; web_server=Nginx 1.25; migrations=Alembic 1.13
 
-#### Data Model: Order
-_Order data model needed to understand response shape for checkout confirmation and order history pages._
+#### US-001 — User Registration
+_US-001 User Registration acceptance criteria needed to validate the registration fix addresses the correct behavior._
 
-Completed purchase order for guest or authenticated user
+As a new user, I want to create an account using my email and a password so that I can track my orders and save my information for future purchases.
 
-#### Data Model: OrderItem
-_OrderItem data model needed for rendering order line items in T-032 order history._
+#### US-002 — User Login
+_US-002 User Login acceptance criteria needed to validate login flow fixes._
 
-Individual line item in an order with captured unit price
+As a registered user, I want to log in to my account so that I can access my profile and order history.
 
-#### Data Model: Review
-_Review data model needed to understand request/response shape for T-033 review submission._
+#### US-011 — Guest Checkout
+_US-011 Guest Checkout acceptance criteria relevant to checkout-related test failures._
 
-Purchase-verified product review linking product, user, and verifying order
+As a shopper, I want to complete my purchase without creating an account so that I can check out quickly and easily.
 
-#### Non-Functional Requirements (6)
-_Non-functional requirements including accessibility (WCAG 2.1 AA) and performance directly govern T-034 accessibility task._
+#### US-013 — Session Continuity
+_US-013 Session Continuity acceptance criteria relevant to JWT refresh token frontend behavior._
 
-[
-  {
-    "category": "performance",
-    "measurable_target": "",
-    "priority": "high",
-    "requirement": "All pages, especially product listing and product detail pages, must achieve a Largest Contentful Paint (LCP) of 2.5 seconds or less."
-  },
-  {
-    "category": "security",
-    "measurable_target": "",
-    "priority": "critical",
-    "requirement": "The application must use a PCI-compliant payment gateway (e.g., Stripe) to process payments, ensuring no sensitive cardholder data is ever stored on the application servers."
-  },
-  {
-    "category": "security",
-    "measurable_target": "",
-    "priority": "critical",
-    "requirement": "User passwords must be securely hashed using a modern algorithm (e.g., bcrypt) before being stored in the database."
-  },
-  {
-    "category": "accessibility",
-    "measurable_target": "",
-    "priority": "high",
-    "requirement": "The entire web application must meet Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards."
-  },
-  {
-    "category": "reliability",
-    "measurable_target": "",
-    "priority": "high",
-    "requirement": "The application must maintain 99.9% uptime during business hours."
-  },
-  {
-    "category": "usability",
-    "measurable_target": "",
-    "priority": "medium",
-    "requirement": "The checkout process, from cart to confirmation, must be completable in 5 steps or fewer."
-  }
-]
+As a logged-in user, I want my session to persist across page refreshes and new tabs so that I don't have to log in repeatedly.
 
-#### qa_engineer output
-_QA engineer identified frontend registration/auth bug with 'Not Found' alert that may affect sprint 3 auth-dependent flows._
+#### API: POST /api/v1/checkout/payment-intent
+_POST /api/v1/checkout/payment-intent API contract needed for checkout frontend fixes._
 
-{
-  "agent_observations": [
-    {
-      "assigned_role": "frontend_dev",
-      "failing_assertion": "expect(successHeading.or(homeHeading)).toBeVisible \u2014 page shows `alert: Not Found` before form submission",
-      "root_cause_hypothesis": "The RegisterPage shows a `role=\"alert\"` with \"Not Found\" before the form is submitted. This indicates the frontend AuthContext or a mounted component 
+Create a Stripe PaymentIntent for the current cart
 
-#### e2e_runner output
-_E2E runner results showing 8 failures including registration redirect issue relevant to fixing auth flows in sprint 3._
+#### API: POST /api/v1/checkout/confirm
+_POST /api/v1/checkout/confirm API contract needed for checkout confirmation flow fixes._
 
-{
-  "failed": 8,
-  "failures": [
-    {
-      "error": "Error: expect(page).toHaveURL(expected) failed\n\nExpected: \"http://localhost:56257/\"\nReceived: \"http://localhost:56257/register\"\nTimeout:  15000ms\n\nCall log:\n  - Expect \"toHaveURL\" with timeout 15000ms\n    34 \u00d7 unexpected value \"http://localhost:56257/register\"\n\n\n  21 |     // \"Account Created!\" heading is transient. A
+Confirm payment, create order, send confirmation email
 
-#### Architecture — full document
-_Full architecture document provides overall system context for implementation decisions across sprint 3 tasks._
+#### Page: Register
+_Register page UI spec needed to ensure the fixed registration page matches design intent._
 
-Architecture: pattern=modular_monolith. 6 components, 17 endpoints, 10 data models, 5 ADRs, 7 diagrams.
+New user account creation page.
 
-#### Component: StripeGateway
-_Stripe Gateway component description defines how frontend integrates with Stripe Elements for PCI-compliant card capture in T-030._
+#### Page: Login
+_Login page UI spec needed to ensure login page fixes match design intent._
 
-{
-  "communication_protocol": "HTTPS REST",
-  "dependencies": [],
-  "description": "Stripe payment processing integration. FastAPI creates PaymentIntents server-side; the React frontend uses Stripe Elements for PCI-compliant card capture. No card data touches application servers.",
-  "name": "StripeGateway",
-  "port": null,
-  "responsibilities": [
-    "Create PaymentIntents server-side with order total and currency",
-    "Verify payment success before creating order records",
-    "Provide client_secret to frontend for Stripe Elements card capture"
-  ],
-  "type": "gateway"
-}
+User authentication page.
 
-#### Component: ReactFrontend
-_ReactFrontend component description confirms SPA architecture, client-side routing, and accessibility requirements._
+#### Page: Checkout
+_Checkout page UI spec needed to ensure checkout flow fixes match design intent._
 
-React 18 single-page application served as static files via Nginx. Handles all UI rendering, client-side routing, form validation, cart state, and WCAG 2.1 AA accessibility.
-
-#### Sprint Plan — full
-_Sprint plan overview confirms sprint 3 stories and overall project timeline context._
-
-Sprint Plan: 3 sprints, 6 weeks, 186 story points
+Multi-step checkout flow including shipping, payment via Stripe Elements, and confirmation.
 
 ### Also available (Read a specific section on demand only if the essentials above don't cover it)
-- Sprint 3 — Deliver the complete guest checkout flow with Stripe payment
-- Sprint 3 — Deliver the complete guest checkout flow with Stripe payment
+- e2e_runner output
 - Development Guidelines
+- code_reviewer output
 
 > The `docs/` folder in your workspace mirrors the upstream phase outputs (PRD, sprint plan, architecture decision doc). The structured essentials you need are inline above. **Do NOT bulk-read the `docs/` folder** — open at most one specific section, and only if something inline is genuinely missing.
 

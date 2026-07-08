@@ -6,7 +6,6 @@ from typing import List
 import sqlalchemy as sa
 from sqlalchemy import (
     Boolean,
-    CheckConstraint,
     Column,
     DateTime,
     Float,
@@ -17,7 +16,6 @@ from sqlalchemy import (
     String,
     Text,
     TypeDecorator,
-    UniqueConstraint,
     func,
     types,
 )

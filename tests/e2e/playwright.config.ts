@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 
-const BE_PORT = process.env.BE_PORT || '8000'
+const BE_PORT = process.env.BE_PORT || '8001'
 const FE_PORT = process.env.FE_PORT || '3000'
 const PROJECT_ROOT = process.env.PROJECT_ROOT || '../..'
 const PYTHON_BIN = process.env.PYTHON_BIN || (process.platform === 'win32' ? 'python' : 'python3')

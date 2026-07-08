@@ -1,0 +1,58 @@
+============================= test session starts ==============================
+collecting ... collected 40 items
+
+tests/integration/sprint_3/test_auth.py::TestUserRegistration::test_user_registers_with_valid_credentials PASSED [  2%]
+tests/integration/sprint_3/test_auth.py::TestUserRegistration::test_user_registers_then_duplicate_email_rejected PASSED [  5%]
+tests/integration/sprint_3/test_auth.py::TestUserRegistration::test_registration_rejected_for_weak_password PASSED [  7%]
+tests/integration/sprint_3/test_auth.py::TestUserLogin::test_user_logs_in_with_correct_credentials PASSED [ 10%]
+tests/integration/sprint_3/test_auth.py::TestUserLogin::test_user_login_fails_with_wrong_password PASSED [ 12%]
+tests/integration/sprint_3/test_auth.py::TestUserLogin::test_user_login_fails_with_unknown_email PASSED [ 15%]
+tests/integration/sprint_3/test_auth.py::TestUserLogin::test_token_refresh_rotates_tokens PASSED [ 17%]
+tests/integration/sprint_3/test_auth.py::TestUserLogin::test_expired_refresh_token_returns_401 PASSED [ 20%]
+tests/integration/sprint_3/test_cart.py::TestAddToShoppingCart::test_authenticated_user_adds_item_to_cart PASSED [ 22%]
+tests/integration/sprint_3/test_cart.py::TestAddToShoppingCart::test_guest_user_adds_item_to_cart_via_session_id PASSED [ 25%]
+tests/integration/sprint_3/test_cart.py::TestAddToShoppingCart::test_adding_same_item_twice_increments_quantity PASSED [ 27%]
+tests/integration/sprint_3/test_cart.py::TestAddToShoppingCart::test_get_cart_returns_current_cart PASSED [ 30%]
+tests/integration/sprint_3/test_cart.py::TestViewAndEditShoppingCart::test_cart_page_shows_items_with_price_quantity_subtotal PASSED [ 32%]
+tests/integration/sprint_3/test_checkout.py::TestGuestCheckout::test_guest_checkout_payment_intent_requires_guest_email PASSED [ 35%]
+tests/integration/sprint_3/test_checkout.py::TestGuestCheckout::test_payment_intent_endpoint_accepts_valid_request_structure PASSED [ 37%]
+tests/integration/sprint_3/test_checkout.py::TestGuestCheckout::test_checkout_orders_endpoint_requires_authentication PASSED [ 40%]
+tests/integration/sprint_3/test_checkout.py::TestGuestCheckout::test_authenticated_user_can_list_their_checkout_orders PASSED [ 42%]
+tests/integration/sprint_3/test_order_history.py::TestOrderHistory::test_authenticated_user_sees_their_order_history PASSED [ 45%]
+tests/integration/sprint_3/test_order_history.py::TestOrderHistory::test_authenticated_user_with_no_orders_sees_empty_state_message PASSED [ 47%]
+tests/integration/sprint_3/test_order_history.py::TestOrderHistory::test_unauthenticated_user_cannot_view_order_history PASSED [ 50%]
+tests/integration/sprint_3/test_order_history.py::TestOrderHistory::test_user_only_sees_own_orders PASSED [ 52%]
+tests/integration/sprint_3/test_product_details.py::TestViewProductDetails::test_product_detail_page_returns_full_details PASSED [ 55%]
+tests/integration/sprint_3/test_product_details.py::TestViewProductDetails::test_product_detail_not_found_returns_404 PASSED [ 57%]
+tests/integration/sprint_3/test_product_details.py::TestReadAndWriteReviews::test_guest_can_read_product_reviews PASSED [ 60%]
+tests/integration/sprint_3/test_product_details.py::TestReadAndWriteReviews::test_authenticated_user_with_purchase_can_submit_review PASSED [ 62%]
+tests/integration/sprint_3/test_product_details.py::TestReadAndWriteReviews::test_unauthenticated_user_cannot_submit_review PASSED [ 65%]
+tests/integration/sprint_3/test_product_details.py::TestReadAndWriteReviews::test_review_aggregate_reflects_new_reviews PASSED [ 67%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestSearchForBoots::test_keyword_search_returns_relevant_products PASSED [ 70%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestSearchForBoots::test_search_returns_no_results_for_unmatched_query PASSED [ 72%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestSearchForBoots::test_search_requires_at_least_one_character PASSED [ 75%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestFilterProductListings::test_filter_by_size_returns_only_matching_products PASSED [ 77%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestFilterProductListings::test_filter_by_size_and_color_combination PASSED [ 80%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestFilterProductListings::test_filter_removal_restores_full_listing PASSED [ 82%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestViewProductListingPage::test_clicking_category_shows_all_boots_in_that_category PASSED [ 85%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestViewProductListingPage::test_product_card_contains_required_fields PASSED [ 87%]
+tests/integration/sprint_3/test_product_search_and_listing.py::TestViewProductListingPage::test_list_categories_returns_all_active_categories PASSED [ 90%]
+tests/integration/sprint_3/test_session_continuity.py::TestSessionContinuity::test_access_token_remains_valid_across_requests PASSED [ 92%]
+tests/integration/sprint_3/test_session_continuity.py::TestSessionContinuity::test_logout_revokes_refresh_token PASSED [ 95%]
+tests/integration/sprint_3/test_session_continuity.py::TestSessionContinuity::test_invalid_token_redirects_to_login PASSED [ 97%]
+tests/integration/sprint_3/test_session_continuity.py::TestSessionContinuity::test_missing_auth_header_returns_401 PASSED [100%]
+
+=============================== warnings summary ===============================
+tests/integration/sprint_3/test_auth.py: 1 warning
+tests/integration/sprint_3/test_cart.py: 7 warnings
+tests/integration/sprint_3/test_checkout.py: 1 warning
+tests/integration/sprint_3/test_order_history.py: 3 warnings
+tests/integration/sprint_3/test_product_details.py: 1 warning
+tests/integration/sprint_3/test_session_continuity.py: 4 warnings
+  /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.sandbox/venv/lib/python3.12/site-packages/jose/jwt.py:311: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = timegm(datetime.utcnow().utctimetuple())
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+--------------------------------- JSON report ----------------------------------
+report saved to: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.elite/python_pytest-report-sprint-3.json
+======================= 40 passed, 17 warnings in 30.60s =======================

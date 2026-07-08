@@ -300,8 +300,8 @@ export const SiteHeader: React.FC = () => {
 
           {/* Right side actions */}
           <div className="flex items-center gap-3">
-            {/* Search — hidden on very small screens, visible from sm */}
-            <div className="hidden sm:block">
+            {/* Search */}
+            <div>
               <SearchBar />
             </div>
 

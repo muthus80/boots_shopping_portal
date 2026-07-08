@@ -15,7 +15,6 @@ from app.domains.products.schemas import (
     ReviewContractRead,
     ReviewCreate,
     ReviewListResponse,
-    ReviewRead,
     ReviewSubmit,
 )
 from app.core.exceptions import ConflictError, ForbiddenError, NotFoundError

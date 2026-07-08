@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import select
@@ -12,15 +12,13 @@ from app.core.security import hash_password, verify_password
 from app.domains.account.models import User
 from app.domains.account.schemas import (
     OrderHistoryResponse,
-    OrderItemRead,
-    OrderRead,
     OrderSummaryRead,
     PasswordChange,
     UserCreate,
     UserRead,
     UserUpdate,
 )
-from app.domains.checkout.models import Order, OrderItem
+from app.domains.checkout.models import Order
 
 
 class AccountService:

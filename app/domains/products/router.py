@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, status
@@ -11,9 +11,7 @@ from app.domains.products.schemas import (
     ProductList,
     ProductRead,
     ReviewContractRead,
-    ReviewCreate,
     ReviewListResponse,
-    ReviewRead,
     ReviewSubmit,
 )
 from app.domains.products.service import ProductService

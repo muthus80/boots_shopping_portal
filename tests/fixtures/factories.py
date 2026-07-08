@@ -1,17 +1,24 @@
-"""
-Faker-based factory classes for boots-shopping-app models.
+"""Faker-based factory classes for all ORM models.
 
-Each factory's ``build()`` method returns a plain dict (no DB call).
-Imports: stdlib + faker only — no app imports.
+Usage::
 
-IMPORTANT: Models with a hashed credential column (e.g. User.hashed_password)
-do NOT include that column in the default dict.  Callers that need a valid hash
-must compute it at test-time using app.core.security.hash_password().
+    from tests.fixtures.factories import UserFactory, ProductFactory
+
+    user_data = UserFactory.build()
+    product_data = ProductFactory.build(category_id='00000000-...')
+
+Rules:
+- ``build()`` returns a plain dict — no DB calls, no ORM imports.
+- Import only stdlib + faker.
+- Password-hash columns are OMITTED (set to None) — callers that need a
+  valid hash must compute it at test-time via the workspace auth helper.
 """
+
 from __future__ import annotations
 
 import uuid
 from decimal import Decimal
+from typing import Any, Dict
 
 from faker import Faker
 
@@ -19,184 +26,212 @@ _fake = Faker("en_GB")
 
 
 # ---------------------------------------------------------------------------
-# Category
+# Helpers
 # ---------------------------------------------------------------------------
+
+def _uuid() -> str:
+    return str(uuid.uuid4())
+
+
+def _now_iso() -> str:
+    return "2026-01-15 10:00:00"
+
+
+# ---------------------------------------------------------------------------
+# Reference / lookup factories
+# ---------------------------------------------------------------------------
+
 class CategoryFactory:
+    """Factory for the ``categories`` table."""
+
     @staticmethod
-    def build(**overrides) -> dict:
-        name = _fake.unique.word().capitalize()
-        data = {
-            "id": str(uuid.uuid4()),
-            "name": name,
-            "slug": name.lower().replace(" ", "-"),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        word = _fake.unique.word()
+        data: Dict[str, Any] = {
+            "id": _uuid(),
+            "name": word.title() + " Boots",
+            "slug": word.lower() + "-boots",
             "description": _fake.sentence(nb_words=10),
-            "image_url": None,
+            "image_url": f"https://cdn.example.com/cats/{word.lower()}.jpg",
             "is_active": True,
             "parent_id": None,
             "display_order": _fake.random_int(min=0, max=100),
+            "created_at": _now_iso(),
+            "updated_at": _now_iso(),
         }
         data.update(overrides)
         return data
 
 
 # ---------------------------------------------------------------------------
-# User
-# NOTE: hashed_password is intentionally omitted.
-#       Compute at test-time:  from app.core.security import hash_password
+# Transactional factories
 # ---------------------------------------------------------------------------
+
 class UserFactory:
+    """Factory for the ``users`` table.
+
+    ``hashed_password`` is omitted — compute it with the app's
+    ``app.core.security.hash_password`` helper at test-time if needed.
+    """
+
     @staticmethod
-    def build(**overrides) -> dict:
-        data = {
-            "id": str(uuid.uuid4()),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        data: Dict[str, Any] = {
+            "id": _uuid(),
             "email": _fake.unique.email(),
-            # hashed_password deliberately excluded — caller must supply or
-            # compute via app.core.security.hash_password(plaintext)
+            "hashed_password": None,   # INTENTIONALLY OMITTED — see module docstring
             "full_name": _fake.name(),
             "is_active": True,
             "is_superuser": False,
+            "created_at": _now_iso(),
+            "updated_at": _now_iso(),
         }
         data.update(overrides)
         return data
 
 
-# ---------------------------------------------------------------------------
-# RefreshToken
-# ---------------------------------------------------------------------------
 class RefreshTokenFactory:
+    """Factory for the ``refresh_tokens`` table."""
+
     @staticmethod
-    def build(**overrides) -> dict:
-        data = {
-            "id": str(uuid.uuid4()),
-            "user_id": str(uuid.uuid4()),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        data: Dict[str, Any] = {
+            "id": _uuid(),
+            "user_id": _uuid(),
             "token": _fake.sha256(),
             "jti": str(uuid.uuid4()),
             "is_revoked": False,
-            "expires_at": "2026-12-31 23:59:59+00",
+            "expires_at": "2026-02-15 10:00:00",
+            "created_at": _now_iso(),
         }
         data.update(overrides)
         return data
 
 
-# ---------------------------------------------------------------------------
-# Product
-# ---------------------------------------------------------------------------
-_BRANDS = ["Heritage Co", "Eleganza", "Titan Works", "StrideWell", "BootCraft"]
-_CURRENCIES = ["GBP", "EUR", "USD"]
-
-
 class ProductFactory:
+    """Factory for the ``products`` table."""
+
+    _BRANDS = ["Clarks", "Dr. Martens", "Timberland", "UGG", "Hunter", "Dubarry", "Sorel"]
+    _COLORS = ["Black", "Brown", "Tan", "Navy", "Grey", "Burgundy"]
+
     @staticmethod
-    def build(**overrides) -> dict:
-        name = " ".join([_fake.color_name(), _fake.unique.word().capitalize(), "Boot"])
-        base_price = round(_fake.pyfloat(min_value=29.99, max_value=199.99, right_digits=2), 2)
-        data = {
-            "id": str(uuid.uuid4()),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        brand = _fake.random_element(ProductFactory._BRANDS)
+        name = f"{brand} {_fake.word().title()} Boot"
+        slug = name.lower().replace(" ", "-")
+        base_price = round(_fake.pyfloat(min_value=40, max_value=300, right_digits=2), 2)
+        data: Dict[str, Any] = {
+            "id": _uuid(),
             "category_id": None,
             "name": name,
-            "slug": name.lower().replace(" ", "-"),
+            "slug": slug,
             "description": _fake.paragraph(nb_sentences=3),
             "short_description": _fake.sentence(nb_words=8),
-            "brand": _fake.random_element(_BRANDS),
-            "sku": f"SKU-{_fake.unique.lexify('????').upper()}-{_fake.random_int(100, 999)}",
+            "brand": brand,
+            "sku": f"{brand[:3].upper()}-{_fake.bothify(text='???-###').upper()}",
             "base_price": str(Decimal(str(base_price))),
             "sale_price": None,
             "currency": "GBP",
-            "stock_quantity": _fake.random_int(0, 100),
+            "stock_quantity": _fake.random_int(min=0, max=200),
             "is_active": True,
             "is_featured": False,
-            "image_url": None,
+            "image_url": f"https://cdn.example.com/products/{slug}.jpg",
             "images": [],
             "attributes": {},
             "average_rating": None,
             "review_count": 0,
+            "created_at": _now_iso(),
+            "updated_at": _now_iso(),
         }
         data.update(overrides)
         return data
-
-
-# ---------------------------------------------------------------------------
-# ProductVariant
-# ---------------------------------------------------------------------------
-_SIZES = ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
-_COLORS = ["Black", "Tan", "Brown", "White", "Red", "Navy", "Grey"]
-_MATERIALS = ["Leather", "Suede", "Patent", "Canvas", "Synthetic"]
 
 
 class ProductVariantFactory:
+    """Factory for the ``product_variants`` table."""
+
+    _SIZES = ["3", "4", "5", "6", "7", "8", "9", "10"]
+    _COLORS = ["Black", "Tan", "Brown", "Grey", "Navy"]
+    _MATERIALS = ["Leather", "Suede", "Rubber", "Synthetic", "Canvas"]
+
     @staticmethod
-    def build(**overrides) -> dict:
-        size = _fake.random_element(_SIZES)
-        color = _fake.random_element(_COLORS)
-        data = {
-            "id": str(uuid.uuid4()),
-            "product_id": str(uuid.uuid4()),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        size = _fake.random_element(ProductVariantFactory._SIZES)
+        color = _fake.random_element(ProductVariantFactory._COLORS)
+        material = _fake.random_element(ProductVariantFactory._MATERIALS)
+        data: Dict[str, Any] = {
+            "id": _uuid(),
+            "product_id": _uuid(),
             "name": f"UK {size} / {color}",
-            "sku": f"VAR-{_fake.unique.lexify('????').upper()}",
+            "sku": f"VAR-{_fake.bothify(text='???-###').upper()}",
             "size": size,
             "color": color,
-            "material": _fake.random_element(_MATERIALS),
+            "material": material,
             "price_modifier": "0.00",
-            "stock_quantity": _fake.random_int(0, 50),
-            "inventory_count": _fake.random_int(0, 50),
+            "stock_quantity": _fake.random_int(min=0, max=50),
+            "inventory_count": _fake.random_int(min=0, max=50),
             "image_url": None,
             "is_active": True,
+            "created_at": _now_iso(),
+            "updated_at": _now_iso(),
         }
         data.update(overrides)
         return data
 
 
-# ---------------------------------------------------------------------------
-# Cart
-# ---------------------------------------------------------------------------
 class CartFactory:
+    """Factory for the ``carts`` table."""
+
     @staticmethod
-    def build(**overrides) -> dict:
-        data = {
-            "id": str(uuid.uuid4()),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        data: Dict[str, Any] = {
+            "id": _uuid(),
             "user_id": None,
-            "session_id": str(uuid.uuid4()),
+            "session_id": None,
+            "created_at": _now_iso(),
+            "updated_at": _now_iso(),
         }
         data.update(overrides)
         return data
 
 
-# ---------------------------------------------------------------------------
-# CartItem
-# ---------------------------------------------------------------------------
 class CartItemFactory:
+    """Factory for the ``cart_items`` table."""
+
     @staticmethod
-    def build(**overrides) -> dict:
-        data = {
-            "id": str(uuid.uuid4()),
-            "cart_id": str(uuid.uuid4()),
-            "product_id": str(uuid.uuid4()),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        unit_price = round(_fake.pyfloat(min_value=20, max_value=300, right_digits=2), 2)
+        quantity = _fake.random_int(min=1, max=5)
+        data: Dict[str, Any] = {
+            "id": _uuid(),
+            "cart_id": _uuid(),
+            "product_id": _uuid(),
             "variant_id": None,
-            "quantity": _fake.random_int(1, 5),
-            "unit_price": str(Decimal(str(round(_fake.pyfloat(min_value=19.99, max_value=199.99, right_digits=2), 2)))),
+            "quantity": quantity,
+            "unit_price": str(Decimal(str(unit_price))),
+            "created_at": _now_iso(),
+            "updated_at": _now_iso(),
         }
         data.update(overrides)
         return data
-
-
-# ---------------------------------------------------------------------------
-# Order
-# ---------------------------------------------------------------------------
-_ORDER_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"]
-_PAYMENT_STATUSES = ["unpaid", "paid", "failed"]
 
 
 class OrderFactory:
+    """Factory for the ``orders`` table."""
+
+    _STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"]
+    _PAYMENT_STATUSES = ["unpaid", "paid", "failed", "refunded"]
+
     @staticmethod
-    def build(**overrides) -> dict:
-        subtotal = round(_fake.pyfloat(min_value=29.99, max_value=499.99, right_digits=2), 2)
+    def build(**overrides: Any) -> Dict[str, Any]:
+        subtotal = round(_fake.pyfloat(min_value=30, max_value=500, right_digits=2), 2)
         shipping = 4.99
-        tax = round(subtotal * 0.12, 2)
+        tax = round(subtotal * 0.1, 2)
         total = round(subtotal + shipping + tax, 2)
-        data = {
-            "id": str(uuid.uuid4()),
+        data: Dict[str, Any] = {
+            "id": _uuid(),
             "user_id": None,
-            "order_number": f"ORD-{_fake.numerify('########')}",
+            "order_number": f"ORD-{_fake.numerify(text='####-######')}",
             "guest_email": None,
             "status": "pending",
             "payment_status": "unpaid",
@@ -213,63 +248,77 @@ class OrderFactory:
             "shipping_city": _fake.city(),
             "shipping_county": _fake.county(),
             "shipping_postcode": _fake.postcode(),
-            "shipping_country": "GB",
-            "billing_name": _fake.name(),
-            "billing_address_line1": _fake.street_address(),
+            "shipping_country": "United Kingdom",
+            "billing_name": None,
+            "billing_address_line1": None,
             "billing_address_line2": None,
-            "billing_city": _fake.city(),
-            "billing_county": _fake.county(),
-            "billing_postcode": _fake.postcode(),
-            "billing_country": "GB",
+            "billing_city": None,
+            "billing_county": None,
+            "billing_postcode": None,
+            "billing_country": None,
             "payment_reference": None,
             "stripe_payment_intent_id": None,
             "notes": None,
+            "created_at": _now_iso(),
+            "updated_at": _now_iso(),
         }
         data.update(overrides)
         return data
 
 
-# ---------------------------------------------------------------------------
-# OrderItem
-# ---------------------------------------------------------------------------
 class OrderItemFactory:
+    """Factory for the ``order_items`` table."""
+
     @staticmethod
-    def build(**overrides) -> dict:
-        qty = _fake.random_int(1, 4)
-        unit = round(_fake.pyfloat(min_value=29.99, max_value=199.99, right_digits=2), 2)
-        data = {
-            "id": str(uuid.uuid4()),
-            "order_id": str(uuid.uuid4()),
-            "product_id": str(uuid.uuid4()),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        unit_price = round(_fake.pyfloat(min_value=20, max_value=300, right_digits=2), 2)
+        quantity = _fake.random_int(min=1, max=3)
+        line_total = round(unit_price * quantity, 2)
+        data: Dict[str, Any] = {
+            "id": _uuid(),
+            "order_id": _uuid(),
+            "product_id": _uuid(),
             "variant_id": None,
-            "product_name": " ".join([_fake.color_name(), "Boot"]),
+            "product_name": f"{_fake.word().title()} Boot",
             "variant_name": None,
-            "sku": f"SKU-{_fake.unique.lexify('????').upper()}",
-            "quantity": qty,
-            "unit_price": str(Decimal(str(unit))),
-            "line_total": str(Decimal(str(round(unit * qty, 2)))),
+            "sku": f"SKU-{_fake.bothify(text='???-###').upper()}",
+            "quantity": quantity,
+            "unit_price": str(Decimal(str(unit_price))),
+            "line_total": str(Decimal(str(line_total))),
+            "created_at": _now_iso(),
         }
         data.update(overrides)
         return data
 
 
-# ---------------------------------------------------------------------------
-# Review
-# ---------------------------------------------------------------------------
 class ReviewFactory:
+    """Factory for the ``reviews`` table.
+
+    rating is constrained to 1–5 (chk_reviews_rating).
+    UNIQUE(user_id, product_id) — callers must ensure uniqueness.
+    """
+
+    _TITLES = [
+        "Great boots!", "Very comfortable", "Perfect fit",
+        "Excellent quality", "Disappointed", "Solid choice",
+        "Would recommend", "Not as described",
+    ]
+
     @staticmethod
-    def build(**overrides) -> dict:
-        data = {
-            "id": str(uuid.uuid4()),
-            "product_id": str(uuid.uuid4()),
-            "user_id": str(uuid.uuid4()),
+    def build(**overrides: Any) -> Dict[str, Any]:
+        data: Dict[str, Any] = {
+            "id": _uuid(),
+            "product_id": _uuid(),
+            "user_id": _uuid(),
             "order_id": None,
-            "rating": _fake.random_int(1, 5),
-            "title": _fake.sentence(nb_words=5).rstrip("."),
+            "rating": _fake.random_int(min=1, max=5),
+            "title": _fake.random_element(ReviewFactory._TITLES),
             "body": _fake.paragraph(nb_sentences=3),
             "is_verified_purchase": False,
             "is_approved": True,
-            "helpful_votes": 0,
+            "helpful_votes": _fake.random_int(min=0, max=20),
+            "created_at": _now_iso(),
+            "updated_at": _now_iso(),
         }
         data.update(overrides)
         return data
