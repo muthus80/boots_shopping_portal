@@ -33,7 +33,14 @@ logger = get_logger(__name__)
 
 @asynccontextmanager
 async def lifespan(application: FastAPI) -> AsyncIterator[None]:
-    """Application lifespan: auto-create DB tables for SQLite/dev environments."""
+    """Application lifespan: auto-create DB tables on startup for all DB backends.
+
+    Uses SQLAlchemy create_all (checkfirst=True / IF NOT EXISTS semantics) so
+    it is safe to run against a database that was already migrated with Alembic —
+    existing tables are not touched.  This ensures the E2E test PostgreSQL
+    database always has the full schema regardless of whether `alembic upgrade
+    head` was run beforehand (QA-fix: relation 'products' does not exist).
+    """
     from app.core.database import engine, Base  # noqa: F401
     # Import all models so metadata is populated before create_all
     import app.domains.account.models  # noqa: F401
@@ -43,12 +50,11 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
     import app.domains.cart.models  # noqa: F401
     import app.domains.checkout.models  # noqa: F401
 
-    url = str(engine.url)
-    if "sqlite" in url:
-        # SQLite fallback (CI / dev without Postgres) — create all tables on startup
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        logger.info("SQLite tables created/verified on startup")
+    # Create all tables (idempotent — skips tables that already exist).
+    # Works for both SQLite (local dev / CI) and PostgreSQL (E2E test DB).
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    logger.info("Database tables created/verified on startup (url=%s)", str(engine.url).split("@")[-1])
 
     yield
 

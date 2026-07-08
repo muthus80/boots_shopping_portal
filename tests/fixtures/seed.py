@@ -34,6 +34,43 @@ DATABASE_URL = os.environ.get(
 sys.path.insert(0, str(PROJECT_ROOT))
 
 
+async def ensure_schema() -> None:
+    """Ensure all ORM tables exist in the target database before seeding.
+
+    This is the schema-bootstrap step for E2E test environments where
+    `alembic upgrade head` has not been run (QA-fix: relation 'products'
+    does not exist at Playwright runtime).
+
+    SQLAlchemy create_all uses IF NOT EXISTS semantics — safe to run
+    against a database that already has the full Alembic-managed schema.
+    """
+    # Build the asyncpg-compatible URL for SQLAlchemy
+    sa_url = DATABASE_URL
+    if sa_url.startswith("postgresql://"):
+        sa_url = sa_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    elif sa_url.startswith("postgres://"):
+        sa_url = sa_url.replace("postgres://", "postgresql+asyncpg://", 1)
+
+    from sqlalchemy.ext.asyncio import create_async_engine
+    from app.core.database import Base  # noqa: F401 — registers DeclarativeBase
+
+    # Import all domain models so Base.metadata is fully populated
+    import app.domains.account.models  # noqa: F401
+    import app.domains.auth.models  # noqa: F401
+    import app.domains.categories.models  # noqa: F401
+    import app.domains.products.models  # noqa: F401
+    import app.domains.cart.models  # noqa: F401
+    import app.domains.checkout.models  # noqa: F401
+
+    engine = create_async_engine(sa_url, echo=False, future=True)
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print("  Schema bootstrapped via SQLAlchemy create_all (idempotent).")
+    finally:
+        await engine.dispose()
+
+
 def hash_password(plaintext: str) -> str:
     """Hash using the workspace's own bcrypt helper (app.core.security)."""
     from app.core.security import hash_password as _hash  # noqa: PLC0415
@@ -93,6 +130,9 @@ async def seed_auth_entity(conn: asyncpg.Connection) -> None:
 
 
 async def main() -> None:
+    print("Ensuring schema exists …")
+    await ensure_schema()
+
     print(f"Connecting to database …")
     conn = await asyncpg.connect(DATABASE_URL)
     try:

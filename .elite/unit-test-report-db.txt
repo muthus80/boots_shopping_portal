@@ -6,7 +6,7 @@ rootdir: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/b
 configfile: pyproject.toml
 plugins: json-report-1.5.0, metadata-3.1.1, asyncio-1.4.0, anyio-4.14.1
 asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
-collecting ... collected 357 items / 239 deselected / 118 selected
+collecting ... collected 398 items / 280 deselected / 118 selected
 
 tests/unit/sprint_1/test_db_models.py::TestUserModel::test_create_user_minimal PASSED [  0%]
 tests/unit/sprint_1/test_db_models.py::TestUserModel::test_user_defaults PASSED [  1%]
@@ -120,11 +120,4 @@ tests/unit/sprint_3/test_checkout_models.py::TestStripePaymentIntentFlow::test_o
 tests/unit/sprint_3/test_checkout_models.py::TestStripePaymentIntentFlow::test_stripe_pi_lookup_by_value PASSED [ 93%]
 tests/unit/sprint_3/test_checkout_models.py::TestPurchaseVerifiedReview::test_review_links_to_verifying_order PASSED [ 94%]
 tests/unit/sprint_3/test_checkout_models.py::TestPurchaseVerifiedReview::test_review_order_id_is_nullable PASSED [ 94%]
-tests/unit/sprint_3/test_checkout_models.py::TestPurchaseVerifiedReview::test_purchase_verification_query_pattern PASSED [ 95%]
-tests/unit/sprint_3/test_checkout_models.py::TestPurchaseVerifiedReview::test_review_rating_stored_correctly PASSED [ 96%]
-tests/unit/sprint_3/test_checkout_models.py::TestOrderHistoryQueries::test_orders_filterable_by_user_id PASSED [ 97%]
-tests/unit/sprint_3/test_checkout_models.py::TestOrderHistoryQueries::test_orders_filterable_by_guest_email PASSED [ 98%]
-tests/unit/sprint_3/test_checkout_models.py::TestOrderHistoryQueries::test_orders_filterable_by_status PASSED [ 99%]
-tests/unit/sprint_3/test_checkout_models.py::TestOrderHistoryQueries::test_order_items_loaded_for_order PASSED [100%]
-
-===================== 118 passed, 239 deselected in 8.91s ======================
+tests/unit/sprint_3/test_checkout_models.py::TestPurchaseVerifiedReview::test_purchase_verification_query_pattern 

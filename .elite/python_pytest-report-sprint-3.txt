@@ -55,4 +55,4 @@ tests/integration/sprint_3/test_session_continuity.py: 4 warnings
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 --------------------------------- JSON report ----------------------------------
 report saved to: /Elite-ai-pod-projects/494d3fc8-f8b6-4f1f-a01d-d8d14f21994a/workspace/boots-shopping-app/.elite/python_pytest-report-sprint-3.json
-======================= 40 passed, 17 warnings in 30.60s =======================
+======================= 40 passed, 17 warnings in 30.53s =======================
